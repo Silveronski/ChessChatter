@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { collection, getDoc, getDocs, query, serverTimestamp, setDoc, where, doc, updateDoc } from "firebase/firestore";
+import { collection, getDoc, getDocs, query, serverTimestamp, setDoc, where, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from '../firebase'
 import { AuthContext } from '../context/AuthContext';
 
@@ -65,7 +65,7 @@ const Search = () => {
             displayName: user.displayName,
             photoURL: user.photoURL,
           },
-          [combinedId + ".date"]: serverTimestamp(),
+          [combinedId + ".date"]: Timestamp.now().toDate(),
         });      
 
         await updateDoc(doc(db, "userChats", user.uid), {
@@ -74,7 +74,7 @@ const Search = () => {
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           },
-          [combinedId + ".date"]: serverTimestamp(),
+          [combinedId + ".date"]: Timestamp.now().toDate(),
         });   
       }
     }    
