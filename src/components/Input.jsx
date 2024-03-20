@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import attach from '../assets/images/attach.png'
 import addImg from '../assets/images/img.png'
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
-import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { Timestamp, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
@@ -68,14 +68,14 @@ const Input = () => {
       [data.chatId + ".lastMessage"] : {
         text        
       },
-      [data.chatId + ".date"] : serverTimestamp()
+      [data.chatId + ".date"] : timeOfMsg
     })
 
     await updateDoc(doc(db, "userChats", data.user.uid), {
       [data.chatId + ".lastMessage"] : {
         text        
       },
-      [data.chatId + ".date"] : serverTimestamp()
+      [data.chatId + ".date"] : timeOfMsg
     })
 
     document.querySelector('.input input').focus();

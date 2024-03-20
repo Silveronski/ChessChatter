@@ -44,9 +44,9 @@ const Chats = () => {
             <div className='lastmsg-time'>
               <p>{chat[1].lastMessage?.text}</p>
               
-              {chat[1].lastMessage?.text && <div>
-                {JSON.stringify(chat[1].date?.toDate().getHours() + ":" +
-                  chat[1].date?.toDate().getMinutes()).substring(1,6)}
+              {chat[1].lastMessage?.text && 
+              <div>
+                {JSON.stringify(chat[1]?.date).substring(1,6)}
               </div>}
                           
             </div>
