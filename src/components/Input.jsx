@@ -39,17 +39,17 @@ const Input = () => {
             // setError(true);
         }, 
         () => {             
-            getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-              await updateDoc(doc(db, "chats", data.chatId), {
-                messages: arrayUnion({
-                  id: uuid(),
-                  text,
-                  senderId: currentUser.uid,
-                  date: timeOfMsg,  
-                  img: downloadURL,
-                })
-              });
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateDoc(doc(db, "chats", data.chatId), {
+              messages: arrayUnion({
+                id: uuid(),
+                text,
+                senderId: currentUser.uid,
+                date: timeOfMsg,  
+                img: downloadURL,
+              })
             });
+          });
         }
       );           
     }
