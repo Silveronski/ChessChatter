@@ -3,6 +3,7 @@ import Message  from './Message'
 import { ChatContext } from '../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
+import logo from '../assets/images/logo.png'
 
 const Messages = ({isChatSelected}) => {
 
@@ -21,11 +22,22 @@ const Messages = ({isChatSelected}) => {
     }, [data.chatId]);
         
     return (
-        <div className={`${isChatSelected ? "messages" : "logo-panel"}`}>
+        <div className={`${isChatSelected ? "messages" : "logo-panel"}`}> 
+
             {messages && messages.map((msg) => (
                 <Message message={msg} key={msg.id}/>
-            ))}                       
+            ))};
+
+            {!isChatSelected && (
+                <div className='panel-content'>
+                    <img src={logo}/>
+                    <p>Send and receive messages</p>
+                    <p>Play Backgammon with your friends!</p>
+                </div>              
+            )};
+                                  
         </div>
+        
     )
 }
 

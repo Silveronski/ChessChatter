@@ -347,13 +347,35 @@ body{
                 }
             }
 
-            .logo-panel{
+            .logo-panel{ 
                 height: 100%;
                 background-color: rgb(50, 49, 49);
 
-                img{
+                .panel-content{
+                    margin-top: 8%;
+                    display: flex;
+                    justify-content: center; 
+                    align-items: center; 
+                    flex-direction: column;
+                    text-align: center;
                     
-                }
+                    img{
+                        width: 28%;                                       
+                    }
+
+                    p{
+                        color: white;
+                        margin-top: 5%;
+                        font-size: 20px;
+                        letter-spacing: 1px;
+                    }
+
+                    p:nth-child(3){
+                        margin-top: 0;
+                        color: white;
+                    }
+                    
+                }                
             }
 
             .messages{
