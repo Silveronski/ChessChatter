@@ -3,12 +3,12 @@ import attach from '../assets/images/attach.png'
 import addImg from '../assets/images/img.png'
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
-import { Timestamp, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-const Input = () => {
+const Input = ({isChatSelected}) => {
 
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
@@ -64,18 +64,21 @@ const Input = () => {
       });
     }
 
+     
     await updateDoc(doc(db, "userChats", currentUser.uid), {
       [data.chatId + ".lastMessage"] : {
         text        
       },
-      [data.chatId + ".date"] : timeOfMsg
+      [data.chatId + ".date"] : timeOfMsg,
+      [data.chatId + ".fullDate"] : serverTimestamp()
     })
 
     await updateDoc(doc(db, "userChats", data.user.uid), {
       [data.chatId + ".lastMessage"] : {
         text        
       },
-      [data.chatId + ".date"] : timeOfMsg
+      [data.chatId + ".date"] : timeOfMsg,
+      [data.chatId + ".fullDate"] : serverTimestamp()
     })
 
     document.querySelector('.input input').focus();
@@ -84,8 +87,10 @@ const Input = () => {
     setImg(null);
   }
 
+  console.log("inside input",isChatSelected);
+
   return (
-    <div className='input'>   
+    (isChatSelected && <div className='input'>   
       <input type="text"
        placeholder='Type something...'
        onChange={e => setText(e.target.value)}
@@ -99,7 +104,7 @@ const Input = () => {
         </label>         
         <button onClick={handleSend}>Send</button> 
       </div>             
-    </div>
+    </div>)
   )
 }
 

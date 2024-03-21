@@ -10,13 +10,13 @@ const Chat = () => {
     <div className='chat'>
       <div className="chat-info">
         <div className='user-info'>
-          <img src={data.user?.photoURL}/>
-          <span>{data.user?.displayName}</span>
+          {data.chatId !== "null" && <img src={data.user?.photoURL}/>}
+          <span>{data.user?.displayName}</span> 
         </div>       
         <button>Play Backgammon</button>
       </div>
-        <Messages/>
-        <Input/>
+        <Messages isChatSelected={data.chatId !== "null"}/>
+        <Input isChatSelected={data.chatId !== "null"}/>  
     </div>
   )
 }

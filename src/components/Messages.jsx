@@ -4,7 +4,7 @@ import { ChatContext } from '../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const Messages = () => {
+const Messages = ({isChatSelected}) => {
 
     const [messages, setMessages] = useState([]);
     const {data} = useContext(ChatContext);
@@ -21,7 +21,7 @@ const Messages = () => {
     }, [data.chatId]);
         
     return (
-        <div className='messages'>
+        <div className={`${isChatSelected ? "messages" : "logo-panel"}`}>
             {messages && messages.map((msg) => (
                 <Message message={msg} key={msg.id}/>
             ))}                       

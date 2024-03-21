@@ -315,10 +315,10 @@ body{
                 img{
                     margin-left: 0.5vw;
                     width: 35px;
-                    padding-left: 5px;
                     background-color: aliceblue;
                     border-radius: 50%;
                     object-fit: contain;
+                    border: 3px white solid;
                 }
 
                 button{
@@ -347,8 +347,17 @@ body{
                 }
             }
 
-            .messages{
+            .logo-panel{
+                height: 100%;
                 background-color: rgb(50, 49, 49);
+
+                img{
+                    
+                }
+            }
+
+            .messages{
+                background-color: rgb(50, 49, 49);  
                 padding: 10px;
                 height: calc(100% - 160px);
                 overflow-y: scroll;                
