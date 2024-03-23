@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import attach from '../assets/images/attach.png'
 import addImg from '../assets/images/img.png'
 import { AuthContext } from '../context/AuthContext';
@@ -8,7 +8,7 @@ import { db, storage } from '../firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-const Input = ({isChatSelected}) => {
+const Input = () => {
 
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
@@ -26,6 +26,15 @@ const Input = ({isChatSelected}) => {
   const handleKeyPress = async (e) => {
     (e.key === "Enter" && text.trim()!== '') && await handleSend();     
   }
+
+  useEffect(() => {
+    document.querySelector('.input input')?.focus();   
+
+    return () => {
+      setText("");
+    };
+
+  },[data.chatId])
 
                                                                
   const handleSend = async () => {
@@ -87,11 +96,10 @@ const Input = ({isChatSelected}) => {
     setImg(null);
   }
 
-  console.log("inside input",isChatSelected);
-
   return (
-    (isChatSelected && <div className='input'>   
-      <input type="text"
+    (data.chatId !== "null" && <div className='input'>   
+      <input 
+       type="text"
        placeholder='Type something...'
        onChange={e => setText(e.target.value)}
        value={text}

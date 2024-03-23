@@ -15,8 +15,8 @@ const Chat = () => {
         </div>       
         <button>Play Backgammon</button>
       </div>
-        <Messages isChatSelected={data.chatId !== "null"}/>
-        <Input isChatSelected={data.chatId !== "null"}/>  
+        <Messages/>
+        <Input/>  
     </div>
   )
 }

@@ -5,7 +5,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import logo from '../assets/images/logo.png'
 
-const Messages = ({isChatSelected}) => {
+const Messages = () => {
 
     const [messages, setMessages] = useState([]);
     const {data} = useContext(ChatContext);
@@ -22,22 +22,20 @@ const Messages = ({isChatSelected}) => {
     }, [data.chatId]);
         
     return (
-        <div className={`${isChatSelected ? "messages" : "logo-panel"}`}> 
+        <div className={`${data.chatId !== "null" ? "messages" : "logo-panel"}`}> 
 
             {messages && messages.map((msg) => (
                 <Message message={msg} key={msg.id}/>
-            ))};
+            ))}
 
-            {!isChatSelected && (
+            {data.chatId === "null" && (
                 <div className='panel-content'>
                     <img src={logo}/>
                     <p>Send and receive messages</p>
                     <p>Play Backgammon with your friends!</p>
                 </div>              
-            )};
-                                  
-        </div>
-        
+            )}                              
+        </div>        
     )
 }
 
