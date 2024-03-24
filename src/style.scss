@@ -228,7 +228,7 @@ body{
                 gap: 15px;
                 color: $green-bgcolor;
                 cursor: pointer;
-                transition: 0.3s linear;           
+                transition: 0.3s linear;  
 
                 &:hover{
                     background-color: $green-bgcolor;
@@ -240,22 +240,38 @@ body{
                             }
                             div{
                                 color: black;
-                            }
-                        }
+                            }                           
+                        }                    
                     }
                 }
-                img{
+                .user-photo{
                     width: 50px;
                     height: 50px;
                     border-radius: 50%;
-                    object-fit: cover;
+                    object-fit: cover;                  
                 }
 
                 .user-chat-info{
-                    width: 100%;           
+                    width: 100%;   
+
                     .lastmsg-time{
                         margin-top: 10px;
-                        display: flex;                                                                                 
+                        display: flex; 
+
+                        .date-status{  
+                            display: flex;
+                            align-items: center;                
+                            p{
+                                img{
+                                    width: 22px;    
+                                    height: 22px;                                              
+                                    object-fit: cover;
+                                    margin-left: 30%;
+                                    border-radius: 50%;                          
+                                }
+                            }
+                        }
+
                         div{
                             font-size: 14px;
                             color: rgba(255, 255, 255, 0.679);
@@ -276,8 +292,7 @@ body{
                         font-size: 18px;
                         font-weight: 500;
                         letter-spacing: 0.5px;                     
-                    }
-                   
+                    }                  
                 }
             }  
             
