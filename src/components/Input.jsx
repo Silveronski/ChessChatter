@@ -24,7 +24,12 @@ const Input = () => {
   const timeOfMsg = hourOfMsg + ":" + minOfMsg;
 
   const handleKeyPress = async (e) => {
-    (e.key === "Enter" && text.trim()!== '') && await handleSend();     
+    if (img) {
+      e.key === "Enter" && await handleSend();
+    }
+    else {
+      (e.key === "Enter" && text.trim()!== '') && await handleSend();     
+    }
   }
 
   useEffect(() => {
@@ -44,7 +49,7 @@ const Input = () => {
       
       uploadTask.on(
         (error) => {
-            console.log(error);
+            console.error(error);
             // setError(true);
         }, 
         () => {             
@@ -58,11 +63,29 @@ const Input = () => {
                 img: downloadURL,
               })
             });
-          });
+          })
         }
-      );           
+      );
+      
+      await updateDoc(doc(db, "userChats", currentUser.uid), {
+        [data.chatId + ".lastMessage"] : {
+          text : "Image"        
+        },
+        [data.chatId + ".date"] : timeOfMsg,
+        [data.chatId + ".fullDate"] : serverTimestamp()
+      })
+  
+      await updateDoc(doc(db, "userChats", data.user.uid), {
+        [data.chatId + ".lastMessage"] : {
+          text : "Image"        
+        },
+        [data.chatId + ".date"] : timeOfMsg,
+        [data.chatId + ".fullDate"] : serverTimestamp()
+      })
     }
-    else {
+
+    else if(!img && text.trim() !== '') {
+      
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),
@@ -71,27 +94,25 @@ const Input = () => {
           date: timeOfMsg,
         }),
       });
+
+      await updateDoc(doc(db, "userChats", currentUser.uid), {
+        [data.chatId + ".lastMessage"] : {
+          text        
+        },
+        [data.chatId + ".date"] : timeOfMsg,
+        [data.chatId + ".fullDate"] : serverTimestamp()
+      })
+  
+      await updateDoc(doc(db, "userChats", data.user.uid), {
+        [data.chatId + ".lastMessage"] : {
+          text        
+        },
+        [data.chatId + ".date"] : timeOfMsg,
+        [data.chatId + ".fullDate"] : serverTimestamp()
+      })
     }
 
-     
-    await updateDoc(doc(db, "userChats", currentUser.uid), {
-      [data.chatId + ".lastMessage"] : {
-        text        
-      },
-      [data.chatId + ".date"] : timeOfMsg,
-      [data.chatId + ".fullDate"] : serverTimestamp()
-    })
-
-    await updateDoc(doc(db, "userChats", data.user.uid), {
-      [data.chatId + ".lastMessage"] : {
-        text        
-      },
-      [data.chatId + ".date"] : timeOfMsg,
-      [data.chatId + ".fullDate"] : serverTimestamp()
-    })
-
     document.querySelector('.input input').focus();
-
     setText("");
     setImg(null);
   }

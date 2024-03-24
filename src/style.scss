@@ -432,7 +432,7 @@ body{
                             max-width: max-content;
                         }
                         img{
-                            width: 50%;
+                            width: 10vw;                     
                         }
                     }
 
@@ -440,7 +440,7 @@ body{
                         flex-direction: row;
 
                         .message-content{
-                            align-items: flex-end;
+                            align-items: flex-end;                          
                             p{
                                 background-color:$green-bgcolor;
                                 color: $black-bgcolor;

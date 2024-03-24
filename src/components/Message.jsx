@@ -20,8 +20,7 @@ const Message = ({message}) => {
         <span>{JSON.stringify(message.date).substring(1,6)}</span>
       </div>
       <div className="message-content">
-        <p>{message.text}</p>
-        {message.img && <img src={message.img}/>}
+        <p>{message.text} {message.img && <> <br/> <img src={message.img}/> </>}</p>   
       </div>
     </div>
 
