@@ -176,12 +176,7 @@ body{
                     padding: 5px 10px;
                     border-radius: 5%;
                     transition: 0.3s;
-                    font-family: "Tilt Warp";
-                    @include tablet{
-                        position: absolute;
-                        bottom: 15px;
-                        left: 15px;
-                    } 
+                    font-family: "Tilt Warp";                   
                     
                     &:hover{
                         background-color: hsl(117, 100%, 72%);

@@ -3,7 +3,7 @@ import Message  from './Message'
 import { ChatContext } from '../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
-import newLogo from '../assets/images/newLogo.png'
+import newLogo from '../assets/images/newLogo.png';
 
 const Messages = () => {
 
@@ -14,13 +14,13 @@ const Messages = () => {
         const unsub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
             doc.exists() && setMessages(doc.data().messages);
         });
-
+        
         return () => {
             unsub();
         }
 
     }, [data.chatId]);
-        
+   
     return (
         <div className={`${data.chatId !== "null" ? "messages" : "logo-panel"}`}> 
 
@@ -34,7 +34,7 @@ const Messages = () => {
                     <p>Send and receive messages</p>
                     <p>Play Backgammon with your friends!</p>
                 </div>              
-            )}                              
+            )}                                       
         </div>        
     )
 }

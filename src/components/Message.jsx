@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
-import bruh from '../assets/audio/bruh.mp3';
 
 const Message = ({message}) => {
 
   const {currentUser} = useContext(AuthContext);
   const {data} = useContext(ChatContext);
-  const [isPlaying, setIsPlaying] = useState(false);
   const ref = useRef();
-
 
   useEffect(() => {
     ref.current?.scrollIntoView();
