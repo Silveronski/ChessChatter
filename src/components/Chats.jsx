@@ -11,7 +11,7 @@ const Chats = () => {
   const [chats, setChats] = useState([]);
   const {currentUser} = useContext(AuthContext);
   const {dispatch} = useContext(ChatContext);
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedChatId, setSelectedChat] = useState("");
   const [userStatuses, setUserStatuses] = useState({});
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const Chats = () => {
 
 
   const handleSelect = (user) => {
-    setSelectedChat(user);
+    setSelectedChat(user.uid);
     dispatch({type:"CHANGE_USER", payload: user})
   }
 
@@ -56,7 +56,7 @@ const Chats = () => {
   return (
     <div className="chats">
       {chats && Object.entries(chats)?.sort((a,b) => b[1].fullDate - a[1].fullDate).map((chat) => ( 
-        <div className={`user-chat ${selectedChat === chat[1].userInfo ? 'selected-chat' : ''}`} key={chat[0]} onClick={() => handleSelect(chat[1].userInfo)}>        
+        <div className={`user-chat ${selectedChatId === chat[1].userInfo.uid ? 'selected-chat' : ''}`} key={chat[0]} onClick={() => handleSelect(chat[1].userInfo)}>        
           <img className='user-photo' src={chat[1].userInfo?.photoURL}/>
           <div className="user-chat-info">
             <span>{chat[1].userInfo?.displayName}</span>

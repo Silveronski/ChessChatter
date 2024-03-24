@@ -3,7 +3,7 @@ import Message  from './Message'
 import { ChatContext } from '../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
-import logo from '../assets/images/logo.png'
+import newLogo from '../assets/images/newLogo.png'
 
 const Messages = () => {
 
@@ -30,7 +30,7 @@ const Messages = () => {
 
             {data.chatId === "null" && (
                 <div className='panel-content'>
-                    <img src={logo}/>
+                    <img src={newLogo}/>
                     <p>Send and receive messages</p>
                     <p>Play Backgammon with your friends!</p>
                 </div>              
