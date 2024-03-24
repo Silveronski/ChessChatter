@@ -62,12 +62,11 @@ const Chats = () => {
             <span>{chat[1].userInfo?.displayName}</span>
             <div className='lastmsg-time'>
               <p>{chat[1].lastMessage?.text}</p>
-              
-              {chat[1].lastMessage?.text && 
+                            
               <div className='date-status'>
-                <p>{JSON.stringify(chat[1]?.date).substring(1,6)} </p>  
+                {chat[1].lastMessage?.text && <p>{JSON.stringify(chat[1]?.date).substring(1,6)}</p> }                
                 <p>{userStatuses[chat[1].userInfo.uid] ? <img src={online}/> : <img src={offline}/>}</p>                   
-              </div>}
+              </div>
                        
             </div>
           </div>
