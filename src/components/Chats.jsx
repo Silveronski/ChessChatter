@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { db } from '../firebase';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 
@@ -13,14 +13,15 @@ const Chats = () => {
 
 
   useEffect(() => {
+
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
         setChats(doc.data()); 
       });
 
       return () => {
-        unsub();
-      }
+        unsub();  
+      }      
     }
 
     currentUser.uid && getChats();
@@ -32,6 +33,10 @@ const Chats = () => {
     setSelectedChat(user);
     dispatch({type:"CHANGE_USER", payload: user})
   }
+
+  // const checkIfUserOnline = (userId) => {
+  //   const res = 
+  // }
 
 
   return (
