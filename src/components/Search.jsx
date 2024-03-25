@@ -2,14 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import { collection, getDoc, getDocs, query, serverTimestamp, setDoc, where, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from '../firebase'
 import { AuthContext } from '../context/AuthContext';
+import { ChatContext } from '../context/ChatContext';
 
 const Search = () => {
 
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
-
   const {currentUser} = useContext(AuthContext);
+  const {dispatch} = useContext(ChatContext);
 
   useEffect(() => {
     if (username.length === 0){
@@ -77,6 +78,8 @@ const Search = () => {
           [combinedId + ".date"]: Timestamp.now().toDate(),
         });   
       }
+
+      dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
     }    
     catch (err) {}
 

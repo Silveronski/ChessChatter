@@ -60,7 +60,7 @@ const Chats = () => {
 
   const handleSelect = (user) => {
     setSelectedChat(user.uid);
-    dispatch({type:"CHANGE_USER", payload: user})
+    dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
   }
 
 
