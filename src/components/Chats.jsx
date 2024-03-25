@@ -26,7 +26,6 @@ const Chats = () => {
           if (chat[1].lastMessage.senderId !== currentUser.uid &&
              (chat[1].fullDate.seconds === Timestamp.now().seconds ||
               chat[1].fullDate.seconds === Timestamp.now().seconds + 1)) {    
-            console.log("new msg");
             bruhRef.current.play();   
           }                 
         })                                          
