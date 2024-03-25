@@ -46,6 +46,8 @@ const Input = () => {
     if (img) {
       const storageRef = ref(storage, uuid());      
       const uploadTask = uploadBytesResumable(storageRef, img);
+      const msgText = text;
+      setText("");
       
       uploadTask.on(
         (error) => {
@@ -57,7 +59,7 @@ const Input = () => {
             await updateDoc(doc(db, "chats", data.chatId), {
               messages: arrayUnion({
                 id: uuid(),
-                text,
+                text: msgText ? msgText : "Image",
                 senderId: currentUser.uid,
                 date: timeOfMsg,  
                 img: downloadURL,
@@ -87,11 +89,14 @@ const Input = () => {
     }
 
     else if(!img && text.trim() !== '') {
+
+      const msgText = text;
+      setText("");
       
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),
-          text,
+          text: msgText,
           senderId: currentUser.uid,
           date: timeOfMsg,
         }),
@@ -99,7 +104,7 @@ const Input = () => {
 
       await updateDoc(doc(db, "userChats", currentUser.uid), {
         [data.chatId + ".lastMessage"] : {
-          text,
+          text: msgText,
           senderId: currentUser.uid      
         },
         [data.chatId + ".date"] : timeOfMsg,
@@ -108,7 +113,7 @@ const Input = () => {
   
       await updateDoc(doc(db, "userChats", data.user.uid), {
         [data.chatId + ".lastMessage"] : {
-          text,
+          text: msgText,
           senderId: currentUser.uid         
         },
         [data.chatId + ".date"] : timeOfMsg,
@@ -116,8 +121,7 @@ const Input = () => {
       })
     }
 
-    document.querySelector('.input input').focus();
-    setText("");
+    document.querySelector('.input input').focus();   
     setImg(null);
   }
 
