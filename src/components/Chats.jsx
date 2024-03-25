@@ -7,7 +7,7 @@ import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
 import bruh from '../assets/audio/bruh.mp3';
 
-const Chats = () => {
+const Chats = ({selectedChatIdFromSearch}) => {
 
   const [chats, setChats] = useState([]);
   const {currentUser} = useContext(AuthContext);
@@ -55,6 +55,11 @@ const Chats = () => {
     };
 
   }, []);
+
+
+  useEffect(() => {
+    setSelectedChat(selectedChatIdFromSearch);
+  },[selectedChatIdFromSearch])
 
 
   const handleSelect = (user) => {

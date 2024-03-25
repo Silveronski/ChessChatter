@@ -4,7 +4,7 @@ import { db } from '../firebase'
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 
-const Search = () => {
+const Search = ({selectedChatIdFromSearch}) => {
 
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
@@ -80,6 +80,7 @@ const Search = () => {
       }
 
       dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
+      selectedChatIdFromSearch(user.uid);
     }    
     catch (err) {}
 
