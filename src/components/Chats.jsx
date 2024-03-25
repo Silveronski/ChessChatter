@@ -25,8 +25,9 @@ const Chats = ({selectedChatIdFromSearch}) => {
         Object.entries(doc.data()).forEach(chat => {
           if (chat[1].lastMessage.senderId !== currentUser.uid &&
              (chat[1].fullDate.seconds === Timestamp.now().seconds ||
-              chat[1].fullDate.seconds === Timestamp.now().seconds + 1)) {    
-            bruhRef.current.play();   
+              chat[1].fullDate.seconds === Timestamp.now().seconds + 1)) {
+
+                bruhRef.current.play();             
           }                 
         })                                          
       });
