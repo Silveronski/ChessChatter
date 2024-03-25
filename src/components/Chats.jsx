@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { db } from '../firebase';
-import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { Timestamp, collection, doc, onSnapshot } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
+import bruh from '../assets/audio/bruh.mp3';
 
 const Chats = () => {
 
@@ -13,12 +14,20 @@ const Chats = () => {
   const {dispatch} = useContext(ChatContext);
   const [selectedChatId, setSelectedChat] = useState("");
   const [userStatuses, setUserStatuses] = useState({});
+  const bruhRef = useRef(); 
 
   useEffect(() => {
 
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-        setChats(doc.data()); 
+        setChats(doc.data());
+
+        Object.entries(doc.data()).forEach(chat => {
+          if (chat[1].lastMessage.senderId !== currentUser.uid && chat[1].fullDate.seconds === Timestamp.now().seconds) {    
+            console.log("new msg");
+            bruhRef.current.play();   
+          }                 
+        })                                          
       });
 
       return () => {
@@ -67,7 +76,9 @@ const Chats = () => {
                 {chat[1].lastMessage?.text && <p>{JSON.stringify(chat[1]?.date).substring(1,6)}</p> }                
                 <p>{userStatuses[chat[1].userInfo.uid] ? <img src={online}/> : <img src={offline}/>}</p>                   
               </div>
-                       
+
+              <audio ref={bruhRef} src={bruh}></audio>
+                                   
             </div>
           </div>
         </div>      

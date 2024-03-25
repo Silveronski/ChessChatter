@@ -69,7 +69,8 @@ const Input = () => {
       
       await updateDoc(doc(db, "userChats", currentUser.uid), {
         [data.chatId + ".lastMessage"] : {
-          text : "Image"        
+          text : "Image",
+          senderId: currentUser.uid         
         },
         [data.chatId + ".date"] : timeOfMsg,
         [data.chatId + ".fullDate"] : serverTimestamp()
@@ -77,7 +78,8 @@ const Input = () => {
   
       await updateDoc(doc(db, "userChats", data.user.uid), {
         [data.chatId + ".lastMessage"] : {
-          text : "Image"        
+          text : "Image",
+          senderId: currentUser.uid               
         },
         [data.chatId + ".date"] : timeOfMsg,
         [data.chatId + ".fullDate"] : serverTimestamp()
@@ -97,7 +99,8 @@ const Input = () => {
 
       await updateDoc(doc(db, "userChats", currentUser.uid), {
         [data.chatId + ".lastMessage"] : {
-          text        
+          text,
+          senderId: currentUser.uid      
         },
         [data.chatId + ".date"] : timeOfMsg,
         [data.chatId + ".fullDate"] : serverTimestamp()
@@ -105,7 +108,8 @@ const Input = () => {
   
       await updateDoc(doc(db, "userChats", data.user.uid), {
         [data.chatId + ".lastMessage"] : {
-          text        
+          text,
+          senderId: currentUser.uid         
         },
         [data.chatId + ".date"] : timeOfMsg,
         [data.chatId + ".fullDate"] : serverTimestamp()
