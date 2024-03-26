@@ -1,0 +1,44 @@
+<html>
+    <head>    
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="../public/js/chess-0.10.3.min.js"></script>
+        <script src="../public/js/chessboard-1.0.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+        <script>let socket = io();</script>
+        <link rel="stylesheet" href="../public/css/chessboard-1.0.0.min.css">
+    </head>
+
+    <body>
+        <h1>Test jQuery</h1>
+
+        <script>
+            // Test jQuery
+            if (window.jQuery) {
+                console.log("jQuery is loaded!");
+            } else {
+                console.log("jQuery is NOT loaded!");
+            }
+        </script>
+
+        <h2>Game code</h2>
+        <input type="text" id="codeInput">
+        <button id="createGame">Create game</button>
+        <button id="joinGame">Join game</button>
+        <div style="color: red" id="errorMessage"></div>
+
+        <script>
+            $('#createGame').on('click', function() {
+                window.location.replace('/white?code=' + $('#codeInput').val());
+                // codeInput = currentUser.uid + user.uid
+            });
+            $('#joinGame').on('click', function() {
+                window.location.replace('/black?code=' + $('#codeInput').val());
+            });
+
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('error') == 'invalidCode') {
+                $('#errorMessage').text('Invalid invite code');
+            }
+        </script>
+    </body>
+</html>
