@@ -13,7 +13,7 @@ const Chat = () => {
           {data.chatId !== "null" && <img src={data.user?.photoURL}/>}
           <span>{data.user?.displayName}</span> 
         </div>       
-        <button>Play Backgammon</button>
+        <button>Play Chess</button>
       </div>
         <Messages/>
         <Input/>  

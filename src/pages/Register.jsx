@@ -59,7 +59,7 @@ const Register = () => {
     return (
         <div className='form-container'> 
             <div className='form-wrapper'>
-                <span className='logo'>Backgammon Chatter</span>
+                <span className='logo'>Chess Chatter</span>
                 <span className='title'>Register</span>
                 <form method='post' onSubmit={handleSubmit}>
                     <input type="text" placeholder='Display name'/>

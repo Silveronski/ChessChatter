@@ -32,7 +32,7 @@ const Messages = () => {
                 <div className='panel-content'>
                     <img src={newLogo}/>
                     <p>Send and receive messages</p>
-                    <p>Play Backgammon with your friends!</p>
+                    <p>Play Chess with your friends!</p>
                 </div>              
             )}                                       
         </div>        

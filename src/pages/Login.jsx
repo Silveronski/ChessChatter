@@ -25,7 +25,7 @@ const Login = () => {
   return (
     <div className='form-container'> 
         <div className='form-wrapper'>
-            <span className='logo'>Backgammon Chatter</span>
+            <span className='logo'>Chess Chatter</span>
             <span className='title'>Login</span>
             <form onSubmit={handleSubmit}>
                 <input type="email" placeholder='Email'/>            

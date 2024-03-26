@@ -1,5 +1,6 @@
     let gameHasStarted = false;
     var board = null;
+    let socket = io();
     var game = new Chess();
     var $status = $('#status');
     var $pgn = $('#pgn');
@@ -84,8 +85,7 @@
             // check?
             if (game.in_check()) {
                 status += ', ' + moveColor + ' is in check'
-            }
-            
+            }         
         }
 
         $status.html(status)
