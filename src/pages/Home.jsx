@@ -39,6 +39,10 @@ const Home = () => {
       window.acceptInvite = (gameLink, inviteId) => {
         window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');
       };
+
+      window.rejectInvite = (inviteId) => {
+        
+      };
   
       return () => {
         unsub();
@@ -49,14 +53,6 @@ const Home = () => {
 
   },[currentUser.uid])
 
-
-  // const acceptInvite = (gameLink, inviteId) => {
-  //   window.open(gameLink, '_blank');
-  // }
-
-  // const rejectInvite = (inviteId) => {
-    
-  // }
 
   return (
     <div className='home'>
