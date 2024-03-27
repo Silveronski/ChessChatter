@@ -8,14 +8,14 @@ const __dirname = dirname(__filename);
 const viewsPath = resolve(__dirname, '../../client/views');
 
 export const routes = app => {
+
     app.get('/', (req, res) => {
         const indexPath = path.join(viewsPath, 'index.html');
         res.sendFile(indexPath);
     });
 
-    app.get('/white', (req, res) => {  
-        const gamePath = path.join(viewsPath, 'game.html');   
-        res.render(gamePath, {
+    app.get('/white', (req, res) => {     
+        res.render('game', {
             color: 'white'
         });
     });
