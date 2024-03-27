@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
 import Messages from './Messages'
 import Input from './Input'
+import React, { useContext } from 'react'
 import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase';
-import { Timestamp, doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import toastr from 'toastr';
 

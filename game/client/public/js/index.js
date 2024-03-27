@@ -49,47 +49,47 @@
     // update the board position after the piece snap
     // for castling, en passant, pawn promotion
     function onSnapEnd () {
-        board.position(game.fen())
+        board.position(game.fen());
     }
 
     function updateStatus () {
-        var status = ''
+        var status = '';
 
-        var moveColor = 'White'
+        var moveColor = 'White';
         if (game.turn() === 'b') {
-            moveColor = 'Black'
+            moveColor = 'Black';
         }
 
         // checkmate?
         if (game.in_checkmate()) {
-            status = 'Game over, ' + moveColor + ' is in checkmate.'
+            status = 'Game over, ' + moveColor + ' is in checkmate.';
         }
 
         // draw?
         else if (game.in_draw()) {
-            status = 'Game over, drawn position'
+            status = 'Game over, drawn position';
         }
 
         else if (gameOver) {
-            status = 'Opponent disconnected, you win!'
+            status = 'Opponent disconnected, you win!';
         }
 
         else if (!gameHasStarted) {
-            status = 'Waiting for black to join'
+            status = 'Waiting for black to join';
         }
 
         // game still on
         else {
-            status = moveColor + ' to move'
+            status = moveColor + ' to move';
 
             // check?
             if (game.in_check()) {
-                status += ', ' + moveColor + ' is in check'
+                status += ', ' + moveColor + ' is in check';
             }         
         }
 
-        $status.html(status)
-        $pgn.html(game.pgn())
+        $status.html(status);
+        $pgn.html(game.pgn());
     }
 
     var config = {
@@ -105,7 +105,7 @@
         board.flip();
     }
 
-    updateStatus()
+    updateStatus();
 
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('code')) {
@@ -116,10 +116,10 @@
 
     socket.on('startGame', function() {
         gameHasStarted = true;
-        updateStatus()
+        updateStatus();
     });
 
     socket.on('gameOverDisconnect', function() {
         gameOver = true;
-        updateStatus()
+        updateStatus();
     });

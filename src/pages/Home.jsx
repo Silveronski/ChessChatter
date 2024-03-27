@@ -18,7 +18,6 @@ const Home = () => {
     const getGameInvitations = () => {
       const unsub = onSnapshot(doc(db, "gameInvitations", currentUser.uid), (doc) => {       
         if (doc.data() && !doc.data().gameConcluded) {
-          console.log(doc.data());
                    
           toastr.info(
             `${doc.data().senderDisplayName} has invited you to play chess!`, 
@@ -29,7 +28,8 @@ const Home = () => {
                 closeButton: true, // Show close button
                 positionClass: "toast-bottom-left", // Adjust position as needed
                 tapToDismiss: false, // Prevent dismissing on click
-                closeHtml: `<button onclick="acceptInvite('${doc.data().link, doc.data().id}')">Accept</button>` + 
+                closeHtml: `<button onclick="acceptInvite('${doc.data().link, doc.data().id}')">Accept</button>` +
+                           `<br />` +
                            `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
             }
           );
@@ -56,7 +56,7 @@ const Home = () => {
 
   return (
     <div className='home'>
-        <div className='container'>
+        <div className='container'>           
             <Sidebar/>
             <Chat passDataToHome={handleGameInviteReceive}/>              
         </div>

@@ -89,7 +89,7 @@ const Input = () => {
     }
 
     else if(!img && text.trim() !== '') {
-
+      
       const msgText = text;
       setText("");
       

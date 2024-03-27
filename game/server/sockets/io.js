@@ -8,7 +8,6 @@ const myIo = (io) => {
 
         socket.on('move', function(move) {
             console.log('move detected')
-
             io.to(currentCode).emit('newMove', move);
         });
         
