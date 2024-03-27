@@ -7,7 +7,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import toastr from 'toastr';
 
-const Chat = ({passDataToHome}) => {
+const Chat = () => {
 
   const {data} = useContext(ChatContext);
   const {currentUser} = useContext(AuthContext);
@@ -15,8 +15,9 @@ const Chat = ({passDataToHome}) => {
   const handlePlay = async () => {
     if (true) { // changes this
       try {        
-        await setDoc(doc(db, "gameInvitations", data.user.uid),{
-          id: currentUser.uid + data.user.uid,
+        await setDoc(doc(db, "gameInvitations", data.user.uid + currentUser.uid),{
+          id: data.user.uid + currentUser.uid,
+          userId: data.user.uid,
           senderId : currentUser.uid,
           senderDisplayName : currentUser.displayName,
           link: data.chatId,

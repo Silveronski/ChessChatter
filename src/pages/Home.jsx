@@ -2,7 +2,7 @@ import Sidebar from '../components/Sidebar'
 import Chat from '../components/Chat'
 import toastr from 'toastr';
 import { useContext, useEffect } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { query, onSnapshot, collection, where, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 
@@ -10,38 +10,61 @@ const Home = () => {
 
   const {currentUser} = useContext(AuthContext);
 
-  const handleGameInviteReceive = (userName, link) => {
-
-  }
-
   useEffect(() => {
     const getGameInvitations = () => {
-      const unsub = onSnapshot(doc(db, "gameInvitations", currentUser.uid), (doc) => {       
-        if (doc.data() && !doc.data().gameConcluded) {
-                   
-          toastr.info(
-            `${doc.data().senderDisplayName} has invited you to play chess!`, 
-            "Game Invitation",
-            {
-                timeOut: 0,
-                extendedTimeOut: 0, // To keep the toastr alert open indefinitely
-                closeButton: true, // Show close button
-                positionClass: "toast-bottom-left", // Adjust position as needed
-                tapToDismiss: false, // Prevent dismissing on click
-                closeHtml: `<button onclick="acceptInvite('${doc.data().link, doc.data().id}')">Accept</button>` +
-                           `<br />` +
-                           `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
+      const unsub = onSnapshot(
+        query(collection(db, "gameInvitations"), where("userId", "==", currentUser.uid)),
+        (snapshot) => {
+          snapshot.forEach((doc) => {
+            if (doc.exists() && !doc.data().gameConcluded) {
+              toastr.info(
+                `${doc.data().senderDisplayName} has invited you to play chess!`, 
+                "Game Invitation",
+                {
+                    timeOut: 0,
+                    extendedTimeOut: 0, 
+                    closeButton: true, 
+                    positionClass: "toast-bottom-left", 
+                    tapToDismiss: false,
+                    closeHtml: `<button onclick="acceptInvite('${doc.data().link}', '${doc.data().id}')">Accept</button>` +
+                               `<br />` +
+                               `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
+                }
+              );
             }
-          );
-        }       
-      });
+          });
+        }
+      );
 
-      window.acceptInvite = (gameLink, inviteId) => {
-        window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');
+      
+
+      window.acceptInvite = async (gameLink, inviteId) => {
+        try{
+          console.log(inviteId);
+          const invitationDocRef = doc(db, "gameInvitations", inviteId);
+          await updateDoc(invitationDocRef, {          
+            gameConcluded: true 
+          });
+          window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');
+        }
+        catch (err) {
+          // handle later
+          // make the try cathc into one fucntion so i can use it in reject aswell
+          console.log(err);
+        }               
       };
 
-      window.rejectInvite = (inviteId) => {
-        
+      window.rejectInvite = async (inviteId) => {
+        try{
+          const invitationDocRef = doc(db, "gameInvitations", inviteId);
+          await updateDoc(invitationDocRef, {          
+            gameConcluded: true 
+          });         
+        }
+        catch (err) {
+          console.log(err);
+          // handle later
+        }     
       };
   
       return () => {
@@ -58,7 +81,7 @@ const Home = () => {
     <div className='home'>
         <div className='container'>           
             <Sidebar/>
-            <Chat passDataToHome={handleGameInviteReceive}/>              
+            <Chat/>              
         </div>
     </div>
   )
