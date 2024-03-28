@@ -19,11 +19,10 @@ export const AuthContextProvider = ({children}) => {
             try {
                 setCurrentUser(user);
                 if (user?.uid && !initialized) {
-                    const userRef = doc(db, `presence/${user?.uid}`); 
-                    console.log(Timestamp.now());                 
+                    const userRef = doc(db, `presence/${user?.uid}`);                
                     await setDoc(userRef, { online: true, name: user?.displayName, date: Timestamp.now(), hasShown: false });    
                     setInitialized(true);                   
-                    sessionStorage.setItem('authInitialized', 'true');
+                    sessionStorage.setItem('authInitialized', 'true');                   
                 }
             }
             catch (err) {

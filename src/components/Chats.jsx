@@ -47,67 +47,60 @@ const Chats = ({selectedChatIdFromSearch}) => {
 
 
   useEffect(() => {
-
-    // const getOnline = async () => {
-
-      //   console.log(doc2.data()?.date?.seconds);
-      //   console.log(Timestamp.now());
-      //   console.log(doc2.data()?.date?.seconds == Timestamp.now());
-      //   console.log(doc2.id);
-      //   console.log(doc2.data().hasShown);
-
-      //   if (doc2.data()?.date?.seconds == Timestamp.now().seconds && currentUser.uid !== doc2.id && doc2.data().hasShown === false) {          
-      //     try {
-
-      //       const presencecRef = doc(db, 'presence', doc2?.id);
-      //       await updateDoc(presencecRef, {          
-      //         hasShown: true 
-      //       });
-                                      
-      //       toastr.info(
-      //         `${doc2.data().name} has just logged on!`, 
-      //         {
-      //             timeOut: 2000,
-      //             extendedTimeOut: 0, 
-      //             closeButton: true, 
-      //             positionClass: "toast-top-right", 
-      //             tapToDismiss: false,
-      //             preventDuplicates: true,               
-      //         }
-      //       );       
-      //     }
-
-      //     catch (err) {
-      //       console.log("error", err);
-      //       //handle later
-      //     }
-          
-      //   }
-      // }
-
-      // getOnline();
-  },[])
-  
-
-
-  useEffect(() => {
     const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
-      const updatedUserStatuses = snapshot.docs.reduce((account, doc2) => {
+      const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {
                            
-        account[doc2.id] = doc2.data().online;
+        account[presDoc.id] = presDoc.data().online;
         return account;
 
       }, {});
       setUserStatuses(updatedUserStatuses);
     });
 
+    const unsub = onSnapshot(collection(db, 'presence'), (snapshot) => {
+      snapshot.forEach(async (presDoc) => {
+        const data = presDoc.data();
+        if (presDoc.id !== currentUser?.uid && !data.hasShown && data.online) {
+          console.log("before try", data.name);
+          try {
+            const presenceRef = doc(db, 'presence', presDoc.id);
+            await updateDoc(presenceRef, {          
+              hasShown: true 
+            });
+
+            console.log("after try", data.name);
+
+            toastr.info(
+              `${data.name} has just logged on!`, 
+              {
+                  timeOut: 8000,
+                  extendedTimeOut: 0, 
+                  closeButton: true, 
+                  positionClass: "toast-top-right", 
+                  tapToDismiss: false,
+                  preventDuplicates: true,               
+              }
+            );                         
+          }
+
+          catch (err) {          
+            console.log("updating presence error", err);
+          }                      
+        }        
+      });
+    });
+
     return () => {
       unsubscribePresence();
+      unsub();
     };
 
-  }, []);
+  }, [currentUser.uid]);
+
+  
 
 
+  
   useEffect(() => {
     setSelectedChat(selectedChatIdFromSearch);
   },[selectedChatIdFromSearch])
