@@ -18,6 +18,8 @@ const Navbar = () => {
       });
 
       await signOut(auth);
+
+      sessionStorage.removeItem('authInitialized');
     } 
       catch (error) {
         console.error('Error setting user presence:', error);

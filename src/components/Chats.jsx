@@ -44,42 +44,56 @@ const Chats = ({selectedChatIdFromSearch}) => {
       }                 
     }) 
   },[chats]);
+
+
+  useEffect(() => {
+
+    // const getOnline = async () => {
+
+      //   console.log(doc2.data()?.date?.seconds);
+      //   console.log(Timestamp.now());
+      //   console.log(doc2.data()?.date?.seconds == Timestamp.now());
+      //   console.log(doc2.id);
+      //   console.log(doc2.data().hasShown);
+
+      //   if (doc2.data()?.date?.seconds == Timestamp.now().seconds && currentUser.uid !== doc2.id && doc2.data().hasShown === false) {          
+      //     try {
+
+      //       const presencecRef = doc(db, 'presence', doc2?.id);
+      //       await updateDoc(presencecRef, {          
+      //         hasShown: true 
+      //       });
+                                      
+      //       toastr.info(
+      //         `${doc2.data().name} has just logged on!`, 
+      //         {
+      //             timeOut: 2000,
+      //             extendedTimeOut: 0, 
+      //             closeButton: true, 
+      //             positionClass: "toast-top-right", 
+      //             tapToDismiss: false,
+      //             preventDuplicates: true,               
+      //         }
+      //       );       
+      //     }
+
+      //     catch (err) {
+      //       console.log("error", err);
+      //       //handle later
+      //     }
+          
+      //   }
+      // }
+
+      // getOnline();
+  },[])
   
 
 
   useEffect(() => {
     const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
       const updatedUserStatuses = snapshot.docs.reduce((account, doc2) => {
-              
-        const getOnline = async () => {
-          if (doc2.data()?.date?.seconds == Timestamp.now().seconds && currentUser.uid !== doc2.id && !doc2.hasShown) {
-            try {              
-              const invitationDocRef = doc(db, 'presence', doc2.id);
-              await updateDoc(invitationDocRef, {          
-                hasShown: true 
-              });              
-    
-              toastr.info(
-                `${doc2.data().name} has just logged on!`, 
-                {
-                    timeOut: 2000,
-                    extendedTimeOut: 0, 
-                    closeButton: true, 
-                    positionClass: "toast-top-right", 
-                    tapToDismiss: false,
-                    preventDuplicates: true,               
-                }
-              );
-            }
-            catch (err) {
-              console.log(err);
-            }
-          }
-        }
-
-        getOnline();
-        
-
+                           
         account[doc2.id] = doc2.data().online;
         return account;
 
