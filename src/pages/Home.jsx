@@ -39,12 +39,13 @@ const Home = () => {
       
 
       window.acceptInvite = async (gameLink, inviteId) => {
-        try{
-          console.log(inviteId);
+        try {
+
           const invitationDocRef = doc(db, "gameInvitations", inviteId);
           await updateDoc(invitationDocRef, {          
             gameConcluded: true 
           });
+          
           window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');
         }
         catch (err) {

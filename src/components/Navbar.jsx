@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { auth, db } from '../firebase'
 import { AuthContext } from '../context/AuthContext';
 import newLogo from '../assets/images/newLogo.png'
-import { doc, setDoc } from 'firebase/firestore';
+import { Timestamp, doc, updateDoc } from 'firebase/firestore';
 
 const Navbar = () => {
 
@@ -11,9 +11,13 @@ const Navbar = () => {
 
   const signUserOut = async () => {
     try { 
-      const userRef = doc(db, `presence/${currentUser?.uid}`); 
-      await setDoc(userRef, { online: false });
-      signOut(auth);
+      const userRef = doc(db, 'presence', currentUser.uid); 
+      await updateDoc(userRef, { 
+        online: false, 
+        hasShown: false 
+      });
+
+      await signOut(auth);
     } 
       catch (error) {
         console.error('Error setting user presence:', error);

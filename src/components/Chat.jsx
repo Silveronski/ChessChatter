@@ -5,7 +5,6 @@ import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
-import toastr from 'toastr';
 
 const Chat = () => {
 
@@ -37,7 +36,6 @@ const Chat = () => {
       // handle error - cant invite 2 users at teh same times
     }  
   }
-
 
 
   return (

@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { Timestamp, doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext();
 
@@ -14,7 +14,7 @@ export const AuthContextProvider = ({children}) => {
                 setCurrentUser(user);
                 if (user?.uid) {
                     const userRef = doc(db, `presence/${user?.uid}`); 
-                    await setDoc(userRef, { online: true });    
+                    await setDoc(userRef, { online: true, name: user?.displayName, date: Timestamp.now(), hasShown: false });    
                 }
             }
             catch (err) {

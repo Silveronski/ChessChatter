@@ -5,9 +5,7 @@ const myIo = (io) => {
         console.log('New socket connection');
 
         let currentCode = null;
-
-        socket.on('move', function(move) {
-            console.log('move detected')
+        socket.on('move', function(move) {          
             io.to(currentCode).emit('newMove', move);
         });
         
@@ -24,7 +22,6 @@ const myIo = (io) => {
         });
 
         socket.on('disconnect', function() {
-            console.log('socket disconnected');
 
             if (currentCode) {
                 io.to(currentCode).emit('gameOverDisconnect');

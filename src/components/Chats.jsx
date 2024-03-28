@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { db } from '../firebase';
-import { Timestamp, collection, doc, onSnapshot } from 'firebase/firestore';
+import { Timestamp, collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
 import bruh from '../assets/audio/bruh.mp3';
+import toastr from 'toastr';
 
 const Chats = ({selectedChatIdFromSearch}) => {
 
@@ -48,9 +49,40 @@ const Chats = ({selectedChatIdFromSearch}) => {
 
   useEffect(() => {
     const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
-      const updatedUserStatuses = snapshot.docs.reduce((account, doc) => {
-        account[doc.id] = doc.data().online;
+      const updatedUserStatuses = snapshot.docs.reduce((account, doc2) => {
+              
+        const getOnline = async () => {
+          if (doc2.data()?.date?.seconds == Timestamp.now().seconds && currentUser.uid !== doc2.id && !doc2.hasShown) {
+            try {              
+              const invitationDocRef = doc(db, 'presence', doc2.id);
+              await updateDoc(invitationDocRef, {          
+                hasShown: true 
+              });              
+    
+              toastr.info(
+                `${doc2.data().name} has just logged on!`, 
+                {
+                    timeOut: 2000,
+                    extendedTimeOut: 0, 
+                    closeButton: true, 
+                    positionClass: "toast-top-right", 
+                    tapToDismiss: false,
+                    preventDuplicates: true,               
+                }
+              );
+            }
+            catch (err) {
+              console.log(err);
+            }
+          }
+        }
+
+        getOnline();
+        
+
+        account[doc2.id] = doc2.data().online;
         return account;
+
       }, {});
       setUserStatuses(updatedUserStatuses);
     });
