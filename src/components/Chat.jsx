@@ -1,18 +1,21 @@
 import Messages from './Messages';
 import Input from './Input';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
+import toastr from 'toastr';
 
 const Chat = () => {
 
   const {data} = useContext(ChatContext);
   const {currentUser} = useContext(AuthContext);
+  const [invitePending, setInvitePending] = useState(false);
+  const [gameInviteId, setGameInviteId] = useState("");
 
   const handlePlay = async () => {
-    if (true) { // changes this
+    if (!invitePending) {     
       try {        
         await setDoc(doc(db, "gameInvitations", data.user.uid + currentUser.uid),{
           id: data.user.uid + currentUser.uid,
@@ -23,10 +26,14 @@ const Chat = () => {
           gameConcluded: false,
         });
 
+        setInvitePending(true);
+        setGameInviteId(data.user.uid + currentUser.uid);
+
         window.open(`http://localhost:3037/white?code=${data.chatId}`, '_blank');
       }
 
       catch (err) {
+        console.log(err);
         // handle error - problem setting doc
       }      
     }
@@ -36,6 +43,35 @@ const Chat = () => {
       // handle error - cant invite 2 users at teh same times
     }  
   }
+
+  useEffect(() => {
+
+    let timer;
+
+    if (invitePending) {
+      timer = setTimeout(async () => {
+        try {          
+          const gameInviteRef = doc(db, "gameInvitations", gameInviteId);
+          const gameInviteSnap = await getDoc(gameInviteRef);
+          if (gameInviteSnap.data().gameConcluded === false) {
+            await updateDoc(gameInviteRef, {gameConcluded: true});
+            console.log("game canceled!");
+            setGameInviteId("");
+            setInvitePending(false);
+          }
+        }
+        catch (err) {
+          //handle later
+          console.log(err);
+        }
+      }, 10000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    }
+
+  },[invitePending, gameInviteId]);
 
 
   return (

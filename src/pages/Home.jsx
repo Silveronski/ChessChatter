@@ -11,8 +11,8 @@ const Home = () => {
   const {currentUser} = useContext(AuthContext);
 
   useEffect(() => {
-    const getGameInvitations = () => {
-      const unsub = onSnapshot(
+    const getGameInvitations = () => {     
+      const unsub = onSnapshot( 
         query(collection(db, "gameInvitations"), where("userId", "==", currentUser.uid)),
         (snapshot) => {
           snapshot.forEach((doc) => {
@@ -21,11 +21,12 @@ const Home = () => {
                 `${doc.data().senderDisplayName} has invited you to play chess!`, 
                 "Game Invitation",
                 {
-                    timeOut: 0,
+                    timeOut: 9500,
                     extendedTimeOut: 0, 
                     closeButton: true, 
                     positionClass: "toast-bottom-left", 
                     tapToDismiss: false,
+                    preventDuplicates: true,
                     closeHtml: `<button onclick="acceptInvite('${doc.data().link}', '${doc.data().id}')">Accept</button>` +
                                `<br />` +
                                `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
@@ -37,38 +38,24 @@ const Home = () => {
       );
       
       window.acceptInvite = async (gameLink, inviteId) => {
-        try {
-
-          const invitationDocRef = doc(db, "gameInvitations", inviteId);
-          await updateDoc(invitationDocRef, {          
-            gameConcluded: true 
-          });
-
-          window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');
-        }
-        catch (err) {
-          // handle later
-          // make the try cathc into one fucntion so i can use it in reject aswell
-          console.log(err);
-        }               
+        await updateGameInvitationsDoc(inviteId);                
+        window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');                   
       };
 
       window.rejectInvite = async (inviteId) => {
-        try{
-          const invitationDocRef = doc(db, "gameInvitations", inviteId);
-          await updateDoc(invitationDocRef, {          
-            gameConcluded: true 
-          });         
-        }
-        catch (err) {
-          console.log(err);
-          // handle later
-        }     
-      };
-  
-      return () => {
-        unsub();
+        await updateGameInvitationsDoc(inviteId);   
+      };      
+    }
+
+    const updateGameInvitationsDoc = async (inviteId) => {
+      try {
+        const invitationDocRef = doc(db, "gameInvitations", inviteId);
+        await updateDoc(invitationDocRef, { gameConcluded: true });                                     
       }
+      catch (err) {
+        console.log(err);
+        // handle later
+      }    
     }
 
     currentUser.uid && getGameInvitations();
@@ -80,17 +67,13 @@ const Home = () => {
       snapshot.forEach(async (presDoc) => {
         const data = presDoc.data();                
 
-        if (presDoc.id !== currentUser.uid && !data.hasShown && data.online) {   
-          console.log(presDoc.id);
-          console.log(currentUser.uid);     
+        if (presDoc.id !== currentUser.uid && !data.hasShown && data.online) {                 
           try {
             const presenceRef = doc(db, 'presence', presDoc.id);
-            await updateDoc(presenceRef, {          
-              hasShown: true 
-            });
-            
+            await updateDoc(presenceRef, { hasShown: true });         
+                                     
             toastr.info(
-              `${data.name} has just logged on!`, 
+              `${data.name} has just logged in!`, 
               {
                   timeOut: 8000,
                   extendedTimeOut: 0, 

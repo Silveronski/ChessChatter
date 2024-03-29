@@ -18,7 +18,7 @@ export const AuthContextProvider = ({children}) => {
                     if (userSnap.exists()) {
                         if (userSnap.data().count === 0) {
                             await updateDoc(userRef, {
-                                count : 1,
+                                count: 1,
                                 online: true,
                                 date: Timestamp.now()
                             });                      
