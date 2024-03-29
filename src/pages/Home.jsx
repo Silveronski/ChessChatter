@@ -11,6 +11,44 @@ const Home = () => {
   const {currentUser} = useContext(AuthContext);
 
   useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'presence'), (snapshot) => {
+      snapshot.forEach(async (presDoc) => {
+        const data = presDoc.data();
+        if (presDoc.id !== currentUser?.uid && !data.hasShown && data.online) {
+
+          console.log("before try", data.name);
+          try {
+            const presenceRef = doc(db, 'presence', presDoc.id);
+            await updateDoc(presenceRef, {          
+              hasShown: true 
+            });
+            console.log("after try", data.name);
+
+            toastr.info(
+              `${data.name} has just logged on!`, 
+              {
+                  timeOut: 8000,
+                  extendedTimeOut: 0, 
+                  closeButton: true, 
+                  positionClass: "toast-top-right", 
+                  tapToDismiss: false,
+                  preventDuplicates: true,               
+              }
+            );                         
+          }
+
+          catch (err) {          
+            console.log("updating presence error", err);
+          }                      
+        }        
+      });
+    });
+
+    currentUser.uid && unsub();
+    
+  },[currentUser.uid]);
+
+  useEffect(() => {
     const getGameInvitations = () => {
       const unsub = onSnapshot(
         query(collection(db, "gameInvitations"), where("userId", "==", currentUser.uid)),
@@ -45,7 +83,7 @@ const Home = () => {
           await updateDoc(invitationDocRef, {          
             gameConcluded: true 
           });
-          
+
           window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');
         }
         catch (err) {

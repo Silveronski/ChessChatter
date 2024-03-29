@@ -13,13 +13,11 @@ const Navbar = () => {
     try { 
       const userRef = doc(db, 'presence', currentUser.uid); 
       await updateDoc(userRef, { 
+        count : 0,
         online: false, 
         hasShown: false 
       });
-
       await signOut(auth);
-
-      sessionStorage.removeItem('authInitialized');
     } 
       catch (error) {
         console.error('Error setting user presence:', error);

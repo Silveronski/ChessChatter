@@ -18,7 +18,6 @@ const Chats = ({selectedChatIdFromSearch}) => {
   const bruhRef = useRef(); 
 
   useEffect(() => {
-
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
         setChats(doc.data());                                                
@@ -30,8 +29,28 @@ const Chats = ({selectedChatIdFromSearch}) => {
     }
     
     currentUser.uid && getChats();
-
+    
   }, [currentUser.uid]);
+
+
+  
+  useEffect(() => {    
+      
+    const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
+      const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {
+                            
+        account[presDoc.id] = presDoc.data().online;
+        return account;
+
+      }, {});
+      setUserStatuses(updatedUserStatuses);
+    });
+         
+    return () => {
+      unsubscribePresence();
+    }    
+    
+  }, []);
 
 
   useEffect(() => {
@@ -44,61 +63,6 @@ const Chats = ({selectedChatIdFromSearch}) => {
       }                 
     }) 
   },[chats]);
-
-
-  useEffect(() => {
-    const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
-      const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {
-                           
-        account[presDoc.id] = presDoc.data().online;
-        return account;
-
-      }, {});
-      setUserStatuses(updatedUserStatuses);
-    });
-
-    const unsub = onSnapshot(collection(db, 'presence'), (snapshot) => {
-      snapshot.forEach(async (presDoc) => {
-        const data = presDoc.data();
-        if (presDoc.id !== currentUser?.uid && !data.hasShown && data.online) {
-          console.log("before try", data.name);
-          try {
-            const presenceRef = doc(db, 'presence', presDoc.id);
-            await updateDoc(presenceRef, {          
-              hasShown: true 
-            });
-
-            console.log("after try", data.name);
-
-            toastr.info(
-              `${data.name} has just logged on!`, 
-              {
-                  timeOut: 8000,
-                  extendedTimeOut: 0, 
-                  closeButton: true, 
-                  positionClass: "toast-top-right", 
-                  tapToDismiss: false,
-                  preventDuplicates: true,               
-              }
-            );                         
-          }
-
-          catch (err) {          
-            console.log("updating presence error", err);
-          }                      
-        }        
-      });
-    });
-
-    return () => {
-      unsubscribePresence();
-      unsub();
-    };
-
-  }, [currentUser.uid]);
-
-  
-
 
   
   useEffect(() => {
