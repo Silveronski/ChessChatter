@@ -38,26 +38,31 @@ const Home = () => {
       );
       
       window.acceptInvite = async (gameLink, inviteId) => {
-        await updateGameInvitationsDoc(inviteId);                
-        window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');                   
+        try {
+          const invitationDocRef = doc(db, "gameInvitations", inviteId);
+          await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "true" });                                     
+        }
+        catch (err) {
+          console.log(err);
+          // handle later
+        }
+        setTimeout(() => {
+          window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');                            
+        }, 1000);                    
       };
 
       window.rejectInvite = async (inviteId) => {
-        await updateGameInvitationsDoc(inviteId);   
+        try {
+          const invitationDocRef = doc(db, "gameInvitations", inviteId);
+          await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "false" });                                     
+        }
+        catch (err) {
+          console.log(err);
+          // handle later
+        }       
       };      
     }
-
-    const updateGameInvitationsDoc = async (inviteId) => {
-      try {
-        const invitationDocRef = doc(db, "gameInvitations", inviteId);
-        await updateDoc(invitationDocRef, { gameConcluded: true });                                     
-      }
-      catch (err) {
-        console.log(err);
-        // handle later
-      }    
-    }
-
+    
     currentUser.uid && getGameInvitations();
 
   },[currentUser.uid]);

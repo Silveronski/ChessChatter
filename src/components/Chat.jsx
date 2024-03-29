@@ -3,7 +3,7 @@ import Input from './Input';
 import React, { useContext, useEffect, useState } from 'react';
 import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, setDoc, updateDoc, query } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import toastr from 'toastr';
 
@@ -22,14 +22,13 @@ const Chat = () => {
           userId: data.user.uid,
           senderId : currentUser.uid,
           senderDisplayName : currentUser.displayName,
-          link: data.chatId,
+          link: data.user.uid + currentUser.uid,
           gameConcluded: false,
+          gameAccepted: ""
         });
 
         setInvitePending(true);
-        setGameInviteId(data.user.uid + currentUser.uid);
-
-        window.open(`http://localhost:3037/white?code=${data.chatId}`, '_blank');
+        setGameInviteId(data.user.uid + currentUser.uid);       
       }
 
       catch (err) {
@@ -39,10 +38,61 @@ const Chat = () => {
     }
 
     else {
-      console.log("cant invite more than 1 person at a time!");
-      // handle error - cant invite 2 users at teh same times
+      console.log("Cant invite more than one person at a time!");
+      toastr.error(
+        "Cant invite more than one person at a time!", 
+        {
+            timeOut: 2000,
+            extendedTimeOut: 0, 
+            closeButton: true, 
+            positionClass: "toast-top-right", 
+            tapToDismiss: true,
+            preventDuplicates: true,               
+        }
+      );
     }  
   }
+
+
+  useEffect(() => {
+
+    let unsub;
+
+    if (invitePending && gameInviteId !== "") {
+      const gameInviteRef = doc(db, "gameInvitations", gameInviteId);
+      unsub = onSnapshot(gameInviteRef, (docSnapshot) => {  
+
+          const data = docSnapshot.data();
+          if (data && data.gameAccepted === "true") {           
+            window.open(`http://localhost:3037/white?code=${gameInviteId}`, '_blank');
+          }
+
+          else if (data && data.gameAccepted === "false") {            
+            toastr.error(
+              "Your invitation was declined.", 
+              {
+                  timeOut: 3000,
+                  extendedTimeOut: 0, 
+                  closeButton: true, 
+                  positionClass: "toast-top-right", 
+                  tapToDismiss: true,
+                  preventDuplicates: true,               
+              }
+            );
+            setGameInviteId("");
+            setInvitePending(false);
+          }
+      });
+    }
+
+    return () => {
+      if (unsub) {
+        unsub(); 
+      }
+    }
+
+  },[invitePending, gameInviteId])
+  
 
   useEffect(() => {
 
