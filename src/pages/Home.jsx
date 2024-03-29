@@ -78,7 +78,7 @@ const Home = () => {
   useEffect(() => {
     const notifyUsersWhenUserOnline = onSnapshot(collection(db, 'presence'), (snapshot) => {
       snapshot.forEach(async (presDoc) => {
-        const data = presDoc.data();       
+        const data = presDoc.data();                
 
         if (presDoc.id !== currentUser.uid && !data.hasShown && data.online) {   
           console.log(presDoc.id);
