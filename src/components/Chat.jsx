@@ -1,6 +1,6 @@
-import Messages from './Messages'
-import Input from './Input'
-import React, { useContext } from 'react'
+import Messages from './Messages';
+import Input from './Input';
+import React, { useContext } from 'react';
 import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';

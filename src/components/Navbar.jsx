@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
-import { signOut } from 'firebase/auth'
-import { auth, db } from '../firebase'
+import React, { useContext } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth, db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 import { doc, updateDoc } from 'firebase/firestore';
-import newLogo from '../assets/images/newLogo.png'
+import newLogo from '../assets/images/newLogo.png';
 
 const Navbar = () => {
 

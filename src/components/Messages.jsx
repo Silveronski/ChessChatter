@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Message  from './Message'
+import React, { useContext, useEffect, useState } from 'react';
+import Message  from './Message';
 import { ChatContext } from '../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';

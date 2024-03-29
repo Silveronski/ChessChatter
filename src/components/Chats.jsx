@@ -6,7 +6,6 @@ import { ChatContext } from '../context/ChatContext';
 import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
 import bruh from '../assets/audio/bruh.mp3';
-import toastr from 'toastr';
 
 const Chats = ({selectedChatIdFromSearch}) => {
 

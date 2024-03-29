@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-import Add from "../assets/images/addAvatar.png"
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore"; 
 import { useNavigate, Link } from 'react-router-dom';
-import logo from '../assets/images/logo.png'
+import Add from "../assets/images/addAvatar.png";
 
 const Register = () => {
 

@@ -1,5 +1,5 @@
-import Sidebar from '../components/Sidebar'
-import Chat from '../components/Chat'
+import Sidebar from '../components/Sidebar';
+import Chat from '../components/Chat';
 import toastr from 'toastr';
 import { useContext, useEffect } from 'react';
 import { query, onSnapshot, collection, where, doc, updateDoc } from 'firebase/firestore';
@@ -11,7 +11,7 @@ const Home = () => {
   const {currentUser} = useContext(AuthContext);
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'presence'), (snapshot) => {
+    const notifyUsersWhenUserOnline = onSnapshot(collection(db, 'presence'), (snapshot) => {
       snapshot.forEach(async (presDoc) => {
         const data = presDoc.data();
         if (presDoc.id !== currentUser?.uid && !data.hasShown && data.online) {
@@ -44,8 +44,8 @@ const Home = () => {
       });
     });
 
-    currentUser.uid && unsub();
-    
+    currentUser.uid && notifyUsersWhenUserOnline();
+
   },[currentUser.uid]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
-import attach from '../assets/images/attach.png'
-import addImg from '../assets/images/img.png'
+import React, { useContext, useEffect, useState } from 'react';
+import attach from '../assets/images/attach.png';
+import addImg from '../assets/images/img.png';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
@@ -89,7 +89,7 @@ const Input = () => {
     }
 
     else if(!img && text.trim() !== '') {
-      
+
       const msgText = text;
       setText("");
       

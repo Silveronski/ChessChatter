@@ -1,10 +1,10 @@
-import Register from './pages/Register'
-import Login from './pages/Login'
-import Home from './pages/Home'
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { useContext } from 'react'
-import { AuthContext } from './context/AuthContext'
-import './style.scss'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import './style.scss';
 
 function App() {
 
