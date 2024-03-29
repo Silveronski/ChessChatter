@@ -55,10 +55,12 @@ const Chats = ({selectedChatIdFromSearch}) => {
   useEffect(() => {
     Object.entries(chats).forEach(chat => {
       if (chat[1]?.lastMessage?.senderId !== currentUser.uid &&
-         chat[1]?.fullDate?.seconds === Timestamp.now().seconds ||
-         chat[1]?.fullDate?.seconds === Timestamp.now().seconds + 1) {
-        console.log("Inside if block");
-        bruhRef.current.play();             
+         (chat[1]?.fullDate?.seconds === Timestamp.now().seconds ||
+         chat[1]?.fullDate?.seconds === Timestamp.now().seconds + 1)) {
+
+          if (bruhRef.current.paused) {
+            bruhRef.current.play();             
+          }
       }                 
     }) 
   },[chats]);
