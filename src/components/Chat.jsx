@@ -77,6 +77,8 @@ const Chat = () => {
           const data = docSnapshot.data();
           if (data && data.gameAccepted === "true") {           
             window.open(`http://localhost:3037/white?code=${gameInviteId}`, '_blank');
+            setGameInviteId("");
+            setInvitePending(false);
           }
 
           else if (data && data.gameAccepted === "false") {            
