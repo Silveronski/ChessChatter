@@ -23,6 +23,7 @@ const Home = () => {
                 {
                     timeOut: 9500,
                     extendedTimeOut: 0, 
+                    progressBar: true,
                     closeButton: true, 
                     positionClass: "toast-bottom-left", 
                     tapToDismiss: false,

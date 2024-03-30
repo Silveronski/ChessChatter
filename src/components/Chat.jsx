@@ -27,6 +27,18 @@ const Chat = () => {
           gameAccepted: ""
         });
 
+        toastr.success(
+          "Your invitation was successfully sent!", 
+          {
+              timeOut: 3000,
+              extendedTimeOut: 0, 
+              closeButton: true, 
+              positionClass: "toast-top-right", 
+              tapToDismiss: true,
+              preventDuplicates: true,               
+          }
+        );
+
         setInvitePending(true);
         setGameInviteId(data.user.uid + currentUser.uid);       
       }
@@ -105,7 +117,17 @@ const Chat = () => {
           const gameInviteSnap = await getDoc(gameInviteRef);
           if (gameInviteSnap.data().gameConcluded === false) {
             await updateDoc(gameInviteRef, {gameConcluded: true});
-            console.log("game canceled!");
+            toastr.error(
+              "Your invitation was not responded to within the specified time frame", 
+              {
+                  timeOut: 6000,
+                  extendedTimeOut: 0, 
+                  closeButton: true, 
+                  positionClass: "toast-top-right", 
+                  tapToDismiss: true,
+                  preventDuplicates: true,               
+              }
+            );
             setGameInviteId("");
             setInvitePending(false);
           }
