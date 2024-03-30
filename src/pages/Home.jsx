@@ -49,7 +49,7 @@ const Home = () => {
         }
         setTimeout(() => {
           window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');                            
-        }, 1000);                    
+        }, 500);                    
       };
 
       window.rejectInvite = async (inviteId) => {
@@ -69,11 +69,11 @@ const Home = () => {
   },[currentUser.uid]);
 
   useEffect(() => {
-    const notifyUsersWhenUserOnline = onSnapshot(collection(db, 'presence'), (snapshot) => {
+    onSnapshot(collection(db, 'presence'), (snapshot) => {
       snapshot.forEach(async (presDoc) => {
         const data = presDoc.data();                
 
-        if (presDoc.id !== currentUser.uid && !data.hasShown && data.online) {                 
+        if (currentUser.uid && presDoc.id !== currentUser.uid && !data.hasShown && data.online) {                         
           try {
             const presenceRef = doc(db, 'presence', presDoc.id);
             await updateDoc(presenceRef, { hasShown: true });         
@@ -98,9 +98,7 @@ const Home = () => {
       });
     });
 
-    currentUser.uid && notifyUsersWhenUserOnline();
-
-  },[currentUser.uid]);
+  },[AuthContext]);
 
 
   return (
