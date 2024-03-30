@@ -11,32 +11,34 @@ const Home = () => {
   const {currentUser} = useContext(AuthContext);
 
   useEffect(() => {
-    const getGameInvitations = () => {     
-      const unsub = onSnapshot( 
-        query(collection(db, "gameInvitations"), where("userId", "==", currentUser.uid)),
-        (snapshot) => {
-          snapshot.forEach((doc) => {
-            if (doc.exists() && !doc.data().gameConcluded) {
-              toastr.info(
-                `${doc.data().senderDisplayName} has invited you to play chess!`, 
-                "Game Invitation",
-                {
-                    timeOut: 9500,
-                    extendedTimeOut: 0, 
-                    progressBar: true,
-                    closeButton: true, 
-                    positionClass: "toast-bottom-left", 
-                    tapToDismiss: false,
-                    preventDuplicates: true,
-                    closeHtml: `<button onclick="acceptInvite('${doc.data().link}', '${doc.data().id}')">Accept</button>` +
-                               `<br />` +
-                               `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
-                }
-              );
-            }
-          });
-        }
-      );
+
+    if (!currentUser.uid) return;
+        
+    onSnapshot( 
+      query(collection(db, "gameInvitations"), where("userId", "==", currentUser.uid)),
+      (snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.exists() && !doc.data().gameConcluded) {
+            toastr.info(
+              `${doc.data().senderDisplayName} has invited you to play chess!`, 
+              "Game Invitation",
+              {
+                  timeOut: 9500,
+                  extendedTimeOut: 0, 
+                  progressBar: true,
+                  closeButton: true, 
+                  positionClass: "toast-bottom-left", 
+                  tapToDismiss: false,
+                  preventDuplicates: true,
+                  closeHtml: `<button onclick="acceptInvite('${doc.data().link}', '${doc.data().id}')">Accept</button>` +
+                              `<br />` +
+                              `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
+              }
+            );
+          }
+        });
+      }
+    );
       
       window.acceptInvite = async (gameLink, inviteId) => {
         try {
@@ -62,11 +64,8 @@ const Home = () => {
           // handle later
         }       
       };      
-    }
     
-    currentUser.uid && getGameInvitations();
-
-  },[currentUser.uid]);
+  },[]);
 
   useEffect(() => {
     onSnapshot(collection(db, 'presence'), (snapshot) => {
