@@ -80,7 +80,7 @@ const Chat = () => {
               }
             );
             setGameInviteId("");
-            setInvitePending(false);
+            setInvitePending(false); 
           }
       });
     }

@@ -118,7 +118,7 @@ body{
         border: 3px solid $green-bgcolor;
         box-shadow: 10px 10px 80px $black-bgcolor;
         border-radius: 3%;
-        width: 75%;
+        width: 80%;
         height: 90%;
         overflow: hidden;
         display: flex;
@@ -141,10 +141,10 @@ body{
 
                 .logo-container{
                     .logo{
-                        width: 45px;
-                        height: 45px;
+                        width: 100px;
+                        height: 60px;
                         padding: 0.2vw;
-                        object-fit: cover;
+                        object-fit: contain;
                         margin-left: 0.5vw;
                         background-color: black;
                     }
@@ -366,13 +366,13 @@ body{
                     text-align: center;
                     
                     img{
-                        width: 28%;                                       
+                        width: 60%;                                       
                     }
 
                     p{
                         color: white;                      
                         font-size: 20px;
-                        letter-spacing: 1px;
+                        letter-spacing: 4px;
                     }
 
                     p:nth-child(3){

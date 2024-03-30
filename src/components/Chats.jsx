@@ -59,7 +59,8 @@ const Chats = ({selectedChatIdFromSearch}) => {
          chat[1]?.fullDate?.seconds === Timestamp.now().seconds + 1)) {
 
           if (bruhRef.current.paused) {
-            bruhRef.current.play();             
+            bruhRef.current.play();
+            console.log("lolololol");             
           }
       }                 
     }) 
