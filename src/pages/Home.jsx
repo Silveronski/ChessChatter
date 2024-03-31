@@ -2,7 +2,7 @@ import Sidebar from '../components/Sidebar';
 import Chat from '../components/Chat';
 import toastr from 'toastr';
 import { useContext, useEffect } from 'react';
-import { query, onSnapshot, collection, where, doc, updateDoc } from 'firebase/firestore';
+import { query, onSnapshot, collection, where, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 
@@ -67,16 +67,17 @@ const Home = () => {
     
   },[]);
 
+  
+
   useEffect(() => {
-    onSnapshot(collection(db, 'presence'), (snapshot) => {
+    const unsubscribe = onSnapshot(collection(db, 'presence'), (snapshot) => {
       snapshot.forEach(async (presDoc) => {
         const data = presDoc.data();                
 
-        if (currentUser.uid && presDoc.id !== currentUser.uid && !data.hasShown && data.online) {                         
-          try {
+        if (currentUser.uid && presDoc.id !== currentUser.uid && !data.hasShown && data.online) {                                   
+          try {          
             const presenceRef = doc(db, 'presence', presDoc.id);
-            await updateDoc(presenceRef, { hasShown: true });         
-                                     
+            await updateDoc(presenceRef, { hasShown: true });                                              
             toastr.info(
               `${data.name} has just logged in!`, 
               {
@@ -97,7 +98,11 @@ const Home = () => {
       });
     });
 
-  },[AuthContext]);
+    return () => {
+      unsubscribe();
+  };
+
+  },[currentUser]);
 
 
   return (
