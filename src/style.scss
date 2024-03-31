@@ -138,13 +138,15 @@ body{
                 height: 50px;
                 padding: 10px;
                 justify-content: space-between;
+                overflow: hidden;
 
                 .logo-container{
                     .logo{
-                        width: 100px;
-                        height: 60px;
+                        width: 110px;
+                        height: 65px;
                         padding: 0.2vw;
                         object-fit: contain;
+                        margin-top: 0.2vw;
                         margin-left: 0.5vw;
                         background-color: black;
                     }

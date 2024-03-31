@@ -13,6 +13,23 @@ const Message = ({message}) => {
   },[message])
 
 
+  const formatMessage = (msg) => {
+    let newMsg = '';
+    let wordCount = 0;
+    let msgArr = msg.split('');
+    msgArr.forEach(m => {
+      if (wordCount === 35) {
+        newMsg +=`<br>${m}`;
+        wordCount = 0;
+      }
+      else {
+        wordCount++;
+        newMsg += m;
+      }
+    });
+    return newMsg;
+  }
+
   return (
     <div ref={ref} className={`message ${message.senderId === currentUser.uid && "owner"}`}>
       <div className="message-info">
@@ -20,7 +37,7 @@ const Message = ({message}) => {
         <span>{JSON.stringify(message.date).substring(1,6)}</span>
       </div>
       <div className="message-content">
-        <p>{message.text} {message.img && <><br/><img src={message.img}/></>}</p>   
+      <p dangerouslySetInnerHTML={{ __html: (message.text.length > 35 ? formatMessage(message.text) : message.text) + (message.img ? `<br/><img src="${message.img}"/>` : '') }} /> 
       </div>
     </div>
   )
