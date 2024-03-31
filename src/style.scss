@@ -101,7 +101,13 @@ body{
             }
             img{
                 width: 33px;
-            }          
+            }
+            .form-error{
+                color: rgba(255, 0, 0, 0.83);
+                font-size: 12px;
+                margin-left: 0.4vw;
+                letter-spacing: 0.2px;
+            }      
         }                    
     }
 }

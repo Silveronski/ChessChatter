@@ -13,7 +13,7 @@ export const AuthContextProvider = ({children}) => {
             try {
                 setCurrentUser(user);
                 if (user?.uid) {
-                    const userRef = doc(db, `presence/${user?.uid}`);
+                    const userRef = doc(db, `presence/${user.uid}`);
                     const userSnap = await getDoc(userRef);
                     if (userSnap.exists()) {
                         if (userSnap.data().count === 0) {
@@ -26,16 +26,18 @@ export const AuthContextProvider = ({children}) => {
                     } 
                     
                     else {
-                        const currentUserRef = await getDoc(doc(db, 'users', user.uid));                        
-                        const userName = currentUserRef.data().displayName;
-
-                        await setDoc(userRef, { 
-                            count : 1,
-                            date: Timestamp.now(), 
-                            hasShown: false,
-                            name: userName, 
-                            online: true, 
-                        });
+                        setTimeout(async () => {
+                            const currentUserRef = await getDoc(doc(db, 'users', user.uid));                        
+                            const userName = currentUserRef.data().displayName;
+    
+                            await setDoc(userRef, { 
+                                count : 1,
+                                date: Timestamp.now(), 
+                                hasShown: false,
+                                name: userName, 
+                                online: true, 
+                            });                           
+                        }, 1000);
                     }                    
                 }              
             }
