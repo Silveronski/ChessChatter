@@ -81,7 +81,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
   return (
     <div className="chats">
       {chats && Object.entries(chats)?.sort((a,b) => b[1].fullDate - a[1].fullDate).map((chat) => ( 
-        <div className={`user-chat ${selectedChatId === chat[1].userInfo.uid ? 'selected-chat' : ''}`} key={chat[0]} onClick={() => handleSelect(chat[1].userInfo)}>        
+        <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`} key={chat[0]} onClick={() => handleSelect(chat[1]?.userInfo)}>        
           <img className='user-photo' src={chat[1].userInfo?.photoURL}/>
           <div className="user-chat-info">
             <span>{chat[1].userInfo?.displayName}</span>
@@ -90,7 +90,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
                             
               <div className='date-status'>
                 {chat[1].lastMessage?.text && <p>{JSON.stringify(chat[1]?.date).substring(1,6)}</p> }                
-                <p>{userStatuses[chat[1].userInfo.uid] ? <img src={online}/> : <img src={offline}/>}</p>                   
+                <p>{userStatuses[chat[1].userInfo?.uid] ? <img src={online}/> : <img src={offline}/>}</p>                   
               </div>
 
               <audio ref={bruhRef} src={bruh}></audio>

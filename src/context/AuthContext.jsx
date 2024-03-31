@@ -26,12 +26,15 @@ export const AuthContextProvider = ({children}) => {
                     } 
                     
                     else {
+                        const currentUserRef = await getDoc(doc(db, 'users', user.uid));                        
+                        const userName = currentUserRef.data().displayName;
+
                         await setDoc(userRef, { 
                             count : 1,
-                            online: true, 
-                            name: user?.displayName, 
                             date: Timestamp.now(), 
-                            hasShown: false
+                            hasShown: false,
+                            name: userName, 
+                            online: true, 
                         });
                     }                    
                 }              
