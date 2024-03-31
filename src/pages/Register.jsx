@@ -68,9 +68,10 @@ const Register = () => {
                 <span className='title'>Register</span>
                 <form method='post' onSubmit={handleSubmit(onSubmit)}>
                 
-                    <input type="text" placeholder='Display name' {...register("displayName",{required: true})}/>
+                    <input type="text" placeholder='Display name' {...register("displayName",{required: true, pattern: /^(?!\s*$).{1,12}$/})}/>
                     <span className='form-error'>
                         {errors.displayName?.type === "required" && "This field is required"}
+                        {errors.displayName?.type === "pattern" && "Display name must not exceed 12 characters"}
                     </span>
 
                     <input type="email" placeholder='Email' {...register("email",{required: true, pattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i})}/> 
