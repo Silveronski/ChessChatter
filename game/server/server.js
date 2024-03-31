@@ -1,9 +1,9 @@
 import http from 'http';
 import express from 'express';
 import handlebars from 'express-handlebars';
-import { Server } from 'socket.io';
 import path from 'path';
 import myIo from './sockets/io.js';
+import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import { routes } from './routes/routes.js';
@@ -24,13 +24,11 @@ export let games = {};
 
 myIo(io);
 
-
 const Handlebars = handlebars.create({
   extname: '.html', 
   defaultLayout: false,
   helpers: {}
 });
-
 
 app.engine('html', Handlebars.engine);
 app.set('view engine', 'html');

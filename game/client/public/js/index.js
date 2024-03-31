@@ -3,8 +3,9 @@
     let socket = io();
     var game = new Chess();
     var $status = $('#status');
-    var $pgn = $('#pgn');
+    var $pgn = $('#pgn-container');
     let gameOver = false;
+    var moveCount = 0;
 
     function onDragStart (source, piece, position, orientation) {
         // do not pick up pieces if the game is over
@@ -50,6 +51,7 @@
     // for castling, en passant, pawn promotion
     function onSnapEnd () {
         board.position(game.fen());
+        // $('#pgn').scrollTop($('#pgn').prop('scrollHeight'));
     }
 
     function updateStatus () {
@@ -89,7 +91,9 @@
         }
 
         $status.html(status);
-        $pgn.html(game.pgn());
+
+        console.log(game.pgn());
+        $pgn.append('<div>' + game.pgn() + '</div>');
     }
 
     var config = {
