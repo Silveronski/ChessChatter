@@ -1,168 +1,199 @@
-    let gameHasStarted = false;
-    var board = null;
-    let socket = io();
-    var game = new Chess();
-    var $status = $('#status');
-    var $pgn = $('#pgn-container');
-    var $bruhSound = $('#bruhSound');
-    var $checkSound = $('#checkSound'); 
-    var $checkMateSound = $('#checkMateSound'); 
-    var $drawSound = $('#drawSound');
-    let gameOver = false;
-    let moveCount = 1;
-    let turnCount = 0;
-    
-    function onDragStart (source, piece, position, orientation) {
-        // do not pick up pieces if the game is over
-        if (game.game_over()) return false;
-        if (!gameHasStarted) return false;
-        if (gameOver) return false;
+let gameHasStarted = false;
+var board = null;
+let socket = io();
+var game = new Chess();
+var $status = $('#status');
+var $pgn = $('#pgn-container');
+var $bruhSound = $('#bruhSound');
+var $checkSound = $('#checkSound'); 
+var $checkMateSound = $('#checkMateSound'); 
+var $drawSound = $('#drawSound');
+let gameOver = false;
+let moveCount = 1;
+let turnCount = 0;
+let colorWhoResigned = '';
+let colorWhoRequestedDraw = '';
 
-        if ((playerColor === 'black' && piece.search(/^w/) !== -1) || (playerColor === 'white' && piece.search(/^b/) !== -1)) {
-            return false;
-        }
+function onDragStart (source, piece, position, orientation) {
+    // do not pick up pieces if the game is over
+    if (game.game_over()) return false;
+    if (!gameHasStarted) return false;
+    if (gameOver) return false;
 
-        // only pick up pieces for the side to move
-        if ((game.turn() === 'w' && piece.search(/^b/) !== -1) || (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-            return false;
-        }
+    if ((playerColor === 'black' && piece.search(/^w/) !== -1) || (playerColor === 'white' && piece.search(/^b/) !== -1)) {
+        return false;
     }
 
-    // this gets called when you make a move
-    function onDrop (source, target) {
-        let theMove = {
-            from: source,
-            to: target,
-            promotion: 'q' // NOTE: always promote to a queen for simplicity
-        };
-
-        // see if the move is legal
-        var move = game.move(theMove);
-
-        // illegal move
-        if (move === null) return 'snapback';
-
-        socket.emit('move', theMove);
-        updateStatus();       
+    // only pick up pieces for the side to move
+    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) || (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        return false;
     }
+}
 
-    // this gets called when the oponent makes a move
-    socket.on('newMove', function(move) {
-        game.move(move);
-        board.position(game.fen());
-        updateStatus();
-        playGameSounds(game);
-        updatePgn();
-    });
+// this gets called when you make a move
+function onDrop (source, target) {
+    let theMove = {
+        from: source,
+        to: target,
+        promotion: 'q' // NOTE: always promote to a queen for simplicity
+    };
 
-    function playGameSounds(game){
-        if ((game.in_checkmate())) {
-            $checkMateSound.get(0).play();
-        }       
-        else if(game.in_check()){
-            $checkSound.get(0).play();
-        }
-        else if (game.in_draw()) {
-            $drawSound.get(0).play();
-        }
-        else {
-            $bruhSound.get(0).play();
-        }             
-    }
+    // see if the move is legal
+    var move = game.move(theMove);
 
-    // update the board position after the piece snap
-    // for castling, en passant, pawn promotion
-    function onSnapEnd () {
-        board.position(game.fen());
-        // $('#pgn').scrollTop($('#pgn').prop('scrollHeight'));
-    }
+    // illegal move
+    if (move === null) return 'snapback';
 
-    function updateStatus () {
-        var status = '';
+    socket.emit('move', theMove);
+    updateStatus();       
+}
 
-        var moveColor = 'White';
-        if (game.turn() === 'b') {
-            moveColor = 'Black';
-        }
-
-        // checkmate?
-        if (game.in_checkmate()) {
-            status = 'Game over, ' + moveColor + ' is in checkmate.';
-        }
-
-        // draw?
-        else if (game.in_draw()) {
-            status = 'Game over, drawn position';
-        }
-
-        else if (gameOver) {
-            status = 'Opponent disconnected, you win!';
-        }
-
-        else if (!gameHasStarted) {
-            status = 'Waiting for black to join';
-        }
-
-        // game still on
-        else {
-            status = moveColor + ' to move';
-
-            // check?
-            if (game.in_check()) {
-                status += ', ' + moveColor + ' is in check';
-            }         
-        } 
-       
-        $status.html(status);
-    }
-
-
-    function updatePgn() {
-        if (gameHasStarted) {                                                                
-            if (game.pgn()) {                
-                turnCount += 0.5;
-                if (turnCount === 1) {
-                    turnCount = 0;
-                    let moveDiv = document.querySelector(`.move${moveCount}`);
-                    moveDiv.innerHTML =`${moveCount}. ` +  game.pgn().split('.')[moveCount];
-                    moveCount++;
-                }
-                else {
-                    $pgn.append('<div class="move' + moveCount + '">'+ moveCount + ". " + game.pgn().split('.')[moveCount] + '</div>');                                                                                                                 
-                }            
-            }                     
-        }
-    }
-
-    var config = {
-        draggable: true,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd,
-        pieceTheme: '/public/img/chesspieces/wikipedia/{piece}.png'
-    }
-
-    board = Chessboard('myBoard', config)
-    if (playerColor == 'black') {
-        board.flip();
-    }
-
+// this gets called when the oponent makes a move
+socket.on('newMove', function(move) {
+    game.move(move);
+    board.position(game.fen());
     updateStatus();
+    playGameSounds(game);
+    updatePgn();
+});
 
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('code')) {
-        socket.emit('joinGame', {
-            code: urlParams.get('code')
-        });
+function playGameSounds(game){
+    if ((game.in_checkmate())) {
+        $checkMateSound.get(0).play();
+    }       
+    else if(game.in_check()){
+        $checkSound.get(0).play();
+    }
+    else if (game.in_draw()) {
+        $drawSound.get(0).play();
+    }
+    else {
+        $bruhSound.get(0).play();
+    }             
+}
+
+// update the board position after the piece snap
+// for castling, en passant, pawn promotion
+function onSnapEnd () {
+    board.position(game.fen());
+    // $('#pgn').scrollTop($('#pgn').prop('scrollHeight'));
+}
+
+function updateStatus () {
+    var status = '';
+
+    var moveColor = 'White';
+    if (game.turn() === 'b') {
+        moveColor = 'Black';
     }
 
-    socket.on('startGame', function() {
-        gameHasStarted = true;
-        updateStatus();
-    });
+    // checkmate?
+    if (game.in_checkmate()) {
+        status = 'Game over, ' + moveColor + ' is in checkmate.';
+    }
 
-    socket.on('gameOverDisconnect', function() {
-        gameOver = true;
-        updateStatus();
+    // draw?
+    else if (game.in_draw()) {
+        status = 'Game over, drawn position';
+    }
+
+    else if (gameOver) {
+        status = 'Opponent disconnected, you win!';
+    }
+
+    else if (!gameHasStarted) {
+        status = 'Waiting for black to join';
+    }
+
+    // game still on
+    else {
+        status = moveColor + ' to move';
+
+        // check?
+        if (game.in_check()) {
+            status += ', ' + moveColor + ' is in check';
+        }         
+    } 
+    
+    $status.html(status);
+}
+
+
+function updatePgn() {
+    if (gameHasStarted) {                                                                
+        if (game.pgn()) {                
+            turnCount += 0.5;
+            if (turnCount === 1) {
+                turnCount = 0;
+                let moveDiv = document.querySelector(`.move${moveCount}`);
+                moveDiv.innerHTML =`${moveCount}. ` +  game.pgn().split('.')[moveCount];
+                moveCount++;
+            }
+            else {
+                $pgn.append('<div class="move' + moveCount + '">'+ moveCount + ". " + game.pgn().split('.')[moveCount] + '</div>');                                                                                                                 
+            }            
+        }                     
+    }
+}
+
+var config = {
+    draggable: true,
+    position: 'start',
+    onDragStart: onDragStart,
+    onDrop: onDrop,
+    onSnapEnd: onSnapEnd,
+    pieceTheme: '/public/img/chesspieces/wikipedia/{piece}.png'
+}
+
+board = Chessboard('myBoard', config)
+if (playerColor == 'black') {
+    board.flip();
+}
+
+updateStatus();
+
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('code')) {
+    socket.emit('joinGame', {
+        code: urlParams.get('code')
     });
+}
+
+socket.on('startGame', function() {
+    gameHasStarted = true;
+    updateStatus();
+});
+
+socket.on('gameOverDisconnect', function() {
+    gameOver = true;
+    updateStatus();
+});
+
+socket.on('drawRequest', function() {
+    
+});
+
+socket.on('draw', function() {
+    
+});
+
+socket.on('resign', function() {
+    if (colorWhoResigned === '') $status.html(`Your opponent has resigned, game over!`);
+    else $status.html(`You have resigned, game over!`);
+    gameOver = true;
+});
+
+
+$('#resignBtn').on('click', function() {
+    if (gameHasStarted && !gameOver){
+        colorWhoResigned = playerColor;
+        socket.emit('resign');
+    } 
+});
+
+$('#drawBtn').on('click', function() {
+    if (gameHasStarted && !gameOver) {
+        colorWhoRequestedDraw = playerColor;
+        socket.emit('drawRequest');
+    }
+});
