@@ -32,14 +32,26 @@ body{
     overflow: hidden; 
 }
 
-.moves-container{
-    width: 20vw;
+.left-container{
     background-color: hsla(0, 2%, 19%, 0.821);
-    overflow-y: scroll;
-    max-height: 77.9vh;
-    border-right: 5px black solid;
+}
+
+.board-container{
+    flex: 1;
+    position: relative;
+}
+
+.moves-container{
+    width: 20vw;   
+    height: calc(100% - 60px);
+    border-right: 4px black solid;
     padding-right: 0.5%;
-    padding-left: 0.5%;
+    padding-left: 0.5%;  
+}
+
+#pgn-container{
+    overflow-y: scroll;
+    height: 59.8vh;
 }
 
 .moves-container #pgn-container div{
@@ -51,10 +63,34 @@ body{
     border: 1px white solid;
 }
 
+.moves-container #pgn-container div:nth-child(1){
+    margin-top: 0;
+}
+
+.btn-container{
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: rgb(34, 32, 32);
+}
+
+.btn-container button{
+    font-family: "Tilt Warp";
+    cursor: pointer;
+    padding: 3px 10px;
+    font-size: 18px;
+    width: 100%;
+    margin-left: 1.2vw;
+    margin-right: 1.2vw;
+    border-radius: 5%;
+    transition: 0.3s;
+}
+
+
 .moves-container #pgn-container div:nth-child(even) {
     background-color: #f8dcb4; 
 }
-
 
 .moves-container #pgn-container div:nth-child(odd) {
     background-color: #b88c64;
@@ -65,9 +101,28 @@ body{
     font-size: 2vw;
     color: white;
     margin-top: 2%;
+    margin-bottom: 4%;
 }
 
 #myBoard .chessboard-63f37 .board-b72b1{
     width: 40vw;
     flex-grow: 1;
+}
+
+.btn-container button:hover{
+    background-color: aliceblue;
+}
+
+.moves-container ::-webkit-scrollbar {
+    width: 0.2em; 
+}
+                   
+.moves-container ::-webkit-scrollbar-track {
+    background: rgb(57, 57, 57);
+    border-radius: 100vw;
+}
+                
+.moves-container ::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 100vw;              
 }

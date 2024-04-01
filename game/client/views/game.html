@@ -11,14 +11,20 @@
     </head>
 
     <body>
-
         <div class="game-container">
             <div class="game-content">
-                <div class="moves-container">
-                    <p id="status"></p>
-                    <div id="pgn-container"></div>                                                            
+                <div class="left-container">
+                    <div class="moves-container">
+                        <p id="status"></p>
+                        <hr>
+                        <div id="pgn-container"></div>                                                                                                                                                        
+                    </div>
+                    <div class="btn-container">
+                        <button>Resign</button>
+                        <button>Draw</button>
+                    </div>                   
                 </div>
-    
+ 
                 <div class="board-container">              
                     <div id="myBoard"></div>
                 </div>
@@ -29,7 +35,7 @@
         <audio id="checkSound" src="../public/audio/check.mp3"></audio>
         <audio id="checkMateSound" src="../public/audio/checkmate.mp3"></audio>
         <audio id="drawSound" src="../public/audio/draw.mp3"></audio>
-        
+
         <script>
             let playerColor = '{{color}}';
             console.log('Playing as ' + playerColor);
