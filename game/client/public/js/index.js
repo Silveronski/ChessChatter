@@ -4,9 +4,14 @@
     var game = new Chess();
     var $status = $('#status');
     var $pgn = $('#pgn-container');
+    var $bruhSound = $('#bruhSound');
+    var $checkSound = $('#checkSound'); 
+    var $checkMateSound = $('#checkMateSound'); 
+    var $drawSound = $('#drawSound');
     let gameOver = false;
-    var moveCount = 0;
-
+    let moveCount = 1;
+    let turnCount = 0;
+    
     function onDragStart (source, piece, position, orientation) {
         // do not pick up pieces if the game is over
         if (game.game_over()) return false;
@@ -23,29 +28,47 @@
         }
     }
 
+    // this gets called when you make a move
     function onDrop (source, target) {
         let theMove = {
             from: source,
             to: target,
             promotion: 'q' // NOTE: always promote to a queen for simplicity
         };
+
         // see if the move is legal
         var move = game.move(theMove);
-
 
         // illegal move
         if (move === null) return 'snapback';
 
         socket.emit('move', theMove);
-
-        updateStatus();
+        updateStatus();       
     }
 
+    // this gets called when the oponent makes a move
     socket.on('newMove', function(move) {
         game.move(move);
         board.position(game.fen());
         updateStatus();
+        playGameSounds(game);
+        updatePgn();
     });
+
+    function playGameSounds(game){
+        if ((game.in_checkmate())) {
+            $checkMateSound.get(0).play();
+        }       
+        else if(game.in_check()){
+            $checkSound.get(0).play();
+        }
+        else if (game.in_draw()) {
+            $drawSound.get(0).play();
+        }
+        else {
+            $bruhSound.get(0).play();
+        }             
+    }
 
     // update the board position after the piece snap
     // for castling, en passant, pawn promotion
@@ -88,12 +111,27 @@
             if (game.in_check()) {
                 status += ', ' + moveColor + ' is in check';
             }         
-        }
-
+        } 
+       
         $status.html(status);
+    }
 
-        console.log(game.pgn());
-        $pgn.append('<div>' + game.pgn() + '</div>');
+
+    function updatePgn() {
+        if (gameHasStarted) {                                                                
+            if (game.pgn()) {                
+                turnCount += 0.5;
+                if (turnCount === 1) {
+                    turnCount = 0;
+                    let moveDiv = document.querySelector(`.move${moveCount}`);
+                    moveDiv.innerHTML =`${moveCount}. ` +  game.pgn().split('.')[moveCount];
+                    moveCount++;
+                }
+                else {
+                    $pgn.append('<div class="move' + moveCount + '">'+ moveCount + ". " + game.pgn().split('.')[moveCount] + '</div>');                                                                                                                 
+                }            
+            }                     
+        }
     }
 
     var config = {
@@ -104,6 +142,7 @@
         onSnapEnd: onSnapEnd,
         pieceTheme: '/public/img/chesspieces/wikipedia/{piece}.png'
     }
+
     board = Chessboard('myBoard', config)
     if (playerColor == 'black') {
         board.flip();

@@ -30,7 +30,6 @@ body{
     border: 6px black solid;
     display: flex; 
     overflow: hidden; 
-    gap: 15px;
 }
 
 .moves-container{
