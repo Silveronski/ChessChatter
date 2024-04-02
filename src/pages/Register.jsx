@@ -12,17 +12,14 @@ const Register = () => {
     const [error, setError] = useState(false);
     const navigate = useNavigate();
     const {register, formState: {errors}, handleSubmit} = useForm();
-
     const onSubmit = async (data) => await AddUser(data);        
                 
     const AddUser = async (data) => {
 
         const displayName = data.displayName;
-        const email = data.email;;
+        const email = data.email;
         const password = data.password;
         const avatar = data.image[0];
-
-        console.log(displayName, email, password, avatar);
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
