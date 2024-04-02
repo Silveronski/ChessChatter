@@ -2,7 +2,7 @@ import Sidebar from '../components/Sidebar';
 import Chat from '../components/Chat';
 import toastr from 'toastr';
 import { useContext, useEffect } from 'react';
-import { query, onSnapshot, collection, where, doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { query, onSnapshot, collection, where, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 

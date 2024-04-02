@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({children}) => {
     const [currentUser, setCurrentUser] = useState({});
     
-    useEffect(() => {      
+    useEffect(() => {  
         const unsub = onAuthStateChanged(auth, async (user) => {
             try {
                 setCurrentUser(user);
@@ -27,8 +27,12 @@ export const AuthContextProvider = ({children}) => {
                     
                     else {
                         setTimeout(async () => {
-                            const currentUserRef = await getDoc(doc(db, 'users', user.uid));                        
-                            const userName = currentUserRef.data().displayName;
+                            console.log(currentUser.uid);
+                            if (currentUser.uid === undefined || null) return;
+                            console.log(user);
+                            
+                            const currentUserSnap = await getDoc(doc(db, 'users', user.uid));                        
+                            const userName = currentUserSnap.data()?.displayName;
     
                             await setDoc(userRef, { 
                                 count : 1,
@@ -37,7 +41,8 @@ export const AuthContextProvider = ({children}) => {
                                 name: userName, 
                                 online: true, 
                             });                           
-                        }, 1000);
+                            
+                        }, 2000);                   
                     }                    
                 }              
             }
