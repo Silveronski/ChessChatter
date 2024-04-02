@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase';
 import { useForm } from 'react-hook-form';
+import newLogo from '../assets/images/newLogo.png';
 
 const Login = () => {
     const [error, setError] = useState(false);
@@ -27,7 +28,7 @@ const Login = () => {
   return (
     <div className='form-container'> 
         <div className='form-wrapper'>
-            <span className='logo'>Chess Chatter</span>
+            <span className='logo'><img src={newLogo}/></span>
             <span className='title'>Login</span>
             <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -47,7 +48,7 @@ const Login = () => {
                 <button>Sign in</button> 
                 {error && <span style={{color:"red", textAlign:"center"}}>Incorrect password or email</span>}                                 
             </form>
-            <p style={{marginTop: 0}}>Don't have an account? <Link to="/register">Register</Link></p>
+            <p>Don't have an account? <Link to="/register">Register</Link></p>
         </div>      
     </div>
   )

@@ -34,23 +34,36 @@ body{
 
     .form-wrapper{
         margin-bottom: 10%;
-        background-color: $green-bgcolor;
+        background-color: hsla(0, 0%, 7%, 0.853);
         padding: 20px 60px;
         border-radius: 10%;
-        box-shadow: 1px 1px 25px $black-bgcolor;
+        box-shadow: 1px 1px 20px $black-bgcolor;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 20px;
+        border: 1px solid $green-bgcolor;
 
-        .logo{
-            font-weight: 600;
-            font-size: 24px;
-            color: $black-bgcolor;           
+        .logo{        
+            text-align: center;
+           img{
+            width: 300px;
+           }         
         }
         .title{
-            font-size: 16px;
-            color: $black-bgcolor;
+            font-size: 22px;
+            color: $green-bgcolor;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: $green-bgcolor;
+        }
+
+        p{
+            color: $green-bgcolor;
+            a{
+                color: hsl(117, 100%, 72%);
+                margin-left: 4px;
+            }
         }
         form{
             display: flex;
@@ -59,15 +72,15 @@ body{
             input{
                 width: 250px;
                 font-family: "Tilt Warp";
-                color: $black-bgcolor;
+                color: $green-bgcolor;
                 padding: 15px;
                 border: none;
-                border-bottom: 1px solid $black-bgcolor;
+                border-bottom: 1px solid $green-bgcolor;
                 background-color: hsla(117, 100%, 72%, 0);
                 border-radius: 5%;
                 &::placeholder{
                     font-family: "Tilt Warp";
-                    color: $black-bgcolor;
+                    color: $green-bgcolor;
                 }
                 &:focus{
                     outline: none;
@@ -81,8 +94,8 @@ body{
                 font-size: 18px;
                 font-weight: 600;
                 border-radius: 5%;
-                background-color: $black-bgcolor;
-                color: $green-bgcolor;
+                background-color: $green-bgcolor;
+                color: $black-bgcolor;
                 cursor: pointer;
                 letter-spacing: 1.5px;
                 border: none;
@@ -92,14 +105,21 @@ body{
                 display: flex;
                 justify-content:baseline;
                 align-items:center;
-                color: $black-bgcolor;
+                color: $green-bgcolor;
                 font-size: 13.3px;
                 gap: 10px;
                 cursor: pointer;
                 margin-left: 0.3vw;
             }
+            .avatar-span{
+                margin-left: 1.5%;
+            }
             img{
                 width: 33px;
+                background-color: $green-bgcolor;
+                border-radius: 50%;
+                padding: 2px;
+                margin-left: 1.5%;
             }
             .form-error{
                 color: rgba(255, 0, 0, 0.83);

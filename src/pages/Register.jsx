@@ -6,6 +6,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Add from "../assets/images/addAvatar.png";
+import newLogo from '../assets/images/newLogo.png';
 
 const Register = () => {
 
@@ -61,7 +62,7 @@ const Register = () => {
     return (
         <div className='form-container'> 
             <div className='form-wrapper'>
-                <span className='logo'>Chess Chatter</span>
+                <span className='logo'><img src={newLogo}/></span>
                 <span className='title'>Register</span>
                 <form method='post' onSubmit={handleSubmit(onSubmit)}>
                 
@@ -87,7 +88,7 @@ const Register = () => {
                     <input style={{display:"none"}} type="file" id='img' {...register("image",{required: true})}/>
                     <label htmlFor="img">
                         <img src={Add}/>
-                        <span>Add an Avatar</span>
+                        <span className='avatar-span'>Add an Avatar</span>
                     </label>
                     <span className='form-error'>
                         {errors.image?.type === "required" && "This field is required"}
