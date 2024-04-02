@@ -25,7 +25,6 @@ body{
     font-family: "Tilt Warp";
 }
 
-
 .form-container{
     background-color: $black-bgcolor;
     height: 100vh;
@@ -136,6 +135,10 @@ body{
             flex: 1;
             background-color: rgb(39, 38, 38);
             position: relative;
+
+            .selected-chat{
+                background-color: hsla(117, 100%, 72%, 0.268);
+            }
 
             .navbar{
                 display: flex;
@@ -297,11 +300,7 @@ body{
                         letter-spacing: 0.5px;                     
                     }                  
                 }
-            }  
-            
-            .selected-chat{
-                background-color: hsla(117, 100%, 72%, 0.268);
-            }
+            }                       
         }
 
         .chat{
@@ -339,7 +338,7 @@ body{
                 button{
                     padding: 6px;   
                     width: 23%;
-                    height: 85%;
+                    height: 80%;
                     margin-right: 15px;
                     font-size: 1.1vw;
                     background-color: $green-bgcolor;
