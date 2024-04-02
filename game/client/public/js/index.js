@@ -8,6 +8,8 @@ var $bruhSound = $('#bruhSound');
 var $checkSound = $('#checkSound'); 
 var $checkMateSound = $('#checkMateSound'); 
 var $drawSound = $('#drawSound');
+var $rizzSound = $('#rizzSound');
+var $fartSound = $('#fartSound');
 let gameOver = false;
 let moveCount = 1;
 let turnCount = 0;
@@ -170,16 +172,69 @@ socket.on('gameOverDisconnect', function() {
 });
 
 socket.on('drawRequest', function() {
-    
+    if (colorWhoRequestedDraw === '') {
+        toastr.info(
+            `Your opponent has offered a draw`, 
+            "Draw request",
+            {
+                timeOut: 10000,
+                extendedTimeOut: 0, 
+                progressBar: true,
+                closeButton: true, 
+                positionClass: "toast-bottom-left", 
+                tapToDismiss: false,
+                preventDuplicates: true,
+                closeHtml: `<button onclick="acceptDraw()">Accept</button>` +
+                            `<br />` +
+                            `<button onclick="rejectDraw()">Reject</button>`
+            }
+        );
+    }
 });
 
+window.acceptDraw = () => {
+    socket.emit('draw');       
+}
+
+window.rejectDraw = () => {
+    socket.emit('drawReject');
+}
+
+socket.on('drawReject', function() {
+    if (colorWhoRequestedDraw !== '') {
+        colorWhoRequestedDraw = '';
+        toastr.error(
+            `Your opponent has declined your draw offer`, 
+            "Draw offer rejected",
+            {
+                timeOut: 3000,
+                extendedTimeOut: 0, 
+                closeButton: true, 
+                positionClass: "toast-bottom-left", 
+                tapToDismiss: false,
+                preventDuplicates: true,              
+            }
+        );
+    }
+});
+
+
 socket.on('draw', function() {
-    
+    $status.html(`Draw!`);
+    gameOver = true;
+    $drawSound.get(0).play();
 });
 
 socket.on('resign', function() {
-    if (colorWhoResigned === '') $status.html(`Your opponent has resigned, game over!`);
-    else $status.html(`You have resigned, game over!`);
+    if (colorWhoResigned === '') {
+        $status.html(`Your opponent has resigned, game over!`);
+        $rizzSound.get(0).play();
+    } 
+    else {
+        $status.html(`You have resigned, game over!`);
+        $fartSound.get(0).play();
+    } 
+    colorWhoResigned = '';
     gameOver = true;
 });
 
@@ -195,5 +250,18 @@ $('#drawBtn').on('click', function() {
     if (gameHasStarted && !gameOver) {
         colorWhoRequestedDraw = playerColor;
         socket.emit('drawRequest');
+
+        toastr.success(
+            `A draw offer was sent to your opponent`, 
+            "Draw offer",
+            {
+                timeOut: 3000,
+                extendedTimeOut: 0, 
+                closeButton: true, 
+                positionClass: "toast-bottom-left", 
+                tapToDismiss: false,
+                preventDuplicates: true,              
+            }
+        );
     }
 });

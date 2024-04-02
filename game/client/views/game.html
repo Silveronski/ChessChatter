@@ -1,15 +1,18 @@
-<html>
+<!doctype html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8"/>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="../public/js/chess-0.10.3.min.js"></script>
         <script src="../public/js/chessboard-1.0.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <link rel="stylesheet" href="../public/css/chessboard-1.0.0.min.css">
         <link rel="stylesheet" href="../public/css/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
         <link rel="icon" type="image/svg+xml" href="../../../src/assets/images/newLogo.png"/>
     </head>
-
     <body>
         <div class="game-container">
             <div class="game-content">
@@ -35,11 +38,13 @@
         <audio id="checkSound" src="../public/audio/check.mp3"></audio>
         <audio id="checkMateSound" src="../public/audio/checkmate.mp3"></audio>
         <audio id="drawSound" src="../public/audio/draw.mp3"></audio>
+        <audio id="rizzSound" src="../public/audio/win.mp3"></audio>
+        <audio id="fartSound" src="../public/audio/lose.mp3"></audio>
 
         <script>
             let playerColor = '{{color}}';
         </script>
-        
+
         <script src="../public/js/index.js"></script>
     </body>
 </html>

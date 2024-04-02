@@ -2,8 +2,10 @@ import { games } from '../server.js';
 
 const myIo = (io) => {
     io.on('connection', socket => {
+
         console.log('New socket connection');
         let currentCode = null;
+
         socket.on('move', function(move) {          
             io.to(currentCode).emit('newMove', move);
         });
@@ -20,7 +22,15 @@ const myIo = (io) => {
         });
 
         socket.on('drawRequest', function() {
-            
+            if (currentCode) {
+                io.to(currentCode).emit('drawRequest');
+            }
+        });
+
+        socket.on('drawReject', function() {
+            if (currentCode) {
+                io.to(currentCode).emit('drawReject');
+            }
         });
 
         socket.on('draw', function() {
