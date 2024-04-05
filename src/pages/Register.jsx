@@ -7,10 +7,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Add from "../assets/images/addAvatar.png";
 import newLogo from '../assets/images/newLogo.png';
+import loading from '../assets/images/loading.gif';
 
 const Register = () => {
 
     const [error, setError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const {register, formState: {errors}, handleSubmit} = useForm();
     const onSubmit = async (data) => await AddUser(data);        
@@ -22,6 +24,8 @@ const Register = () => {
         const password = data.password;
         const avatar = data.image[0];
 
+        setIsLoading(true);
+
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const storageRef = ref(storage, displayName); // creates a reference to the storage location where the avatar will be saved
@@ -31,6 +35,7 @@ const Register = () => {
             uploadTask.on(
                 (error) => {
                     console.log(error);
+                    setIsLoading(false);
                     setError(true);
                 }, 
                 () => {             
@@ -48,6 +53,7 @@ const Register = () => {
                         });
 
                         await setDoc(doc(db, "userChats", res.user.uid), {});
+                        setIsLoading(false);
                         navigate("/");
                     });
                 }
@@ -55,6 +61,7 @@ const Register = () => {
         }
         catch (err) {
             console.log(err);
+            setIsLoading(false);
             setError(true);
         }
     }
@@ -99,6 +106,7 @@ const Register = () => {
 
                 </form>
                 <p>Already have an account? <Link to="/login">Login</Link></p>
+                {isLoading && <img className='loading' src={loading}/>}
             </div>      
         </div>
     ) 

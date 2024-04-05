@@ -4,10 +4,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase';
 import { useForm } from 'react-hook-form';
 import newLogo from '../assets/images/newLogo.png';
+import loading from '../assets/images/loading.gif';
 
 const Login = () => {
     const [error, setError] = useState(false);
     const navigate = useNavigate(); 
+    const [isLoading, setIsLoading] = useState(false);
     const {register, formState: {errors}, handleSubmit} = useForm();
     const onSubmit = async (data) => await userLogin(data);
 
@@ -15,9 +17,11 @@ const Login = () => {
 
         const email = data.email;
         const password = data.password;
+        setIsLoading(true);
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);                  
+            await signInWithEmailAndPassword(auth, email, password);      
+            setIsLoading(false);                       
             navigate("/");                     
         }
         catch (err) {
@@ -49,6 +53,7 @@ const Login = () => {
                 {error && <span style={{color:"red", textAlign:"center"}}>Incorrect password or email</span>}                                 
             </form>
             <p>Don't have an account? <Link to="/register">Register</Link></p>
+            {isLoading && <img className='loading' src={loading}/>}
         </div>      
     </div>
   )

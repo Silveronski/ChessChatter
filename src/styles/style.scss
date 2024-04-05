@@ -65,6 +65,11 @@ body{
                 margin-left: 4px;
             }
         }
+
+        .loading{
+            width: 50px;
+        }   
+
         form{
             display: flex;
             flex-direction: column;
@@ -98,7 +103,11 @@ body{
                 color: $black-bgcolor;
                 cursor: pointer;
                 letter-spacing: 1.5px;
-                border: none;
+                border: none; 
+                transition: 0.3s;
+                &:hover{
+                    background-color: hsl(117, 100%, 72%);
+                }
             }
             label{
                 margin-top: 1vh;
@@ -127,7 +136,7 @@ body{
                 margin-left: 0.4vw;
                 letter-spacing: 0.2px;
             }      
-        }                    
+        }          
     }
 }
 

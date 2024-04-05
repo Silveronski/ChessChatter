@@ -31,8 +31,8 @@ const Navbar = () => {
     <div className='navbar'>
       <div className='logo-container'><img src={newLogo} className='logo'/></div>  
       <div className="user">
-          <img src={currentUser.photoURL}/>
-          <span>{currentUser.displayName}</span>
+          <img src={currentUser?.photoURL}/>
+          <span>{currentUser?.displayName}</span>
           <button onClick={() => signUserOut()}>Logout</button>
       </div>
     </div>
