@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import attach from '../assets/images/attach.png';
 import addImg from '../assets/images/img.png';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
@@ -39,7 +38,7 @@ const Input = () => {
       setText("");
     };
 
-  },[data.chatId])
+  },[data.chatId]);
 
                                                                
   const handleSend = async () => {
@@ -134,7 +133,6 @@ const Input = () => {
        value={text}
        onKeyDown={handleKeyPress}/>     
       <div className="icons">
-        <img src={attach}/>
         <input type="file" id="img" style={{display:"none"}} onChange={e => setImg(e.target.files[0])}/>
         <label htmlFor="img">
         <img src={addImg}/>

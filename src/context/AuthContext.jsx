@@ -15,8 +15,7 @@ export const AuthContextProvider = ({children}) => {
 
                 if (currentUser?.uid === undefined || null) return;
 
-                if (user?.uid) {
-                    
+                if (user?.uid) {                  
                     const userRef = doc(db, `presence/${user.uid}`);
                     const userSnap = await getDoc(userRef);
                     if (userSnap.exists()) {
@@ -30,19 +29,16 @@ export const AuthContextProvider = ({children}) => {
                     } 
                     
                     else {
-                        setTimeout(async () => {
-                                                     
+                        setTimeout(async () => {                                                     
                             const currentUserSnap = await getDoc(doc(db, 'users', user.uid));                        
                             const userName = currentUserSnap.data()?.displayName;
-    
                             await setDoc(userRef, { 
                                 count : 1,
                                 date: Timestamp.now(), 
                                 hasShown: false,
                                 name: userName, 
                                 online: true, 
-                            });                           
-                            
+                            });                                               
                         }, 2000);                                              
                     }                    
                 }              

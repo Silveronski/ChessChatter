@@ -10,7 +10,7 @@ const Message = ({message}) => {
 
   useEffect(() => {
     ref.current?.scrollIntoView();
-  },[message])
+  },[message]);
 
 
   const formatMessage = (msg) => {

@@ -51,23 +51,11 @@ const Chats = ({selectedChatIdFromSearch}) => {
     
   }, []);
 
-
-  // useEffect(() => { // change this to use snapshot !
-  //   Object.entries(chats).forEach(chat => {
-  //     if (chat[1]?.lastMessage?.senderId !== currentUser.uid &&
-  //        (chat[1]?.fullDate?.seconds === Timestamp.now().seconds ||
-  //        chat[1]?.fullDate?.seconds === Timestamp.now().seconds + 1)) {
-
-  //         if (bruhRef.current.paused) {
-  //           bruhRef.current.play();           
-  //         }
-  //     }                 
-  //   }) 
-  // },[chats]);
-
   
   useEffect(() => {
     setSelectedChat(selectedChatIdFromSearch);
+    const selectedChat = document.getElementById(selectedChatIdFromSearch);
+    selectedChat?.scrollIntoView({behavior:'instant'});
   },[selectedChatIdFromSearch]);
 
 
@@ -80,7 +68,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
   return (
     <div className="chats">     
       {chats && Object.entries(chats)?.sort((a,b) => b[1].fullDate - a[1].fullDate).map((chat) => ( 
-        <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`} key={chat[0]} onClick={() => handleSelect(chat[1]?.userInfo)}>        
+        <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`} id={chat[1]?.userInfo?.uid} key={chat[1]?.userInfo?.uid} onClick={() => handleSelect(chat[1]?.userInfo)}>        
           <img className='user-photo' src={chat[1].userInfo?.photoURL}/>
           <div className="user-chat-info">
             <span>{chat[1].userInfo?.displayName}</span>
