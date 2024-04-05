@@ -52,7 +52,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
   }, []);
 
 
-  useEffect(() => {
+  useEffect(() => { // change this to use snapshot !
     Object.entries(chats).forEach(chat => {
       if (chat[1]?.lastMessage?.senderId !== currentUser.uid &&
          (chat[1]?.fullDate?.seconds === Timestamp.now().seconds ||
@@ -69,7 +69,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
   
   useEffect(() => {
     setSelectedChat(selectedChatIdFromSearch);
-  },[selectedChatIdFromSearch])
+  },[selectedChatIdFromSearch]);
 
 
   const handleSelect = (user) => {

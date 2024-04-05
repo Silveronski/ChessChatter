@@ -247,6 +247,25 @@ body{
                 }
             }
 
+            .chats{
+                height: calc(100% - 200px);
+                overflow-y: auto;
+
+                &::-webkit-scrollbar {
+                    width: 0.1500em; 
+                  }
+                                   
+                &::-webkit-scrollbar-track {
+                background-color: transparent;
+                border-radius: 100vw;
+                }
+                                
+                &::-webkit-scrollbar-thumb {
+                background-color: $green-bgcolor;
+                border-radius: 100vw;              
+                }
+            }
+
             .user-chat{
                 padding: 10px;
                 display: flex;

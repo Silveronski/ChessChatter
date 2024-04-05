@@ -12,7 +12,11 @@ export const AuthContextProvider = ({children}) => {
         const unsub = onAuthStateChanged(auth, async (user) => {
             try {
                 setCurrentUser(user);
+
+                if (currentUser?.uid === undefined || null) return;
+
                 if (user?.uid) {
+                    
                     const userRef = doc(db, `presence/${user.uid}`);
                     const userSnap = await getDoc(userRef);
                     if (userSnap.exists()) {
@@ -27,10 +31,7 @@ export const AuthContextProvider = ({children}) => {
                     
                     else {
                         setTimeout(async () => {
-                            console.log(currentUser.uid);
-                            if (currentUser.uid === undefined || null) return;
-                            console.log(user);
-                            
+                                                     
                             const currentUserSnap = await getDoc(doc(db, 'users', user.uid));                        
                             const userName = currentUserSnap.data()?.displayName;
     
@@ -42,7 +43,7 @@ export const AuthContextProvider = ({children}) => {
                                 online: true, 
                             });                           
                             
-                        }, 2000);                   
+                        }, 2000);                                              
                     }                    
                 }              
             }

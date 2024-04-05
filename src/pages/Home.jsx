@@ -2,13 +2,39 @@ import Sidebar from '../components/Sidebar';
 import Chat from '../components/Chat';
 import toastr from 'toastr';
 import { useContext, useEffect } from 'react';
-import { query, onSnapshot, collection, where, doc, updateDoc } from 'firebase/firestore';
+import { query, onSnapshot, collection, where, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
 
   const {currentUser} = useContext(AuthContext);
+
+  useEffect(() => {
+    let timer;
+
+    const fetchCurrentUserPresence = async () => {
+      try {
+        const currentUserPresenceRef = doc(db, 'presence', currentUser?.uid);
+        const currentUserPresenceSnap = await getDoc(currentUserPresenceRef);
+  
+        if (currentUserPresenceSnap.exists() && currentUserPresenceSnap.data().hasShown === false) {
+          timer = setTimeout(async () => {
+            await updateDoc(currentUserPresenceRef, { hasShown: true });
+          }, 1500);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    currentUser.uid && fetchCurrentUserPresence();
+  
+    return () => {
+      clearTimeout(timer);
+    };
+    
+  },[currentUser.uid]);
 
   useEffect(() => {
 
@@ -70,10 +96,12 @@ const Home = () => {
   
 
   useEffect(() => {
+    
+    if (currentUser?.uid === undefined || null) return;
+
     const unsubscribe = onSnapshot(collection(db, 'presence'), (snapshot) => {
       snapshot.forEach(async (presDoc) => {
-        const data = presDoc.data();                
-
+        const data = presDoc.data();         
         if (currentUser.uid && presDoc.id !== currentUser.uid && !data.hasShown && data.online) {                                   
           try {          
             const presenceRef = doc(db, 'presence', presDoc.id);
@@ -102,7 +130,7 @@ const Home = () => {
       unsubscribe();
   };
 
-  },[currentUser]);
+  },[currentUser.uid]);
 
 
   return (
