@@ -52,19 +52,18 @@ const Chats = ({selectedChatIdFromSearch}) => {
   }, []);
 
 
-  useEffect(() => { // change this to use snapshot !
-    Object.entries(chats).forEach(chat => {
-      if (chat[1]?.lastMessage?.senderId !== currentUser.uid &&
-         (chat[1]?.fullDate?.seconds === Timestamp.now().seconds ||
-         chat[1]?.fullDate?.seconds === Timestamp.now().seconds + 1)) {
+  // useEffect(() => { // change this to use snapshot !
+  //   Object.entries(chats).forEach(chat => {
+  //     if (chat[1]?.lastMessage?.senderId !== currentUser.uid &&
+  //        (chat[1]?.fullDate?.seconds === Timestamp.now().seconds ||
+  //        chat[1]?.fullDate?.seconds === Timestamp.now().seconds + 1)) {
 
-          if (bruhRef.current.paused) {
-            bruhRef.current.play();
-            console.log("lolololol");             
-          }
-      }                 
-    }) 
-  },[chats]);
+  //         if (bruhRef.current.paused) {
+  //           bruhRef.current.play();           
+  //         }
+  //     }                 
+  //   }) 
+  // },[chats]);
 
   
   useEffect(() => {
@@ -79,7 +78,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
 
 
   return (
-    <div className="chats">
+    <div className="chats">     
       {chats && Object.entries(chats)?.sort((a,b) => b[1].fullDate - a[1].fullDate).map((chat) => ( 
         <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`} key={chat[0]} onClick={() => handleSelect(chat[1]?.userInfo)}>        
           <img className='user-photo' src={chat[1].userInfo?.photoURL}/>
@@ -94,12 +93,12 @@ const Chats = ({selectedChatIdFromSearch}) => {
               </div>
 
               <audio ref={bruhRef} src={bruh}></audio>
-                                   
+                                    
             </div>
           </div>
         </div>      
       ))}
-    </div>    
+    </div>          
   )
 }
 

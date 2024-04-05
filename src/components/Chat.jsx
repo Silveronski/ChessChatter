@@ -15,8 +15,24 @@ const Chat = () => {
   const [gameInviteId, setGameInviteId] = useState("");
 
   const handlePlay = async () => {
-    if (!invitePending) {     
+    if (!invitePending) { 
       try {        
+        const userSnap = await getDoc(doc(db, 'presence', data.user.uid));    
+        if (userSnap.exists() && !userSnap.data().online) {
+          toastr.error(
+            "Can't invite an offline user!", 
+            {
+                timeOut: 1000,
+                extendedTimeOut: 0, 
+                closeButton: true, 
+                positionClass: "toast-top-right", 
+                tapToDismiss: true,
+                preventDuplicates: true,               
+            }
+          );
+          return;
+        }
+
         await setDoc(doc(db, "gameInvitations", data.user.uid + currentUser.uid),{
           id: data.user.uid + currentUser.uid,
           userId: data.user.uid,
@@ -50,9 +66,8 @@ const Chat = () => {
     }
 
     else {
-      console.log("Cant invite more than one person at a time!");
       toastr.error(
-        "Cant invite more than one person at a time!", 
+        "Can't invite more than one person at a time!", 
         {
             timeOut: 2000,
             extendedTimeOut: 0, 
@@ -77,15 +92,15 @@ const Chat = () => {
           const data = docSnapshot.data();
           if (data && data.gameAccepted === "true") {           
             window.open(`http://localhost:3037/white?code=${gameInviteId}`, '_blank');
-            setGameInviteId("");
             setInvitePending(false);
+            setGameInviteId("");
           }
 
           else if (data && data.gameAccepted === "false") {            
             toastr.error(
               "Your invitation was declined.", 
               {
-                  timeOut: 3000,
+                  timeOut: 2000,
                   extendedTimeOut: 0, 
                   closeButton: true, 
                   positionClass: "toast-top-right", 
@@ -135,8 +150,8 @@ const Chat = () => {
           }
         }
         catch (err) {
-          //handle later
           console.log(err);
+          //handle later
         }
       }, 10000);
     }
