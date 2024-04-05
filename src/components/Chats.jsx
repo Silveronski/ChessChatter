@@ -67,7 +67,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
 
   return (
     <div className="chats">     
-      {chats && Object.entries(chats)?.sort((a,b) => b[1].fullDate - a[1].fullDate).map((chat) => ( 
+      {chats && Object.entries(chats)?.sort((a,b) => b[1]?.fullDate - a[1]?.fullDate).map((chat) => ( 
         <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`} id={chat[1]?.userInfo?.uid} key={chat[1]?.userInfo?.uid} onClick={() => handleSelect(chat[1]?.userInfo)}>        
           <img className='user-photo' src={chat[1].userInfo?.photoURL}/>
           <div className="user-chat-info">
