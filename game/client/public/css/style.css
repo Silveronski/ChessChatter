@@ -41,6 +41,11 @@ body{
     position: relative;
 }
 
+#myBoard .chessboard-63f37 .board-b72b1{
+    width: 40vw;
+    flex-grow: 1;
+}
+
 .moves-container{
     width: 20vw;   
     height: calc(100% - 60px);
@@ -104,10 +109,6 @@ body{
     margin-bottom: 4%;
 }
 
-#myBoard .chessboard-63f37 .board-b72b1{
-    width: 40vw;
-    flex-grow: 1;
-}
 
 .btn-container button:hover{
     background-color: aliceblue;
