@@ -1,7 +1,8 @@
 import Sidebar from '../components/Sidebar';
 import Chat from '../components/Chat';
 import toastr from 'toastr';
-import { useContext, useEffect } from 'react';
+import msgSound from '../assets/audio/msgSound.mp3';
+import { useContext, useEffect, useRef } from 'react';
 import { query, onSnapshot, collection, where, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
@@ -9,6 +10,7 @@ import { AuthContext } from '../context/AuthContext';
 const Home = () => {
 
   const {currentUser} = useContext(AuthContext);
+  const sound = useRef();
 
   useEffect(() => {
     let timer;
@@ -35,6 +37,7 @@ const Home = () => {
     };
     
   },[currentUser.uid]);
+
 
   useEffect(() => {
 
@@ -133,11 +136,29 @@ const Home = () => {
   },[currentUser.uid]);
 
 
+  useEffect(() => {
+
+    if (!currentUser.uid) return;
+
+    onSnapshot(collection(db, "userChats"),     
+      (snapshot) => {       
+        snapshot.forEach((doc) => {
+          if (doc.exists()) {
+            console.log(Object.entries(doc.data())[0][0]);
+          } 
+        });         
+      }
+    );
+
+  },[]);
+
+
   return (
     <div className='home'>
         <div className='container'>           
             <Sidebar/>
-            <Chat/>              
+            <Chat/>
+            <audio src={msgSound} ref={sound}></audio>              
         </div>
     </div>
   )

@@ -73,7 +73,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
           <div className="user-chat-info">
             <span>{chat[1].userInfo?.displayName}</span>
             <div className='lastmsg-time'>
-              <p>{chat[1].lastMessage?.text.length >= 36 ? chat[1].lastMessage?.text.substring(0,30) + "..." : chat[1].lastMessage?.text}</p>
+              <p className='lastmsg-text'>{chat[1].lastMessage?.text.length >= 36 ? chat[1].lastMessage?.text.substring(0,30) + "..." : chat[1].lastMessage?.text}</p>
                             
               <div className='date-status'>
                 {chat[1].lastMessage?.text && <p>{JSON.stringify(chat[1]?.date).substring(1,6)}</p> }                

@@ -246,7 +246,7 @@ body{
 
 
                     &::placeholder{
-                        color: $green-bgcolor;
+                        color: hsla(117, 100%, 72%, 0.691);
                         letter-spacing: 0.5px;
                     }
 
@@ -289,12 +289,9 @@ body{
                     color: black;                  
                     .user-chat-info{
                         .lastmsg-time{
-                            p{
-                                color: black;
-                            }
-                            div{
-                                color: black;
-                            }                           
+                            p, div{
+                                color: black;                               
+                            }                                                    
                         }                    
                     }
                 }
@@ -306,16 +303,22 @@ body{
                 }
 
                 .user-chat-info{
-                    width: 100%;   
+                    width: 100%; 
 
                     .lastmsg-time{
                         margin-top: 10px;
-                        display: flex; 
+                        display: flex;
+                                               
+                        .lastmsg-text{
+                            padding-top: 4px;
+                        }
 
                         .date-status{  
                             display: flex;
-                            align-items: center;                
+                            align-items: center;
+                                                           
                             p{
+                                margin-left: 10px;
                                 img{
                                     width: 22px;    
                                     height: 22px;                                              

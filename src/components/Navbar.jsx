@@ -33,7 +33,7 @@ const Navbar = () => {
       <div className="user">
           <img src={currentUser?.photoURL}/>
           <span>{currentUser?.displayName}</span>
-          <button onClick={() => signUserOut()}>Logout</button>
+          <button onClick={() => signUserOut()}>Log out</button>
       </div>
     </div>
   )
