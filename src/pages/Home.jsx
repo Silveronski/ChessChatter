@@ -49,7 +49,6 @@ const Home = () => {
           if (doc.exists() && !doc.data().gameConcluded) {
             toastr.info(
               `${doc.data().senderDisplayName} has invited you to play chess!`, 
-              "Game Invitation",
               {
                   timeOut: 9500,
                   extendedTimeOut: 0, 
@@ -60,7 +59,7 @@ const Home = () => {
                   preventDuplicates: true,
                   closeHtml: `<button onclick="acceptInvite('${doc.data().link}', '${doc.data().id}')">Accept</button>` +
                               `<br />` +
-                              `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
+                              `<button onclick="rejectInvite('${doc.data().id}')">Decline</button>`
               }
             );
           }
@@ -145,9 +144,6 @@ const Home = () => {
       const currentUserLoginDate = currentUserPresenceSnap.data().date.seconds;
       Object.entries(docSnapshot.data()).forEach((snap) => {              
         if (snap[1].lastMessage?.senderId !== currentUser.uid && currentUserLoginDate < snap[1].fullDate.seconds) {
-          console.log(snap[1].lastMessage.text);
-          console.log(currentUserLoginDate);
-          console.log(snap[1].fullDate.seconds);
           msgReceivedSound.current.play();  
         }
       })      

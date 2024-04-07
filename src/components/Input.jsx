@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import addImg from '../assets/images/img.png';
+import vMark from '../assets/images/v.png';
+import loading from '../assets/images/loading.gif';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
@@ -11,9 +13,10 @@ const Input = () => {
 
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
-
   const {currentUser} = useContext(AuthContext);
   const {data} = useContext(ChatContext);
+  const [imgStartedLoading, setImgStartedLoading] = useState(false);
+  const [imgEndedLoading, setImgEndedLoading] = useState(false);
 
   const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
                       Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
@@ -50,7 +53,7 @@ const Input = () => {
       
       uploadTask.on(
         (error) => {
-            console.error(error);
+            console.error(error);       
             // setError(true);
         }, 
         () => {             
@@ -134,9 +137,11 @@ const Input = () => {
        onKeyDown={handleKeyPress}/>     
       <div className="icons">
         <input type="file" id="img" style={{display:"none"}} onChange={e => setImg(e.target.files[0])}/>
+        {imgStartedLoading && <img src={loading}/>} 
+        {imgEndedLoading && <img src={vMark}/>} 
         <label htmlFor="img">
         <img src={addImg}/>
-        </label>         
+        </label>              
         <button onClick={handleSend}>Send</button> 
       </div>             
     </div>)
