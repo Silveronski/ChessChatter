@@ -10,19 +10,18 @@ import { AuthContext } from '../context/AuthContext';
 const Home = () => {
 
   const {currentUser} = useContext(AuthContext);
-  const sound = useRef();
+  const msgReceivedSound = useRef();
 
   useEffect(() => {
     let timer;
 
     const fetchCurrentUserPresence = async () => {
       try {
-        const currentUserPresenceRef = doc(db, 'presence', currentUser?.uid);
-        const currentUserPresenceSnap = await getDoc(currentUserPresenceRef);
-  
+        const currentUserPresenceRef = doc(db, 'presence', currentUser?.uid);     
+        const currentUserPresenceSnap = await getDoc(currentUserPresenceRef);       
         if (currentUserPresenceSnap.exists() && currentUserPresenceSnap.data().hasShown === false) {
           timer = setTimeout(async () => {
-            await updateDoc(currentUserPresenceRef, { hasShown: true });
+            await updateDoc(currentUserPresenceRef, { hasShown: true });      
           }, 1500);
         }
       } catch (error) {
@@ -36,7 +35,7 @@ const Home = () => {
       clearTimeout(timer);
     };
     
-  },[currentUser.uid]);
+  },[]);
 
 
   useEffect(() => {
@@ -139,17 +138,22 @@ const Home = () => {
   useEffect(() => {
 
     if (!currentUser.uid) return;
-
-    onSnapshot(collection(db, "userChats"),     
-      (snapshot) => {       
-        snapshot.forEach((doc) => {
-          if (doc.exists()) {
-            console.log(Object.entries(doc.data())[0][0]);
-          } 
-        });         
-      }
-    );
-
+    
+    const currentUserChats = doc(db, "userChats", currentUser.uid);
+    onSnapshot(currentUserChats, async (docSnapshot) => {
+      const currentUserPresenceSnap = await getDoc(doc(db, 'presence', currentUser.uid));
+      const currentUserLoginDate = currentUserPresenceSnap.data().date.seconds;
+      Object.entries(docSnapshot.data()).forEach((snap) => {              
+        if (snap[1].lastMessage?.senderId !== currentUser.uid && currentUserLoginDate < snap[1].fullDate.seconds) {
+          console.log(snap[1].lastMessage.text);
+          console.log(currentUserLoginDate);
+          console.log(snap[1].fullDate.seconds);
+          msgReceivedSound.current.play();  
+        }
+      })      
+    });  
+      
+    
   },[]);
 
 
@@ -158,7 +162,7 @@ const Home = () => {
         <div className='container'>           
             <Sidebar/>
             <Chat/>
-            <audio src={msgSound} ref={sound}></audio>              
+            <audio src={msgSound} ref={msgReceivedSound}></audio>              
         </div>
     </div>
   )
