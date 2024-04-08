@@ -3,7 +3,7 @@ import Chat from '../components/Chat';
 import toastr from 'toastr';
 import msgSound from '../assets/audio/msgSound.mp3';
 import { useContext, useEffect, useRef } from 'react';
-import { query, onSnapshot, collection, where, doc, updateDoc, getDoc } from 'firebase/firestore';
+import { query, onSnapshot, collection, where, doc, updateDoc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 
@@ -48,7 +48,8 @@ const Home = () => {
         snapshot.forEach((doc) => {
           if (doc.exists() && !doc.data().gameConcluded) {
             toastr.info(
-              `${doc.data().senderDisplayName} has invited you to play chess!`, 
+              `${doc.data().senderDisplayName} has invited you to play chess!`,
+              "Game Invitation", 
               {
                   timeOut: 9500,
                   extendedTimeOut: 0, 
@@ -59,7 +60,7 @@ const Home = () => {
                   preventDuplicates: true,
                   closeHtml: `<button onclick="acceptInvite('${doc.data().link}', '${doc.data().id}')">Accept</button>` +
                               `<br />` +
-                              `<button onclick="rejectInvite('${doc.data().id}')">Decline</button>`
+                              `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
               }
             );
           }
@@ -138,18 +139,22 @@ const Home = () => {
 
     if (!currentUser.uid) return;
     
-    const currentUserChats = doc(db, "userChats", currentUser.uid);
-    onSnapshot(currentUserChats, async (docSnapshot) => {
-      const currentUserPresenceSnap = await getDoc(doc(db, 'presence', currentUser.uid));
-      const currentUserLoginDate = currentUserPresenceSnap.data().date.seconds;
-      Object.entries(docSnapshot.data()).forEach((snap) => {              
-        if (snap[1].lastMessage?.senderId !== currentUser.uid && currentUserLoginDate < snap[1].fullDate.seconds) {
-          msgReceivedSound.current.play();  
-        }
-      })      
-    });  
-      
-    
+    onSnapshot(
+      collection(db, "chats"),
+      (snapshot) => {
+        snapshot.forEach((chatDoc) => {
+          const msgAraayLen = chatDoc.data().messages.length;
+          const receiverId = chatDoc.data().messages[msgAraayLen-1].receiverId;
+          const msgDate = chatDoc.data().messages[msgAraayLen-1].fullDate.seconds;
+
+          if (receiverId === currentUser.uid && msgDate === Timestamp.now().seconds) {           
+            console.log(chatDoc.data().messages[msgAraayLen-1].text);
+            msgReceivedSound.current.play();
+          }          
+        })
+      }     
+    ); 
+       
   },[]);
 
 

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import addImg from '../assets/images/img.png';
 import vMark from '../assets/images/v.png';
-import loading from '../assets/images/loading.gif';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
@@ -15,8 +14,8 @@ const Input = () => {
   const [img, setImg] = useState(null);
   const {currentUser} = useContext(AuthContext);
   const {data} = useContext(ChatContext);
-  const [imgStartedLoading, setImgStartedLoading] = useState(false);
-  const [imgEndedLoading, setImgEndedLoading] = useState(false);
+  const [imgIsReady, setImgIsReady] = useState(false);
+  const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
 
   const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
                       Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
@@ -35,13 +34,25 @@ const Input = () => {
   }
 
   useEffect(() => {
-    document.querySelector('.input input')?.focus();   
+    document.querySelector('.input input')?.focus();
+    setImg(null);
+    setImgIsReady(false);   
 
     return () => {
       setText("");
     };
-
   },[data.chatId]);
+
+
+  const handleImage = (img) => {
+    if (img && validImgExtensions.includes(img.type)) {
+      setImg(img);
+      setImgIsReady(true);
+    }
+    else {
+      alert("Invalid image format!");
+    }
+  }
 
                                                                
   const handleSend = async () => {
@@ -63,7 +74,9 @@ const Input = () => {
                 id: uuid(),
                 text: msgText,
                 senderId: currentUser.uid,
+                receiverId: data.user.uid,
                 date: timeOfMsg,  
+                fullDate: Timestamp.now(),
                 img: downloadURL,
               })
             });
@@ -100,7 +113,9 @@ const Input = () => {
           id: uuid(),
           text: msgText,
           senderId: currentUser.uid,
+          receiverId: data.user.uid,
           date: timeOfMsg,
+          fullDate: Timestamp.now(),
         }),
       });
 
@@ -125,6 +140,7 @@ const Input = () => {
 
     document.querySelector('.input input').focus();   
     setImg(null);
+    setImgIsReady(false);
   }
 
   return (
@@ -136,9 +152,8 @@ const Input = () => {
        value={text}
        onKeyDown={handleKeyPress}/>     
       <div className="icons">
-        <input type="file" id="img" style={{display:"none"}} onChange={e => setImg(e.target.files[0])}/>
-        {imgStartedLoading && <img src={loading}/>} 
-        {imgEndedLoading && <img src={vMark}/>} 
+        <input type="file" id="img" accept="image/*" style={{display:"none"}} onChange={e => handleImage(e.target.files[0])}/>
+        {imgIsReady && <img src={vMark}/>} 
         <label htmlFor="img">
         <img src={addImg}/>
         </label>              
