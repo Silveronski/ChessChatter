@@ -12,8 +12,10 @@ import loading from '../assets/images/loading.gif';
 const Register = () => {
 
     const [error, setError] = useState(false);
+    const [avatarError, setAvatarError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
     const {register, formState: {errors}, handleSubmit} = useForm();
     const onSubmit = async (data) => await AddUser(data);        
                 
@@ -23,6 +25,11 @@ const Register = () => {
         const email = data.email;
         const password = data.password;
         const avatar = data.image[0];
+
+        if (!validImgExtensions.includes(avatar.type)) {
+            setAvatarError(true); 
+            return;
+        }
 
         setIsLoading(true);
 
@@ -99,6 +106,7 @@ const Register = () => {
                     </label>
                     <span className='form-error'>
                         {errors.image?.type === "required" && "This field is required"}
+                        {avatarError && "Please select a valid file type (PNG/JPEG/GIF)"}
                     </span>
 
                     <button>Sign up</button>
