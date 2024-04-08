@@ -37,7 +37,7 @@ const Message = ({message}) => {
         <span>{JSON.stringify(message.date).substring(1,6)}</span>
       </div>
       <div className="message-content">
-      <p dangerouslySetInnerHTML={{ __html: (message.text.length > 35 ? formatMessage(message.text) : message.text) + (message.img ? `<br/><img src="${message.img}"/>` : '') }} /> 
+        <p dangerouslySetInnerHTML={{ __html: (message.text.length > 35 ? formatMessage(message.text) : message.text) + (message.img ? `<br/> <img src="${message.img}"/>` : '') }} /> 
       </div>
     </div>
   )

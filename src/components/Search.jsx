@@ -16,7 +16,7 @@ const Search = ({selectedChatIdFromSearch}) => {
     if (username.length === 0){
       setErr(false);
     }
-  },[username])
+  },[username]);
 
 
   const handleKey =  (e) => {
@@ -90,7 +90,6 @@ const Search = ({selectedChatIdFromSearch}) => {
 
   return (
     <div className='search'>
-
       <div className="search-form">
         <input 
         type="text" 
@@ -109,7 +108,6 @@ const Search = ({selectedChatIdFromSearch}) => {
           </div>
         </div>
       )}
-
     </div>
   )
 }

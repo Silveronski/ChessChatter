@@ -14,7 +14,6 @@ const Chats = ({selectedChatIdFromSearch}) => {
   const {dispatch} = useContext(ChatContext);
   const [selectedChatId, setSelectedChat] = useState("");
   const [userStatuses, setUserStatuses] = useState({});
-  const bruhRef = useRef(); 
 
   useEffect(() => {
     const getChats = () => {
@@ -79,8 +78,6 @@ const Chats = ({selectedChatIdFromSearch}) => {
                 {chat[1].lastMessage?.text && <p>{JSON.stringify(chat[1]?.date).substring(1,6)}</p> }                
                 <p>{userStatuses[chat[1].userInfo?.uid] ? <img src={online}/> : <img src={offline}/>}</p>                   
               </div>
-
-              <audio ref={bruhRef} src={bruh}></audio>
                                     
             </div>
           </div>

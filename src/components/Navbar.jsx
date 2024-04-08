@@ -12,8 +12,7 @@ const Navbar = () => {
   const {dispatch} = useContext(ChatContext);
 
   const signUserOut = async () => {
-    try { 
-      dispatch({ type: "LOG_OUT", payload: {} });
+    try {      
       const userRef = doc(db, 'presence', currentUser.uid); 
       await updateDoc(userRef, { 
         count : 0,
@@ -21,6 +20,7 @@ const Navbar = () => {
         hasShown: false 
       });
       await signOut(auth);
+      dispatch({ type: "LOG_OUT", payload: {} });
     } 
       catch (error) {
         console.error('Error setting user presence:', error);

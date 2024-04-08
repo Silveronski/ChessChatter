@@ -160,6 +160,12 @@ body{
             width: 90%;
         }
 
+        @include mobile(){
+            width: 100%;
+            height: 99.5%;
+            overflow: hidden;
+        }
+
         .sidebar{
             flex: 1;
             background-color: rgb(39, 38, 38);
@@ -198,7 +204,7 @@ body{
                 }
     
                 img{
-                    background-color: white;
+                    background-color: $green-bgcolor;
                     width: 35px;
                     height: 35px;
                     padding: 2px;
@@ -357,6 +363,10 @@ body{
         .chat{
             flex: 2;
             background-color: rgb(50, 49, 49);
+
+            @include mobile(){
+                display: none;
+            }
 
             .chat-info{
                 height: 50px;
