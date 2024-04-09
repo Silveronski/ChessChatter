@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { db } from '../firebase';
-import { Timestamp, collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
-import bruh from '../assets/audio/bruh.mp3';
 
 const Chats = ({selectedChatIdFromSearch}) => {
 
@@ -72,13 +71,11 @@ const Chats = ({selectedChatIdFromSearch}) => {
           <div className="user-chat-info">
             <span>{chat[1].userInfo?.displayName}</span>
             <div className='lastmsg-time'>
-              <p className='lastmsg-text'>{chat[1].lastMessage?.text.length >= 36 ? chat[1].lastMessage?.text.substring(0,30) + "..." : chat[1].lastMessage?.text}</p>
-                            
+              <p className='lastmsg-text'>{chat[1].lastMessage?.text.length >= 36 ? chat[1].lastMessage?.text.substring(0,30) + "..." : chat[1].lastMessage?.text}</p>                         
               <div className='date-status'>
                 {chat[1].lastMessage?.text && <p>{JSON.stringify(chat[1]?.date).substring(1,6)}</p> }                
                 <p>{userStatuses[chat[1].userInfo?.uid] ? <img src={online}/> : <img src={offline}/>}</p>                   
-              </div>
-                                    
+              </div>                                   
             </div>
           </div>
         </div>      
