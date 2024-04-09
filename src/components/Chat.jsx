@@ -6,13 +6,17 @@ import { db } from '../firebase';
 import { doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import toastr from 'toastr';
+import back from '../assets/images/back.png'
+import { AppearanceContext } from '../context/AppearanceContext';
 
 const Chat = () => {
 
   const {data} = useContext(ChatContext);
   const {currentUser} = useContext(AuthContext);
+  const {controlSidebarAppearance, controlChatAppearance} = useContext(AppearanceContext);
   const [invitePending, setInvitePending] = useState(false);
   const [gameInviteId, setGameInviteId] = useState("");
+  const [showBackBtn, setShowBackBtn] = useState(false);
 
   const handlePlay = async () => {
     if (!invitePending) { 
@@ -163,10 +167,38 @@ const Chat = () => {
   },[invitePending, gameInviteId]);
 
 
+  useEffect(() => {
+    
+    const handleResize = () => {
+      if (window.innerWidth < 940) {
+        setShowBackBtn(true);
+      }
+      else {
+        setShowBackBtn(false);
+      }
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+
+  },[])
+
+  const handleBack = () => {
+    controlChatAppearance(false);
+    controlSidebarAppearance(true);
+  }
+
+
   return (
     <div className='chat'>
       <div className="chat-info">
         <div className='user-info'>
+          {(data.chatId !== "null" && showBackBtn) && <img src={back} className='backBtn' onClick={handleBack}/>}
           {data.chatId !== "null" && <img src={data.user?.photoURL}/>}
           <span>{data.user?.displayName}</span> 
         </div>       

@@ -6,11 +6,14 @@ import { useContext, useEffect, useRef } from 'react';
 import { query, onSnapshot, collection, where, doc, updateDoc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
+import { AppearanceContext } from '../context/AppearanceContext';
 
 const Home = () => {
 
   const {currentUser} = useContext(AuthContext);
+  const {controlSidebarAppearance, controlChatAppearance, showSidebar, showChat} = useContext(AppearanceContext);
   const msgReceivedSound = useRef();
+
 
   useEffect(() => {
     let timer;
@@ -157,13 +160,34 @@ const Home = () => {
        
   },[]);
 
+  useEffect(() => {
+    
+    const handleResize = () => {
+      if (window.innerWidth < 940) {
+        controlChatAppearance(false);
+      }
+      else {
+        controlChatAppearance(true);
+      }
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+
+  },[]);
+
 
   return (
     <div className='home'>
-        <div className='container'>           
-            <Sidebar/>
-            <Chat/>
-            <audio src={msgSound} ref={msgReceivedSound}></audio>              
+        <div className='container'>             
+            {showSidebar && <Sidebar/>}
+            {showChat && <Chat/>}
+            <audio src={msgSound} ref={msgReceivedSound}></audio>                              
         </div>
     </div>
   )

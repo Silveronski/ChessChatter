@@ -5,12 +5,14 @@ import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
+import { AppearanceContext } from '../context/AppearanceContext';
 
 const Chats = ({selectedChatIdFromSearch}) => {
 
   const [chats, setChats] = useState([]);
   const {currentUser} = useContext(AuthContext);
   const {dispatch} = useContext(ChatContext);
+  const {controlSidebarAppearance, controlChatAppearance} = useContext(AppearanceContext);
   const [selectedChatId, setSelectedChat] = useState("");
   const [userStatuses, setUserStatuses] = useState({});
 
@@ -54,12 +56,15 @@ const Chats = ({selectedChatIdFromSearch}) => {
     setSelectedChat(selectedChatIdFromSearch);
     const selectedChat = document.getElementById(selectedChatIdFromSearch);
     selectedChat?.scrollIntoView({behavior:'instant'});
+    // not sure if need control here too
   },[selectedChatIdFromSearch]);
 
 
   const handleSelect = (user) => {
     setSelectedChat(user.uid);
     dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
+    controlSidebarAppearance(false);
+    controlChatAppearance(true);
   }
 
 

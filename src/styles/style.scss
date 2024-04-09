@@ -364,10 +364,6 @@ body{
             flex: 2;
             background-color: rgb(50, 49, 49);
 
-            @include mobile(){
-                display: none;
-            }
-
             .chat-info{
                 height: 50px;
                 padding: 10px;
@@ -394,6 +390,15 @@ body{
                     border-radius: 50%;
                     object-fit: contain;
                     border: 3px white solid;
+                }
+
+                .backBtn{
+                    background-color: transparent;
+                    border: none;
+                    cursor: pointer;
+                    border-radius: 0%;
+                    margin-right: 10px;
+                    width: 30px;
                 }
 
                 button{
