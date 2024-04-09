@@ -14,7 +14,6 @@ const Home = () => {
   const {controlSidebarAppearance, controlChatAppearance, showSidebar, showChat} = useContext(AppearanceContext);
   const msgReceivedSound = useRef();
 
-
   useEffect(() => {
     let timer;
 
@@ -63,7 +62,7 @@ const Home = () => {
                   preventDuplicates: true,
                   closeHtml: `<button onclick="acceptInvite('${doc.data().link}', '${doc.data().id}')">Accept</button>` +
                               `<br />` +
-                              `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`
+                              `<button onclick="rejectInvite('${doc.data().id}')">Reject</button>`                       
               }
             );
           }
@@ -151,7 +150,6 @@ const Home = () => {
           const msgDate = chatDoc.data().messages[msgAraayLen-1].fullDate.seconds;
 
           if (receiverId === currentUser.uid && msgDate === Timestamp.now().seconds) {           
-            console.log(chatDoc.data().messages[msgAraayLen-1].text);
             msgReceivedSound.current.play();
           }          
         })
@@ -165,9 +163,11 @@ const Home = () => {
     const handleResize = () => {
       if (window.innerWidth < 940) {
         controlChatAppearance(false);
+        controlSidebarAppearance(true);
       }
       else {
         controlChatAppearance(true);
+        controlSidebarAppearance(true);
       }
     }
 

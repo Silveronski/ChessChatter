@@ -21,13 +21,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' index element=
-          {<ProtectedRoute>
-            <Home/>
-          </ProtectedRoute>}>      
+          {<ProtectedRoute><Home/></ProtectedRoute>}>                    
         </Route>
         <Route path='register' element={<Register/>}></Route>
         <Route path='login' element={<Login/>}></Route>
-        {/* <Route path='*' index element={<ErrorPage/>}></Route> */}
+        <Route path='*' element={<Navigate to={'/'}/>}></Route>
       </Routes>
     </BrowserRouter>       
   )

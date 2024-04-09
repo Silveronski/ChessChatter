@@ -3,6 +3,7 @@ import { collection, getDoc, getDocs, query, setDoc, where, doc, updateDoc, Time
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
+import { AppearanceContext } from '../context/AppearanceContext';
 
 const Search = ({selectedChatIdFromSearch}) => {
 
@@ -11,6 +12,7 @@ const Search = ({selectedChatIdFromSearch}) => {
   const [err, setErr] = useState(false);
   const {currentUser} = useContext(AuthContext);
   const {dispatch} = useContext(ChatContext);
+  const {controlSidebarAppearance, controlChatAppearance} = useContext(AppearanceContext);
 
   useEffect(() => {
     if (username.length === 0){
@@ -81,6 +83,11 @@ const Search = ({selectedChatIdFromSearch}) => {
 
       dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
       selectedChatIdFromSearch(user.uid);
+
+      if (window.innerWidth < 940) {
+        controlSidebarAppearance(false);
+        controlChatAppearance(true);
+      }
     }    
     catch (err) {}
 

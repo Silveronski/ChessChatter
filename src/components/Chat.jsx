@@ -170,12 +170,7 @@ const Chat = () => {
   useEffect(() => {
     
     const handleResize = () => {
-      if (window.innerWidth < 940) {
-        setShowBackBtn(true);
-      }
-      else {
-        setShowBackBtn(false);
-      }
+      window.innerWidth < 940 ? setShowBackBtn(true) : setShowBackBtn(false);
     }
 
     window.addEventListener('resize', handleResize);

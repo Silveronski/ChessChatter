@@ -10,7 +10,6 @@ export const AppearanceContextProvider = ({children}) => {
         setShowSidebar(valFromUserChats);
     },[showSidebar]);
     
-    
     const controlChatAppearance = useCallback((valFromUserChats) => {
         setShowChat(valFromUserChats);
     },[showChat]);

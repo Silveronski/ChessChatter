@@ -56,15 +56,16 @@ const Chats = ({selectedChatIdFromSearch}) => {
     setSelectedChat(selectedChatIdFromSearch);
     const selectedChat = document.getElementById(selectedChatIdFromSearch);
     selectedChat?.scrollIntoView({behavior:'instant'});
-    // not sure if need control here too
   },[selectedChatIdFromSearch]);
 
 
   const handleSelect = (user) => {
     setSelectedChat(user.uid);
     dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
-    controlSidebarAppearance(false);
-    controlChatAppearance(true);
+    if (window.innerWidth < 940) {
+      controlSidebarAppearance(false);
+      controlChatAppearance(true);
+    }
   }
 
 

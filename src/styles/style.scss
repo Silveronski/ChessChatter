@@ -157,19 +157,22 @@ body{
         overflow: hidden;
         display: flex;
         @include tablet{
-            width: 90%;
+            width: 95%;
+            height: 95%;
         }
 
         @include mobile(){
             width: 100%;
             height: 99.5%;
             overflow: hidden;
+            border-radius: 0%;
+            border: 2px solid $green-bgcolor;
         }
 
         .sidebar{
             flex: 1;
             background-color: rgb(39, 38, 38);
-            position: relative;
+            position: relative;            
 
             .selected-chat{
                 background-color: hsla(117, 100%, 72%, 0.268);
@@ -330,7 +333,11 @@ body{
                                     height: 22px;                                              
                                     object-fit: cover;
                                     margin-left: 30%;
-                                    border-radius: 50%;                          
+                                    border-radius: 50%; 
+                                    
+                                    @include mobile{
+                                        margin-right: 5px;
+                                    }
                                 }
                             }
                         }
@@ -375,12 +382,27 @@ body{
 
                 .user-info{
                     display: flex;
-                    align-items: center;
+                    align-items: center;                  
                 }
 
                 span{
                     margin-left: 1.2vw;
                     font-size: 20px;
+                    @include mobile{
+                        margin-left: 20px;
+                    }
+                }
+
+                img:nth-child(2){
+                    @include mobile{
+                        margin-left: 10px;
+                    }
+                }
+
+                img:nth-child(1){
+                    @include mobile{
+                        margin-left: 6px;
+                    }
                 }
 
                 img{
@@ -401,7 +423,7 @@ body{
                     width: 30px;
                 }
 
-                button{
+                button{                
                     padding: 6px;   
                     width: 23%;
                     height: 80%;
@@ -414,12 +436,19 @@ body{
                     border: none;
                     cursor: pointer;
                     transition: 0.3s;
+                    
                     @include tablet{
-                        font-size: min(16px, 12px);
+                        width: 120px;
+                        font-size: 5vw;
                     }
 
                     @include laptop{
                         font-size: min(16px, 12px);
+                    }
+
+                    @include mobile{
+                        font-size: 14px;
+                        width: 100px;
                     }
 
                     &:hover{
@@ -462,7 +491,7 @@ body{
                 overflow-y: scroll;                
                 
                 &::-webkit-scrollbar {
-                    width: 0.5em; 
+                    width: 0.4em; 
                   }
                                    
                 &::-webkit-scrollbar-track {
