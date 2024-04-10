@@ -25,6 +25,7 @@ const Login = () => {
             navigate("/");                     
         }
         catch (err) {
+            setIsLoading(false); 
             setError(true);
         }
     }

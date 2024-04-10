@@ -188,7 +188,7 @@ body{
             height: 95%;
         }
 
-        @include mobile(){
+        @include mobile{
             width: 100%;
             height: 99.5%;
             overflow: hidden;

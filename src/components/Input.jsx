@@ -38,9 +38,8 @@ const Input = () => {
     setImg(null);
     setImgIsReady(false);   
 
-    return () => {
-      setText("");
-    };
+    return () =>  setText(""); 
+       
   },[data.chatId]);
 
 

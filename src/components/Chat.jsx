@@ -177,10 +177,8 @@ const Chat = () => {
 
     handleResize();
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-
+    return () => window.removeEventListener('resize', handleResize);
+      
   },[])
 
   const handleBack = () => {

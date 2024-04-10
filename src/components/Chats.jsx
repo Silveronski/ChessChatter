@@ -21,20 +21,15 @@ const Chats = ({selectedChatIdFromSearch}) => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
         setChats(doc.data());                                                
       });
-
-      return () => {
-        unsub();  
-      }            
-    }
-    
-    currentUser.uid && getChats();
-    
+      
+      return () => unsub();                      
+    }   
+    currentUser.uid && getChats();    
   }, [currentUser.uid]);
 
 
   
-  useEffect(() => {    
-      
+  useEffect(() => {         
     const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
       const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {
                             
@@ -45,10 +40,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
       setUserStatuses(updatedUserStatuses);
     });
          
-    return () => {
-      unsubscribePresence();
-    }    
-    
+    return () => unsubscribePresence();           
   }, []);
 
   

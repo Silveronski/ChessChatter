@@ -33,10 +33,8 @@ const Home = () => {
   
     currentUser.uid && fetchCurrentUserPresence();
   
-    return () => {
-      clearTimeout(timer);
-    };
-    
+    return () => clearTimeout(timer); 
+        
   },[]);
 
 
@@ -130,10 +128,8 @@ const Home = () => {
       });
     });
 
-    return () => {
-      unsubscribe();
-  };
-
+    return () => unsubscribe();
+      
   },[currentUser.uid]);
 
 
@@ -175,10 +171,8 @@ const Home = () => {
 
     handleResize();
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-
+    return () => window.removeEventListener('resize', handleResize);
+      
   },[]);
 
 
