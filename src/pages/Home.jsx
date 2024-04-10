@@ -146,8 +146,8 @@ const Home = () => {
       (snapshot) => {
         snapshot.forEach((chatDoc) => {
           const msgAraayLen = chatDoc.data().messages.length;
-          const receiverId = chatDoc.data().messages[msgAraayLen-1].receiverId;
-          const msgDate = chatDoc.data().messages[msgAraayLen-1].fullDate.seconds;
+          const receiverId = chatDoc.data().messages[msgAraayLen-1]?.receiverId;
+          const msgDate = chatDoc.data().messages[msgAraayLen-1]?.fullDate.seconds;
 
           if (receiverId === currentUser.uid && msgDate === Timestamp.now().seconds) {           
             msgReceivedSound.current.play();

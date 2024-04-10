@@ -16,7 +16,6 @@
     }
 }
 
-
 $green-bgcolor: hsla(117, 100%, 72%, 0.821);
 $black-bgcolor: hsla(0, 0%, 0%, 0.821);
 
@@ -30,7 +29,7 @@ body{
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;   
 
     .form-wrapper{
         margin-bottom: 10%;
@@ -42,10 +41,24 @@ body{
         flex-direction: column;
         align-items: center;
         gap: 20px;
-        border: 1px solid $green-bgcolor;
+        border: 1px solid $green-bgcolor;        
+
+        @include mobile{
+            margin-bottom: 0%;
+            padding: 0%;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0%;
+            min-height: 100vh;
+            border: none;
+            background-color: hsl(0, 0%, 7%);
+        }
 
         .logo{        
             text-align: center;
+            @include mobile{
+               margin-top: 30%;
+            }
            img{
             width: 300px;
            }         
@@ -74,6 +87,9 @@ body{
             display: flex;
             flex-direction: column;
             gap: 15px;
+            @include mobile{
+                gap: 25px;           
+             }
             input{
                 width: 250px;
                 font-family: "Tilt Warp";
@@ -108,6 +124,13 @@ body{
                 &:hover{
                     background-color: hsl(117, 100%, 72%);
                 }
+                @include mobile{
+                   font-size: 14px;
+                   padding: 10px;
+                   width: 50vw;
+                   align-self: center; 
+                   margin-top: 8%;             
+                }
             }
             label{
                 margin-top: 1vh;
@@ -135,6 +158,10 @@ body{
                 font-size: 12px;
                 margin-left: 0.4vw;
                 letter-spacing: 0.2px;
+
+                @include mobile{
+                    margin-left: 6vw;
+                }
             }      
         }          
     }
