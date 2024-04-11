@@ -246,6 +246,7 @@ socket.on('resign', function() {
     gameOver = true;
 });
 
+
 function handleResign() {
     if (gameHasStarted && !gameOver){
         colorWhoResigned = playerColor;
@@ -279,4 +280,4 @@ $('#resignBtnMob').on('click', handleResign);
     
 
 $('#drawBtn').on('click', handleDraw); 
-$('#drawBtnMob').on('click', handleDraw);  
+$('#drawBtnMob').on('click', handleDraw);

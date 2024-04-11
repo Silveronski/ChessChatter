@@ -18,6 +18,20 @@ const Chat = () => {
   const [gameInviteId, setGameInviteId] = useState("");
   const [showBackBtn, setShowBackBtn] = useState(false);
 
+  useEffect(() => {
+    const invitePendingData = window.localStorage.getItem('invitePending');
+    const gameInviteIdData = window.localStorage.getItem('gameInviteId');
+    if (invitePendingData !== null) setInvitePending(JSON.parse(invitePendingData));
+    if (gameInviteIdData !== null) setGameInviteId(JSON.parse(gameInviteIdData));
+  },[]);
+
+
+  useEffect(() => {
+    window.localStorage.setItem('invitePending', JSON.stringify(invitePending));
+    window.localStorage.setItem('gameInviteId', JSON.stringify(gameInviteId));
+  },[invitePending, gameInviteId]);
+
+
   const handlePlay = async () => {
     if (!invitePending) { 
       try {        
@@ -68,7 +82,6 @@ const Chat = () => {
         // handle error - problem setting doc
       }      
     }
-
     else {
       toastr.error(
         "Can't invite more than one person at a time!", 
