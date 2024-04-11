@@ -3,7 +3,9 @@ var board = null;
 let socket = io();
 var game = new Chess();
 var $status = $('#status');
+var $statusMob = $('#statusMob');
 var $pgn = $('#pgn-container');
+var $pgnMobile = $('#pgn-mobile');
 var $bruhSound = $('#bruhSound');
 var $checkSound = $('#checkSound'); 
 var $checkMateSound = $('#checkMateSound'); 
@@ -118,10 +120,13 @@ function updateStatus () {
     } 
     
     $status.html(status);
+    $statusMob.html(status);
 }
 
 
 function updatePgn() {
+    $pgnMobile.html(game.pgn());
+
     if (gameHasStarted) {                                                                
         if (game.pgn()) {                
             turnCount += 0.5;
@@ -221,6 +226,7 @@ socket.on('drawReject', function() {
 
 socket.on('draw', function() {
     $status.html(`Draw!`);
+    $statusMob.html(`Draw!`);
     gameOver = true;
     $drawSound.get(0).play();
 });
@@ -228,25 +234,26 @@ socket.on('draw', function() {
 socket.on('resign', function() {
     if (colorWhoResigned === '') {
         $status.html(`Your opponent has resigned, game over!`);
+        $statusMob.html(`Your opponent has resigned, game over!`);
         $rizzSound.get(0).play();
     } 
     else {
         $status.html(`You have resigned, game over!`);
+        $statusMob.html(`You have resigned, game over!`);
         $fartSound.get(0).play();
     } 
     colorWhoResigned = '';
     gameOver = true;
 });
 
-
-$('#resignBtn').on('click', function() {
+function handleResign() {
     if (gameHasStarted && !gameOver){
         colorWhoResigned = playerColor;
         socket.emit('resign');
     } 
-});
+}
 
-$('#drawBtn').on('click', function() {
+function handleDraw() {
     if (gameHasStarted && !gameOver) {
         colorWhoRequestedDraw = playerColor;
         socket.emit('drawRequest');
@@ -264,4 +271,12 @@ $('#drawBtn').on('click', function() {
             }
         );
     }
-});
+}
+
+
+$('#resignBtn').on('click', handleResign);
+$('#resignBtnMob').on('click', handleResign);
+    
+
+$('#drawBtn').on('click', handleDraw); 
+$('#drawBtnMob').on('click', handleDraw);  

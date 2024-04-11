@@ -110,7 +110,6 @@ body{
     margin-bottom: 4%;
 }
 
-
 .btn-container button:hover{
     background-color: aliceblue;
 }
@@ -124,17 +123,92 @@ body{
     border-radius: 100vw;
 }
                 
-.moves-container ::-webkit-scrollbar-thumb {
+.moves-container ::-webkit-scrollbar-thumb { 
     background-color: white;
     border-radius: 100vw;              
 }
 
-@media screen and (max-width: 768px) {
+.pgn-mobile-container{
+    display: none;
+}
+
+#pgn-mobile{
+    display: block;
+    background-color: hsla(0, 2%, 19%, 0.821);
+    color: white;
+    font-size: 10px;
+    padding: 4px;
+    width: 320px;
+    overflow-x: auto;
+    user-select: none;
+}
+
+.btn-container-mobile, #statusMob{
+    display: none;
+}
+
+.hrMob{
+    display: none;
+}
+
+@media screen and (max-width: 480px) {
     .left-container{
        display: none;
     }
 
-    #myBoard{
-        width: 500px;
+    .game-content{
+        margin-top: 20%;
     }
+
+    .pgn-mobile-container{
+        display: block;
+    }
+    
+    #myBoard{
+        width: 325px;
+    }
+
+    #pgn-mobile::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    #pgn-mobile::-webkit-scrollbar-track {
+        background: rgb(57, 57, 57);
+        border-radius: 100vw;
+    }
+    
+    #pgn-mobile::-webkit-scrollbar-thumb {
+        background-color: white;
+        border-radius: 100vw;
+    }
+
+    .btn-container-mobile{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .btn-container-mobile button{
+        padding: 2px 4px;
+        font-size: 16px;
+        margin: 1vw 1.2vw 1vw 1.2vw;
+        border-radius: 5%;
+        width: 70%;
+        cursor: pointer;
+        font-family: "Tilt Warp";
+    }
+
+    #statusMob{
+        display: block;
+        color: white;
+        text-align: center;
+        margin-top: 2%;
+    }
+
+    .hrMob{
+        display: block;
+    }
+}
+
+@media screen and (max-width: 780px) {
+    /* handle later */
 }
