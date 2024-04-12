@@ -148,7 +148,8 @@ const Input = () => {
        placeholder='Type something...'
        onChange={e => setText(e.target.value)}
        value={text}
-       onKeyDown={handleKeyPress}/>     
+       onKeyDown={handleKeyPress}
+       autoFocus={false}/>     
       <div className="icons">
         <input type="file" id="img" accept="image/*" style={{display:"none"}} onChange={e => handleImage(e.target.files[0])}/>
         {imgIsReady && <img src={vMark}/>} 
