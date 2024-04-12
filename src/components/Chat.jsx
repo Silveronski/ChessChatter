@@ -108,7 +108,7 @@ const Chat = () => {
 
           const data = docSnapshot.data();
           if (data && data.gameAccepted === "true") {           
-            window.open(`http://localhost:3037/white?code=${gameInviteId}`, '_blank');
+            window.open(`https://chess-game-fh3hl.ondigitalocean.app/white?code=${gameInviteId}`, '_blank');
             setInvitePending(false);
             setGameInviteId("");
           }

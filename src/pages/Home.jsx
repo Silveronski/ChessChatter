@@ -78,7 +78,7 @@ const Home = () => {
           // handle later
         }
         setTimeout(() => {
-          window.open(`http://localhost:3037/black?code=${gameLink}`, '_blank');                            
+          window.open(`https://chess-game-fh3hl.ondigitalocean.app/black?code=${gameLink}`, '_blank');                            
         }, 500);                    
       };
 
