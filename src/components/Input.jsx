@@ -34,7 +34,6 @@ const Input = () => {
   }
 
   useEffect(() => {
-    document.querySelector('.input input')?.focus();
     setImg(null);
     setImgIsReady(false);   
 
