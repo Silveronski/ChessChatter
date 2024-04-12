@@ -70,16 +70,17 @@ const Home = () => {
       
       window.acceptInvite = async (gameLink, inviteId) => {
         try {
+          console.log("game link:", gameLink);
           const invitationDocRef = doc(db, "gameInvitations", inviteId);
-          await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "true" });                                     
+          await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "true" });
+          setTimeout(() => {
+            window.open(`https://chess-game-fh3hl.ondigitalocean.app/black?code=${gameLink}`, '_blank');                            
+          }, 2000);                                     
         }
         catch (err) {
           console.log(err);
           // handle later
-        }
-        setTimeout(() => {
-          window.open(`https://chess-game-fh3hl.ondigitalocean.app/black?code=${gameLink}`, '_blank');                            
-        }, 500);                    
+        }                            
       };
 
       window.rejectInvite = async (inviteId) => {

@@ -8,29 +8,53 @@ import { useForm } from 'react-hook-form';
 import Add from "../assets/images/addAvatar.png";
 import newLogo from '../assets/images/newLogo.png';
 import loading from '../assets/images/loading.gif';
+import defaultAvatar from '../assets/images/defaultAvatar.png';
 
 const Register = () => {
 
     const [error, setError] = useState(false);
     const [avatarError, setAvatarError] = useState(false);
+    const [avatarErrorMsg, setAvatarErrorMsg] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
-    const {register, formState: {errors}, handleSubmit} = useForm();
-    const onSubmit = async (data) => await AddUser(data);        
-                
-    const AddUser = async (data) => {
 
+    const {register, formState: {errors}, handleSubmit} = useForm();
+    const onSubmit = async (data) => await AddUser(data);  
+    
+    
+    const AddUser = async (data) => {
         const displayName = data.displayName;
         const email = data.email;
         const password = data.password;
-        const avatar = data.image[0];
+        let avatar = null;
 
-        if (!validImgExtensions.includes(avatar.type)) {
-            setAvatarError(true); 
-            return;
+        if (data.image[0]){
+            if (!validImgExtensions.includes(data.image[0].type)) {
+                setAvatarError(true); 
+                setAvatarErrorMsg("Please select a valid file type (PNG/JPEG/GIF)");
+                return;
+            }
+            else if (data.image[0].size > 80000) {
+                setAvatarError(true); 
+                setAvatarErrorMsg("Image must not exceed 80 kilobytes in size!");
+                return;
+            }
+            setAvatarError(false); 
+            avatar = data.image[0];        
         }
-
+        else {
+            imageUrlToFile(defaultAvatar, "defaultAvatar.png")
+                .then((file) => {
+                    avatar = file;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    return;
+                });
+            setAvatarError(false);          
+        }
+             
         setIsLoading(true);
 
         try {
@@ -73,6 +97,13 @@ const Register = () => {
         }
     }
 
+    async function imageUrlToFile(imageUrl, fileName) {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], fileName);
+        return file;
+    }
+
     return (
         <div className='form-container'> 
             <div className='form-wrapper'>
@@ -99,18 +130,17 @@ const Register = () => {
                         {errors.password?.type === "maxLength" && "Password must not exceed 12 characters"}
                     </span>
 
-                    <input style={{display:"none"}} type="file" id='img' {...register("image",{required: true})}/>
+                    <input style={{display:"none"}} type="file" id='img' {...register("image")}/>
                     <label htmlFor="img">
                         <img src={Add}/>
-                        <span className='avatar-span'>Add an Avatar</span>
+                        <span className='avatar-span'>Add an Avatar (Optional)</span>
                     </label>
                     <span className='form-error'>
-                        {errors.image?.type === "required" && "This field is required"}
-                        {avatarError && "Please select a valid file type (PNG/JPEG/GIF)"}
-                    </span>
+                        {avatarError && avatarErrorMsg}
+                    </span>              
 
                     <button>Sign up</button>
-                    {error && <span style={{color:"red"}}>Something went wrong...</span>} 
+                    {error && <span className='generalError'>Something went wrong...</span>} 
 
                 </form>
                 <p>Already have an account? <Link to="/login">Login</Link></p>

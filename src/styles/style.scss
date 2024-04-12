@@ -84,7 +84,12 @@ body{
             @include mobile{
                 width: 35px;
             }
-        }   
+        }  
+        
+        .generalError{
+            text-align: center;
+            color: red;
+        }
 
         form{
             display: flex;
