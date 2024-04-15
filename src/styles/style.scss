@@ -532,7 +532,7 @@ body{
                 
                 @include mobile{
                     height: calc(100% - 130px);
-                    padding-top: 20%;
+                    margin-top: 22%;
                 }
                 
                 &::-webkit-scrollbar {
