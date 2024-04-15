@@ -416,7 +416,7 @@ body{
 
                 @include mobile{
                     position: fixed;
-                    width: 93.2%;
+                    width: 93.7%;
                 }
 
                 .user-info{
@@ -531,7 +531,8 @@ body{
                 overflow-y: scroll;  
                 
                 @include mobile{
-                    height: calc(100% - 65px);
+                    height: calc(100% - 130px);
+                    padding-top: 20%;
                 }
                 
                 &::-webkit-scrollbar {
@@ -624,7 +625,7 @@ body{
                 @include mobile{
                     position: fixed;
                     bottom: 0;
-                    width: 93.2%;
+                    width: 93.7%;
                     margin-bottom: 2px;
                 }
 
