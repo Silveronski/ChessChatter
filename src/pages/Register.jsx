@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore"; 
+import { collection, doc, getDocs, setDoc } from "firebase/firestore"; 
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Add from "../assets/images/addAvatar.png";
@@ -15,6 +15,7 @@ const Register = () => {
     const [error, setError] = useState(false);
     const [avatarError, setAvatarError] = useState(false);
     const [avatarErrorMsg, setAvatarErrorMsg] = useState("");
+    const [displayNameError, setDisplayNameError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
@@ -23,7 +24,11 @@ const Register = () => {
     const onSubmit = async (data) => await AddUser(data);  
     
     
-    const AddUser = async (data) => {
+    const AddUser = async (data) => {  
+
+        const displayNameTaken = await isDisplayNameTaken(data.displayName);
+        if (displayNameTaken) return;
+
         const displayName = data.displayName;
         const email = data.email;
         const password = data.password;
@@ -59,8 +64,8 @@ const Register = () => {
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
-            const storageRef = ref(storage, displayName); // creates a reference to the storage location where the avatar will be saved
-                                                          // the name of the image will be the displayName
+            const storageRef = ref(storage, email); // creates a reference to the storage location where the avatar will be saved
+                                                          // the name of the image will be the email
             const uploadTask = uploadBytesResumable(storageRef, avatar); // initiates the upload of the user's avatar to the storage location
 
             uploadTask.on(
@@ -104,6 +109,26 @@ const Register = () => {
         return file;
     }
 
+    async function isDisplayNameTaken (displayName) {
+        try {
+            let displayNameTaken = false;
+            const querySnapshot = await getDocs(collection(db, "users"));
+            querySnapshot.forEach((doc) => { 
+                if (doc.data().displayName === displayName) { 
+                    console.log("match!", doc.data().displayName);
+                    displayNameTaken = true; 
+                    setDisplayNameError(true);        
+                }                    
+            });
+            return displayNameTaken;
+        } 
+        catch (err) {
+            console.error("Error searching for user:", err);
+            setError(true);
+            return true;
+        }
+    }
+
     return (
         <div className='form-container'> 
             <div className='form-wrapper'>
@@ -111,10 +136,11 @@ const Register = () => {
                 <span className='title'>Register</span>
                 <form method='post' onSubmit={handleSubmit(onSubmit)}>
                 
-                    <input type="text" placeholder='Display name' {...register("displayName",{required: true, pattern: /^(?!\s*$).{1,12}$/})}/>
+                    <input onClick={() => setDisplayNameError(false)} type="text" placeholder='Display name' {...register("displayName",{required: true, pattern: /^(?!\s*$).{1,12}$/})}/>
                     <span className='form-error'>
                         {errors.displayName?.type === "required" && "This field is required"}
                         {errors.displayName?.type === "pattern" && "Display name must not exceed 12 characters"}
+                        {displayNameError && "This display name is already taken!"}
                     </span>
 
                     <input type="email" placeholder='Email' {...register("email",{required: true, pattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i})}/> 
