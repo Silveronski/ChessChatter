@@ -412,6 +412,12 @@ body{
                 background-color: rgb(25, 25, 25);
                 color: $green-bgcolor;
                 justify-content: space-between;
+                position: relative;
+
+                @include mobile{
+                    position: fixed;
+                    width: 93.2%;
+                }
 
                 .user-info{
                     display: flex;
@@ -521,7 +527,11 @@ body{
                 background-color: rgb(50, 49, 49);  
                 padding: 10px;
                 height: calc(100% - 160px);
-                overflow-y: scroll;                
+                overflow-y: scroll;  
+                
+                @include mobile{
+                    height: calc(100% - 65px);
+                }
                 
                 &::-webkit-scrollbar {
                     width: 0.4em; 
@@ -542,13 +552,13 @@ body{
                     flex-direction: row-reverse;
                     display: flex;
                     gap: 20px;
-                    margin-bottom: 20px;
+                    margin-bottom: 20px;                   
 
                     .message-info{
                         display: flex;
                         flex-direction: column;
                         font-weight: 300;
-                        color: $black-bgcolor;
+                        color: $black-bgcolor;                                            
                         span{
                             color: rgba(255, 255, 255, 0.767);
                             font-size: 13px;
@@ -567,7 +577,7 @@ body{
                         max-width: 80%;
                         display: flex;
                         flex-direction: column;
-                        gap: 100px;
+                        gap: 100px;                      
                         p{
                             color: white;
                             background-color: rgba(39, 39, 39, 0.736);
@@ -577,11 +587,11 @@ body{
                         }
                         img{
                             width: 10vw;
-                            @include mobile{
+                            @include mobile{                                
                                 width: 215px;
                             } 
-                            @include tablet(){
-                                width: 315px;
+                            @include tablet{
+                                width: 255px;
                             }                    
                         }
                     }
@@ -608,7 +618,14 @@ body{
                 padding: 10px;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;             
+                justify-content: space-between; 
+                
+                @include mobile{
+                    position: fixed;
+                    bottom: 0;
+                    width: 93.2%;
+                    margin-bottom: 2px;
+                }
 
                 input{
                     width: 100%;
