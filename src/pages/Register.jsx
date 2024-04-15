@@ -22,10 +22,8 @@ const Register = () => {
 
     const {register, formState: {errors}, handleSubmit} = useForm();
     const onSubmit = async (data) => await AddUser(data);  
-    
-    
+     
     const AddUser = async (data) => {  
-
         const displayNameTaken = await isDisplayNameTaken(data.displayName);
         if (displayNameTaken) return;
 
