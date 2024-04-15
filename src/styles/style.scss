@@ -421,7 +421,7 @@ body{
 
                 .user-info{
                     display: flex;
-                    align-items: center;                  
+                    align-items: center;                                      
                 }
 
                 span{
@@ -488,6 +488,7 @@ body{
                     @include mobile{
                         font-size: 14px;
                         width: 100px;
+                        margin-right: 0;
                     }
 
                     &:hover{
