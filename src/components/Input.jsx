@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import addImg from '../assets/images/img.png';
 import vMark from '../assets/images/v.png';
 import { AuthContext } from '../context/AuthContext';
@@ -15,6 +15,7 @@ const Input = () => {
   const {currentUser} = useContext(AuthContext);
   const {data} = useContext(ChatContext);
   const [imgIsReady, setImgIsReady] = useState(false);
+  const inputRef = useRef();
   const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
 
   const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
@@ -34,8 +35,10 @@ const Input = () => {
   }
 
   useEffect(() => {
+
     setImg(null);
-    setImgIsReady(false);   
+    setImgIsReady(false);
+    window.innerWidth > 940 && inputRef?.current?.focus();   
 
     return () =>  setText(""); 
        
@@ -135,7 +138,7 @@ const Input = () => {
       })
     }
 
-    document.querySelector('.input input').focus();   
+    inputRef.current.focus();  
     setImg(null);
     setImgIsReady(false);
   }
@@ -148,7 +151,7 @@ const Input = () => {
        onChange={e => setText(e.target.value)}
        value={text}
        onKeyDown={handleKeyPress}
-       autoFocus={false}/>     
+       ref={inputRef}/>          
       <div className="icons">
         <input type="file" id="img" accept="image/*" style={{display:"none"}} onChange={e => handleImage(e.target.files[0])}/>
         {imgIsReady && <img src={vMark}/>} 
