@@ -160,6 +160,8 @@ const Home = () => {
     const handleResize = () => {      
       setTimeout(() => {
         if (isInputClicked) return;
+
+        console.log(isInputClicked);
       
         if (window.innerWidth < 940) {
           controlChatAppearance(false);
@@ -169,7 +171,7 @@ const Home = () => {
           controlChatAppearance(true);
           controlSidebarAppearance(true);
         }
-      }, 300);
+      }, 1000);
     }
 
     window.addEventListener('resize', handleResize);
