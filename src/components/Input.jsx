@@ -37,10 +37,10 @@ const Input = () => {
   }
 
   useEffect(() => {
-
+    
     setImg(null);
     setImgIsReady(false);
-    setIsInputClicked(false);
+    setIsInputClicked(true);
     window.innerWidth > 940 && inputRef?.current?.focus();   
 
     return () =>  setText(""); 
