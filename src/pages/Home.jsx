@@ -11,7 +11,7 @@ import { AppearanceContext } from '../context/AppearanceContext';
 const Home = () => {
 
   const {currentUser} = useContext(AuthContext);
-  const {controlSidebarAppearance, controlChatAppearance, showSidebar, showChat} = useContext(AppearanceContext);
+  const {controlSidebarAppearance, controlChatAppearance, showSidebar, showChat, isInputClicked} = useContext(AppearanceContext);
   const msgReceivedSound = useRef();
 
   useEffect(() => {
@@ -157,7 +157,10 @@ const Home = () => {
 
   useEffect(() => {
     
-    const handleResize = () => {
+    const handleResize = () => {  
+      
+      if (isInputClicked) return;
+      
       if (window.innerWidth < 940) {
         controlChatAppearance(false);
         controlSidebarAppearance(true);

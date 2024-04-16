@@ -7,6 +7,7 @@ import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase
 import { db, storage } from '../firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { AppearanceContext } from '../context/AppearanceContext';
 
 const Input = () => {
 
@@ -14,6 +15,7 @@ const Input = () => {
   const [img, setImg] = useState(null);
   const {currentUser} = useContext(AuthContext);
   const {data} = useContext(ChatContext);
+  const {setIsInputClicked} = useContext(AppearanceContext);
   const [imgIsReady, setImgIsReady] = useState(false);
   const inputRef = useRef();
   const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
@@ -38,6 +40,7 @@ const Input = () => {
 
     setImg(null);
     setImgIsReady(false);
+    setIsInputClicked(false);
     window.innerWidth > 940 && inputRef?.current?.focus();   
 
     return () =>  setText(""); 
@@ -143,6 +146,10 @@ const Input = () => {
     setImgIsReady(false);
   }
 
+  const handleClick = () => {
+    setIsInputClicked(true);
+  }
+
   return (
     (data.chatId !== "null" && <div className='input'>   
       <input 
@@ -151,6 +158,7 @@ const Input = () => {
        onChange={e => setText(e.target.value)}
        value={text}
        onKeyDown={handleKeyPress}
+       onClick={handleClick}
        ref={inputRef}/>          
       <div className="icons">
         <input type="file" id="img" accept="image/*" style={{display:"none"}} onChange={e => handleImage(e.target.files[0])}/>
