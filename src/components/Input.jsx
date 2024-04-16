@@ -43,7 +43,7 @@ const Input = () => {
     setIsInputClicked(true);
     window.innerWidth > 940 && inputRef?.current?.focus();   
 
-    return () =>  setText(""); 
+    return () => setText(""); 
        
   },[data.chatId]);
 
