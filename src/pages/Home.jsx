@@ -157,18 +157,19 @@ const Home = () => {
 
   useEffect(() => {
     
-    const handleResize = () => {  
+    const handleResize = () => {      
+      setTimeout(() => {
+        if (isInputClicked) return;
       
-      if (isInputClicked) return;
-      
-      if (window.innerWidth < 940) {
-        controlChatAppearance(false);
-        controlSidebarAppearance(true);
-      }
-      else {
-        controlChatAppearance(true);
-        controlSidebarAppearance(true);
-      }
+        if (window.innerWidth < 940) {
+          controlChatAppearance(false);
+          controlSidebarAppearance(true);
+        }
+        else {
+          controlChatAppearance(true);
+          controlSidebarAppearance(true);
+        }
+      }, 300);
     }
 
     window.addEventListener('resize', handleResize);
