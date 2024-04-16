@@ -37,10 +37,10 @@ const Input = () => {
   }
 
   useEffect(() => {
-
+    
     setImg(null);
     setImgIsReady(false);
-    
+    setIsInputClicked(true);
     window.innerWidth > 940 && inputRef?.current?.focus();   
 
     return () =>  setText(""); 
@@ -146,10 +146,6 @@ const Input = () => {
     setImgIsReady(false);
   }
 
-  const handleClick = () => {
-    setIsInputClicked(true);
-  }
-
   return (
     (data.chatId !== "null" && <div className='input'>   
       <input 
@@ -158,7 +154,6 @@ const Input = () => {
        onChange={e => setText(e.target.value)}
        value={text}
        onKeyDown={handleKeyPress}
-       onClick={handleClick}
        ref={inputRef}/>          
       <div className="icons">
         <input type="file" id="img" accept="image/*" style={{display:"none"}} onChange={e => handleImage(e.target.files[0])}/>
