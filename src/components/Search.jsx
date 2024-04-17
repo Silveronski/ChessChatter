@@ -21,8 +21,12 @@ const Search = ({selectedChatIdFromSearch}) => {
   },[username]);
 
 
-  const handleKey =  (e) => {
+  const handleKey = (e) => {
     (e.code === "Enter" && username.trim() !== '') && handleSearch();
+  }
+
+  const handleClick = () => {
+    username.trim() !== '' && handleSearch();
   }
 
   const handleSearch = async () => {
@@ -104,6 +108,7 @@ const Search = ({selectedChatIdFromSearch}) => {
         onKeyDown={handleKey}
         onChange={(e) => setUsername(e.target.value)} 
         value={username}/>
+        <button className='search-btn' onClick={handleClick}>Search</button>
       </div>
 
       {err && <span className='error' style={{color: "red"}}>User not found!</span>}

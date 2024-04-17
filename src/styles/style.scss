@@ -270,6 +270,10 @@ body{
                 overflow-x: hidden; 
                 padding: 5px; 
                 border-bottom: $green-bgcolor 1px solid;
+
+                .search-form{
+                    position: relative;
+                }
                
                 .error{
                     display: inline-block;                  
@@ -294,6 +298,25 @@ body{
 
                     &:focus{
                         outline: none;
+                    }
+                }
+
+                .search-btn{
+                    display: none;
+                }
+
+                @include mobile{
+                    .search-btn{
+                        display: block;
+                        position: absolute;
+                        right: 2.2%;
+                        top: 15%;
+                        background-color: $green-bgcolor;
+                        outline: none;
+                        border: none;
+                        font-family: "Tilt Warp";
+                        padding: 6px;
+                        letter-spacing: 0.2px;
                     }
                 }
             }

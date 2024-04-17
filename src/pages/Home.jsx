@@ -2,7 +2,7 @@ import Sidebar from '../components/Sidebar';
 import Chat from '../components/Chat';
 import toastr from 'toastr';
 import msgSound from '../assets/audio/msgSound.mp3';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { query, onSnapshot, collection, where, doc, updateDoc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
@@ -11,7 +11,8 @@ import { AppearanceContext } from '../context/AppearanceContext';
 const Home = () => {
 
   const {currentUser} = useContext(AuthContext);
-  const {controlSidebarAppearance, controlChatAppearance, showSidebar, showChat, isInputClicked} = useContext(AppearanceContext);
+  const {controlSidebarAppearance, controlChatAppearance, showSidebar, showChat} = useContext(AppearanceContext);
+  const [initialWindowSize, setInitialWindowSize] = useState(0);
   const msgReceivedSound = useRef();
 
   useEffect(() => {
@@ -155,30 +156,35 @@ const Home = () => {
        
   },[]);
 
-  useEffect(() => {
-    
-    const handleResize = () => {      
+    useEffect(() => {
       
-      if (isInputClicked) return;
-    
-      if (window.innerWidth < 940) {
-        controlChatAppearance(false);
-        controlSidebarAppearance(true);
+      const handleResize = () => {  
+
+        if (initialWindowSize === 0) {
+          setInitialWindowSize(window.innerWidth);
+        }
+      
+        if (window.innerWidth < 940) {
+          controlChatAppearance(false);
+          controlSidebarAppearance(true);
+        }
+        else {
+          controlChatAppearance(true);
+          controlSidebarAppearance(true);
+        }     
       }
-      else {
-        controlChatAppearance(true);
-        controlSidebarAppearance(true);
-      }     
-    }
 
-    window.addEventListener('resize', handleResize);
+      const beforeHandleResize = () => {
+        if (initialWindowSize > 940) handleResize();
+      }
 
-    handleResize();
+      window.addEventListener('resize', beforeHandleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
-      
-  },[]);
+      handleResize();
 
+      return () => window.removeEventListener('resize', beforeHandleResize);
+        
+    },[initialWindowSize]);
 
   return (
     <div className='home'>

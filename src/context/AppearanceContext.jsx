@@ -5,7 +5,6 @@ export const AppearanceContext = createContext();
 export const AppearanceContextProvider = ({children}) => {
     const [showSidebar, setShowSidebar] = useState(true);
     const [showChat, setShowChat] = useState(true);
-    const [isInputClicked, setIsInputClicked] = useState(false);
 
     const controlSidebarAppearance = useCallback((valFromUserChats) => {
         setShowSidebar(valFromUserChats);
@@ -16,8 +15,7 @@ export const AppearanceContextProvider = ({children}) => {
     },[showChat]);
 
     return (
-        <AppearanceContext.Provider value={{ controlSidebarAppearance, controlChatAppearance, setIsInputClicked, 
-                                                showSidebar, showChat, isInputClicked }}>
+        <AppearanceContext.Provider value={{ controlSidebarAppearance, controlChatAppearance,showSidebar, showChat }}>                                             
           {children}
         </AppearanceContext.Provider>
     );
