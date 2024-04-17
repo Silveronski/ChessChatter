@@ -1,0 +1,150 @@
+@import './base.scss';
+
+.form-container{
+    background-color: $black-bgcolor;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+
+    .form-wrapper{
+        margin-bottom: 10%;
+        background-color: hsla(0, 0%, 7%, 0.853);
+        padding: 20px 60px;
+        border-radius: 10%;
+        box-shadow: 1px 1px 20px $black-bgcolor;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        border: 1px solid $green-bgcolor;        
+
+        @include mobile{
+            margin-bottom: 0%;
+            padding: 0%;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0%;
+            min-height: 100vh;
+            border: none;
+            background-color: hsl(0, 0%, 7%);
+        }
+
+        .logo{        
+            text-align: center;
+            @include mobile{
+               margin-top: 15%;
+            }
+           img{
+            width: 300px;
+           }         
+        }
+        .title{
+            font-size: 22px;
+            color: $green-bgcolor;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: $green-bgcolor;
+        }
+
+        p{
+            color: $green-bgcolor;
+            a{
+                color: hsl(117, 100%, 72%);
+                margin-left: 4px;
+            }
+        }
+
+        .loading{
+            width: 50px;
+            @include mobile{
+                width: 35px;
+            }
+        }  
+        
+        .generalError{
+            text-align: center;
+            color: red;
+        }
+
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            
+            input{
+                width: 250px;
+                font-family: "Tilt Warp";
+                color: $green-bgcolor;
+                padding: 15px;
+                border: none;
+                border-bottom: 1px solid $green-bgcolor;
+                background-color: hsla(117, 100%, 72%, 0);
+                border-radius: 5%;
+                &::placeholder{
+                    font-family: "Tilt Warp";
+                    color: $green-bgcolor;
+                }
+                &:focus{
+                    outline: none;
+                    border-bottom: 1px solid white;
+                }
+            }                    
+            button{
+                margin-top: 1.5vh;
+                font-family: "Tilt Warp";
+                padding: 12px;
+                font-size: 18px;
+                font-weight: 600;
+                border-radius: 5%;
+                background-color: $green-bgcolor;
+                color: $black-bgcolor;
+                cursor: pointer;
+                letter-spacing: 1.5px;
+                border: none; 
+                transition: 0.3s;
+                &:hover{
+                    background-color: hsl(117, 100%, 72%);
+                }
+                @include mobile{
+                   font-size: 16px;
+                   padding: 10px;
+                   width: 50vw;
+                   align-self: center; 
+                   margin-top: 8%;             
+                }
+            }
+            label{
+                margin-top: 1vh;
+                display: flex;
+                justify-content:baseline;
+                align-items:center;
+                color: $green-bgcolor;
+                font-size: 13.3px;
+                gap: 10px;
+                cursor: pointer;
+                margin-left: 0.3vw;
+            }
+            .avatar-span{
+                margin-left: 1.5%;
+            }
+            img{
+                width: 33px;
+                background-color: $green-bgcolor;
+                border-radius: 50%;
+                padding: 2px;
+                margin-left: 1.5%;
+            }
+            .form-error{
+                color: rgba(255, 0, 0, 0.83);
+                font-size: 12px;
+                margin-left: 0.4vw;
+                letter-spacing: 0.2px;
+
+                @include mobile{
+                    margin-left: 6vw;
+                }
+            }      
+        }          
+    }
+}
