@@ -71,7 +71,6 @@ const Home = () => {
       
       window.acceptInvite = async (gameLink, inviteId) => {
         try {
-          console.log("game link:", gameLink);
           const invitationDocRef = doc(db, "gameInvitations", inviteId);
           await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "true" });
           setTimeout(() => {
@@ -160,10 +159,8 @@ const Home = () => {
       
       const handleResize = () => {  
 
-        if (initialWindowSize === 0) {
-          setInitialWindowSize(window.innerWidth);
-        }
-      
+        if (initialWindowSize === 0) setInitialWindowSize(window.innerWidth);
+          
         if (window.innerWidth < 940) {
           controlChatAppearance(false);
           controlSidebarAppearance(true);

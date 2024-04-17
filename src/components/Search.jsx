@@ -117,7 +117,7 @@ const Search = ({selectedChatIdFromSearch}) => {
         <img className='search-icon' src={search} onClick={handleSearchClick}/>
       </div>
 
-      {err && <span className='error' style={{color: "red"}}>User not found!</span>}
+      {err && <span className='error'>User not found!</span>}
       {user && ( 
         <div className="user-chat" onClick={handleSelect}>
           <img src={user.photoURL}/>

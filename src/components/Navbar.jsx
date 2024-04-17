@@ -8,7 +8,6 @@ import newLogo from '../assets/images/newLogo.png';
 import logout from '../assets/images/logout.png';
 
 const Navbar = () => {
-
   const {currentUser} = useContext(AuthContext);
   const {dispatch} = useContext(ChatContext);
 
@@ -24,7 +23,7 @@ const Navbar = () => {
       dispatch({ type: "LOG_OUT", payload: {} });
     } 
       catch (error) {
-        console.error('Error setting user presence:', error);
+        console.error('Error logging out:', error);
       }
   }
 
@@ -34,7 +33,7 @@ const Navbar = () => {
       <div className="user">
           <img src={currentUser?.photoURL}/>
           <span>{currentUser?.displayName}</span>
-          <button onClick={() => signUserOut()}>Log out <img src={logout}/></button>
+          <button onClick={() => signUserOut()}>Log out<img src={logout}/></button>
       </div>
     </div>
   )

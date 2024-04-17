@@ -15,7 +15,7 @@ export const AppearanceContextProvider = ({children}) => {
     },[showChat]);
 
     return (
-        <AppearanceContext.Provider value={{ controlSidebarAppearance, controlChatAppearance,showSidebar, showChat }}>                                             
+        <AppearanceContext.Provider value={{ controlSidebarAppearance, controlChatAppearance, showSidebar, showChat }}>                                             
           {children}
         </AppearanceContext.Provider>
     );

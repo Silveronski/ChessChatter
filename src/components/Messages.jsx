@@ -6,7 +6,6 @@ import { db } from '../firebase/firebase';
 import newLogo from '../assets/images/newLogo.png';
 
 const Messages = () => {
-
     const [messages, setMessages] = useState([]);
     const {data} = useContext(ChatContext);
 
