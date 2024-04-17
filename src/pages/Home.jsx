@@ -4,7 +4,7 @@ import toastr from 'toastr';
 import msgSound from '../assets/audio/msgSound.mp3';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { query, onSnapshot, collection, where, doc, updateDoc, getDoc, Timestamp } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../firebase/firebase';
 import { AuthContext } from '../context/AuthContext';
 import { AppearanceContext } from '../context/AppearanceContext';
 

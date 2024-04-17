@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { signOut } from 'firebase/auth';
-import { auth, db } from '../firebase';
+import { auth, db } from '../firebase/firebase';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { doc, updateDoc } from 'firebase/firestore';
