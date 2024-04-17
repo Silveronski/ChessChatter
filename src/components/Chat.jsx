@@ -5,10 +5,10 @@ import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase/firebase';
 import { doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
-import toastr from 'toastr';
-import back from '../assets/images/back.png'
 import { AppearanceContext } from '../context/AppearanceContext';
-import pawn from '../assets/images/pawn.png'
+import toastr from 'toastr';
+import back from '../assets/images/back.png';
+import pawn from '../assets/images/pawn.png';
 
 const Chat = () => {
 

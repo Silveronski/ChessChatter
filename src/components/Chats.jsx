@@ -3,9 +3,9 @@ import { db } from '../firebase/firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
+import { AppearanceContext } from '../context/AppearanceContext';
 import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
-import { AppearanceContext } from '../context/AppearanceContext';
 
 const Chats = ({selectedChatIdFromSearch}) => {
 
