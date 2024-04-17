@@ -4,6 +4,7 @@ import { db } from '../firebase/firebase';
 import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { AppearanceContext } from '../context/AppearanceContext';
+import search from '../assets/images/search.png';
 
 const Search = ({selectedChatIdFromSearch}) => {
 
@@ -26,7 +27,7 @@ const Search = ({selectedChatIdFromSearch}) => {
     (e.code === "Enter" && username.trim() !== '') && handleSearch();
   }
 
-  const handleClick = () => {
+  const handleSearchClick = () => {
     username.trim() !== '' && handleSearch();
   }
 
@@ -113,7 +114,7 @@ const Search = ({selectedChatIdFromSearch}) => {
         onKeyDown={handleKey}
         onChange={(e) => setUsername(e.target.value)} 
         value={username}/>
-        <button className='search-btn' onClick={handleClick}>Search</button>
+        <img className='search-icon' src={search} onClick={handleSearchClick}/>
       </div>
 
       {err && <span className='error' style={{color: "red"}}>User not found!</span>}

@@ -61,16 +61,21 @@
             border-radius: 5%;
             transition: 0.3s;
             font-family: "Tilt Warp";   
+            
+            @include mobile{
+                padding-left: 8px;
+            }
 
+            @include tablet{         
+                width: 95px;
+                justify-content: center;
+            }
+            
             @include laptop{
                 font-size: 12px;
                 padding: 6px 3.3px;
             }
 
-            @include mobile{
-                padding-left: 8px;
-            }
-            
             img{
                 background-color: transparent;
                 width: 15px;
@@ -117,23 +122,25 @@
                 outline: none;
             }
         }
-
-        .search-btn{
+        .search-icon{
             display: none;
         }
 
         @include mobile{
-            .search-btn{
+            .search-icon{
                 display: block;
                 position: absolute;
                 right: 2.2%;
-                top: 15%;
-                background-color: $green-bgcolor;
-                outline: none;
-                border: none;
-                font-family: "Tilt Warp";
-                padding: 6px;
-                letter-spacing: 0.2px;
+                top: 35%;                   
+            }
+        }
+
+        @include tablet{
+            .search-icon{
+                display: block;
+                position: absolute;
+                right: 2.2%;
+                top: 35%;                   
             }
         }
     }
