@@ -249,6 +249,9 @@ body{
                 }
     
                 button{
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
                     background-color: $green-bgcolor;
                     font-size: 14px;
                     border: none;
@@ -256,9 +259,25 @@ body{
                     color: $black-bgcolor;  
                     font-weight: 300;
                     padding: 5px 10px;
+                    padding-left: 14px;
                     border-radius: 5%;
                     transition: 0.3s;
-                    font-family: "Tilt Warp";                   
+                    font-family: "Tilt Warp";   
+
+                    @include laptop{
+                        font-size: 12px;
+                        padding: 6px 3.3px;
+                    }
+
+                    @include mobile{
+                        padding-left: 8px;
+                    }
+                    
+                    img{
+                        background-color: transparent;
+                        width: 15px;
+                        height: 15px;
+                    }
                     
                     &:hover{
                         background-color: hsl(117, 100%, 72%);

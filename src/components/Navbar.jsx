@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import newLogo from '../assets/images/newLogo.png';
+import logout from '../assets/images/logout.png';
 
 const Navbar = () => {
 
@@ -33,7 +34,7 @@ const Navbar = () => {
       <div className="user">
           <img src={currentUser?.photoURL}/>
           <span>{currentUser?.displayName}</span>
-          <button onClick={() => signUserOut()}>Log out</button>
+          <button onClick={() => signUserOut()}>Log out <img src={logout}/></button>
       </div>
     </div>
   )
