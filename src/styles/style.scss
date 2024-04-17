@@ -485,7 +485,8 @@ body{
                     width: 30px;
                 }
 
-                button{                
+                button{        
+                    position: relative;        
                     padding: 6px;   
                     width: 23%;
                     height: 80%;
@@ -498,20 +499,52 @@ body{
                     border: none;
                     cursor: pointer;
                     transition: 0.3s;
+                    padding-right: 2%;
+                    
+                    img{
+                        position: absolute;
+                        width: 22px;
+                        background-color: transparent;
+                        border: none;
+                        top: 25%;
+                        right: 16%;
+                        left: 70%;
+                    }
                     
                     @include tablet{
                         width: 120px;
                         font-size: 5vw;
+
+                        img{                           
+                            width: 15px;                        
+                            top: 33%;
+                            right: 7.5%;
+                            left: 75%;
+                        }
                     }
 
                     @include laptop{
-                        font-size: min(16px, 12px);
+                        font-size: 16px;
+                        padding-right: 4%;
+                        img{                           
+                            width: 16px;                        
+                            top: 33%;
+                            right: 7.5%;
+                            left: 75%;
+                        }
                     }
 
                     @include mobile{
                         font-size: 14px;
-                        width: 100px;
                         margin-right: 0;
+                        padding-right: 5%;
+                        width: 28%;
+                        img{                           
+                            width: 15px;                        
+                            top: 33%;
+                            right: 7.5%;
+                            left: 75%;
+                        }
                     }
 
                     &:hover{

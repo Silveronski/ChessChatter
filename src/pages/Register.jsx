@@ -112,8 +112,7 @@ const Register = () => {
             let displayNameTaken = false;
             const querySnapshot = await getDocs(collection(db, "users"));
             querySnapshot.forEach((doc) => { 
-                if (doc.data().displayName === displayName) { 
-                    console.log("match!", doc.data().displayName);
+                if (doc.data().displayName.toLowerCase() === displayName.toLowerCase()) { 
                     displayNameTaken = true; 
                     setDisplayNameError(true);        
                 }                    

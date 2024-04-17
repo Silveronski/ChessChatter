@@ -8,6 +8,7 @@ import { AuthContext } from '../context/AuthContext';
 import toastr from 'toastr';
 import back from '../assets/images/back.png'
 import { AppearanceContext } from '../context/AppearanceContext';
+import pawn from '../assets/images/pawn.png'
 
 const Chat = () => {
 
@@ -208,7 +209,7 @@ const Chat = () => {
           {data.chatId !== "null" && <img src={data.user?.photoURL}/>}
           <span>{data.user?.displayName}</span> 
         </div>       
-        {data.chatId !== "null" && <button onClick={handlePlay}>Play Chess</button>}
+        {data.chatId !== "null" && <button onClick={handlePlay}>Play Chess <img src={pawn}/></button>}
       </div>        
         <Messages/>
         <Input/>  

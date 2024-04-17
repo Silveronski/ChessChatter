@@ -17,6 +17,7 @@ const Search = ({selectedChatIdFromSearch}) => {
   useEffect(() => {
     if (username.length === 0){
       setErr(false);
+      setUser(null);
     }
   },[username]);
 
@@ -30,6 +31,10 @@ const Search = ({selectedChatIdFromSearch}) => {
   }
 
   const handleSearch = async () => {
+    if (username.toLowerCase() === currentUser.displayName.toLowerCase()) {
+      setErr(true);
+      return;
+    }
     const q = query(
       collection(db, "users"), 
       where("displayName", "==", username)
