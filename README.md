@@ -22,4 +22,5 @@ Introducing Chess Chatter: a platform for messaging and playing chess with your 
 - Audio cues for specific moves (check, checkmate, piece move, etc) during the game
 - Material points status for each player
 
+
 ## Convinced yet? Try it yourself: https://chess-chatter.netlify.app
