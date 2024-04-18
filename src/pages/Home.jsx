@@ -10,7 +10,6 @@ import { AppearanceContext } from '../context/AppearanceContext';
 import useToastr from '../hooks/useToastr';
 
 const Home = () => {
-
   const {currentUser} = useContext(AuthContext);
   const {controlSidebarAppearance, controlChatAppearance, showSidebar, showChat} = useContext(AppearanceContext);
   const [initialWindowSize, setInitialWindowSize] = useState(0);
@@ -176,10 +175,10 @@ const Home = () => {
 
   return (
     <div className='home'>
-        <div className='container'>             
-            {showSidebar && <Sidebar/>}
-            {showChat && <Chat/>}
-            <audio src={msgSound} ref={msgReceivedSound}></audio>                              
+        <div className='container'>                           
+          {showSidebar && <Sidebar/>}
+          {showChat && <Chat/>}
+          <audio src={msgSound} ref={msgReceivedSound}></audio>                              
         </div>
     </div>
   )
