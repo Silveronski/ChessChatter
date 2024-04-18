@@ -6,9 +6,9 @@ import { db } from '../firebase/firebase';
 import { doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../context/AuthContext';
 import { AppearanceContext } from '../context/AppearanceContext';
-import toastr from 'toastr';
 import back from '../assets/images/back.png';
 import pawn from '../assets/images/pawn.png';
+import useToastr from '../hooks/useToastr';
 
 const Chat = () => {
 
@@ -38,17 +38,7 @@ const Chat = () => {
       try {        
         const userSnap = await getDoc(doc(db, 'presence', data.user.uid));    
         if (userSnap.exists() && !userSnap.data().online) {
-          toastr.error(
-            "Can't invite an offline user!", 
-            {
-                timeOut: 1000,
-                extendedTimeOut: 0, 
-                closeButton: true, 
-                positionClass: "toast-top-right", 
-                tapToDismiss: true,
-                preventDuplicates: true,               
-            }
-          );
+          useToastr("error", "Can't invite an offline user!");
           return;
         }
 
@@ -62,18 +52,7 @@ const Chat = () => {
           gameAccepted: ""
         });
 
-        toastr.success(
-          "Your invitation was successfully sent!", 
-          {
-              timeOut: 3000,
-              extendedTimeOut: 0, 
-              closeButton: true, 
-              positionClass: "toast-top-right", 
-              tapToDismiss: true,
-              preventDuplicates: true,               
-          }
-        );
-
+        useToastr("success", "Your invitation was successfully sent!");
         setInvitePending(true);
         setGameInviteId(data.user.uid + currentUser.uid);       
       }
@@ -84,17 +63,7 @@ const Chat = () => {
       }      
     }
     else {
-      toastr.error(
-        "Can't invite more than one person at a time!", 
-        {
-            timeOut: 2000,
-            extendedTimeOut: 0, 
-            closeButton: true, 
-            positionClass: "toast-top-right", 
-            tapToDismiss: true,
-            preventDuplicates: true,               
-        }
-      );
+      useToastr("error", "Can't invite more than one person at a time!");
     }  
   }
 
@@ -114,18 +83,8 @@ const Chat = () => {
             setGameInviteId("");
           }
 
-          else if (data && data.gameAccepted === "false") {            
-            toastr.error(
-              "Your invitation was declined.", 
-              {
-                  timeOut: 2000,
-                  extendedTimeOut: 0, 
-                  closeButton: true, 
-                  positionClass: "toast-top-right", 
-                  tapToDismiss: true,
-                  preventDuplicates: true,               
-              }
-            );
+          else if (data && data.gameAccepted === "false") { 
+            useToastr("error", "Your invitation was declined");           
             setGameInviteId("");
             setInvitePending(false); 
           }
@@ -152,17 +111,7 @@ const Chat = () => {
           const gameInviteSnap = await getDoc(gameInviteRef);
           if (gameInviteSnap.data().gameConcluded === false) {
             await updateDoc(gameInviteRef, {gameConcluded: true});
-            toastr.error(
-              "Your invitation was not responded to within the specified time frame", 
-              {
-                  timeOut: 6000,
-                  extendedTimeOut: 0, 
-                  closeButton: true, 
-                  positionClass: "toast-top-right", 
-                  tapToDismiss: true,
-                  preventDuplicates: true,               
-              }
-            );
+            useToastr("error", "Your invitation was not responded to within the specified time frame");           
             setGameInviteId("");
             setInvitePending(false);
           }
@@ -193,7 +142,7 @@ const Chat = () => {
 
     return () => window.removeEventListener('resize', handleResize);
       
-  },[])
+  },[]);
 
   const handleBack = () => {
     controlChatAppearance(false);

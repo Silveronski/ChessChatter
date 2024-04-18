@@ -7,6 +7,7 @@ import { query, onSnapshot, collection, where, doc, updateDoc, getDoc, Timestamp
 import { db } from '../firebase/firebase';
 import { AuthContext } from '../context/AuthContext';
 import { AppearanceContext } from '../context/AppearanceContext';
+import useToastr from '../hooks/useToastr';
 
 const Home = () => {
 
@@ -108,18 +109,8 @@ const Home = () => {
         if (currentUser.uid && presDoc.id !== currentUser.uid && !data.hasShown && data.online) {                                   
           try {          
             const presenceRef = doc(db, 'presence', presDoc.id);
-            await updateDoc(presenceRef, { hasShown: true });                                              
-            toastr.info(
-              `${data.name} has just logged in!`, 
-              {
-                  timeOut: 8000,
-                  extendedTimeOut: 0, 
-                  closeButton: true, 
-                  positionClass: "toast-top-right", 
-                  tapToDismiss: false,
-                  preventDuplicates: true,               
-              }
-            );                         
+            await updateDoc(presenceRef, { hasShown: true }); 
+            useToastr("info", `${data.name} has just logged in!`, 8000);                                                                  
           }
 
           catch (err) {          
