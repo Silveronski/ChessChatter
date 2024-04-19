@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 export const app = initializeApp({
-    apiKey: "AIzaSyCbTGisl9Yea7qWrT97VH--NwENSqLp_Ow",
-    authDomain: "backgammon-chatter.firebaseapp.com",
-    projectId: "backgammon-chatter",
-    storageBucket: "backgammon-chatter.appspot.com",
-    messagingSenderId: "708028010012",
-    appId: "1:708028010012:web:6b34844b67f71571df19d9"
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID
 });
 
 export const auth = getAuth();
