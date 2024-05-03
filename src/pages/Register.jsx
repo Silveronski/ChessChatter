@@ -155,7 +155,7 @@ const Register = () => {
 
                     <input style={{display:"none"}} type="file" id='img' {...register("image")}/>
                     <label htmlFor="img">
-                        <img src={Add}/>
+                        <img src={Add} alt='add image icon'/>
                         <span className='avatar-span'>Add an Avatar (Optional)</span>
                     </label>
                     <span className='form-error'>

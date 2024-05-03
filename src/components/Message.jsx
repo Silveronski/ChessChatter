@@ -33,7 +33,7 @@ const Message = ({message}) => {
   return (
     <div ref={ref} className={`message ${message.senderId === currentUser.uid && "owner"}`}>
       <div className="message-info">
-        <img src={message.senderId === currentUser.uid ? currentUser.photoURL : data.user.photoURL}/>
+        <img src={message.senderId === currentUser.uid ? currentUser.photoURL : data.user.photoURL} alt='user image'/>
         <span>{JSON.stringify(message.date).substring(1,6)}</span>
       </div>
       <div className="message-content">

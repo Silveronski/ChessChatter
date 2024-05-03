@@ -114,13 +114,13 @@ const Search = ({selectedChatIdFromSearch}) => {
         onKeyDown={handleKey}
         onChange={(e) => setUsername(e.target.value)} 
         value={username}/>
-        <img className='search-icon' src={search} onClick={handleSearchClick}/>
+        <img className='search-icon' alt='search for users icon' src={search} onClick={handleSearchClick}/>
       </div>
 
       {err && <span className='error'>User not found!</span>}
       {user && ( 
         <div className="user-chat" onClick={handleSelect}>
-          <img src={user.photoURL}/>
+          <img src={user.photoURL} alt='found user image'/>
           <div className="user-chat-info">
             <span>{user.displayName}</span>
           </div>

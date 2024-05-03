@@ -27,7 +27,7 @@ const Messages = () => {
 
             {data.chatId === "null" && (
                 <div className='panel-content'>
-                    <img src={newLogo}/>
+                    <img src={newLogo} alt='site logo'/>
                     <p>Send and receive messages</p>
                     <p>Play Chess with your friends!</p>
                 </div>              

@@ -154,8 +154,8 @@ const Chat = () => {
     <div className='chat'>
       <div className="chat-info">
         <div className='user-info'>
-          {(data.chatId !== "null" && showBackBtn) && <img src={back} className='backBtn' onClick={handleBack}/>}
-          {data.chatId !== "null" && <img src={data.user?.photoURL}/>}
+          {(data.chatId !== "null" && showBackBtn) && <img src={back} className='backBtn' onClick={handleBack} alt='back button'/>}
+          {data.chatId !== "null" && <img src={data.user?.photoURL} alt='user image'/>}
           <span>{data.user?.displayName}</span> 
         </div>       
         {data.chatId !== "null" && <button onClick={handlePlay}>Play Chess <img src={pawn}/></button>}
