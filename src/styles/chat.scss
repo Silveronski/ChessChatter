@@ -47,6 +47,7 @@
         img{
             margin-left: 0.5vw;
             width: 35px;
+            height: 35px;
             background-color: aliceblue;
             border-radius: 50%;
             object-fit: contain;
@@ -63,64 +64,47 @@
         }
 
         button{        
-            position: relative;        
-            padding: 6px;   
+            display: flex;   
+            align-items: center;   
+            justify-content: center;
             width: 23%;
-            height: 80%;
+            min-width: fit-content;
+            padding: 6px;   
             margin-right: 15px;
             font-size: 1.1vw;
             background-color: $green-bgcolor;
             color: $black-bgcolor;
             font-family: "Tilt Warp";
-            border-radius: 5%;
+            border-radius: 24px;
             border: none;
             cursor: pointer;
-            transition: 0.3s;
-            padding-right: 2%;
-            
-            img{
-                position: absolute;
-                width: 22px;
+            transition: 0.3s;       
+            img{             
+                width: 1.1vw;
                 background-color: transparent;
                 border: none;
-                top: 25%;
-                right: 16%;
-                left: 70%;
-            }
-            
-            @include tablet{
-                width: 120px;
-                font-size: 5vw;
-
-                img{                           
-                    width: 15px;                        
-                    top: 33%;
-                    right: 7.5%;
-                    left: 75%;
-                }
             }
 
             @include laptop{
-                font-size: 16px;
-                padding-right: 4%;
+                font-size: 1.3rem;
                 img{                           
-                    width: 16px;                        
-                    top: 33%;
-                    right: 7.5%;
-                    left: 75%;
+                    width: 1.3rem;                        
                 }
             }
-
-            @include mobile{
-                font-size: 14px;
-                margin-right: 0;
-                padding-right: 5%;
-                width: 28%;
+            
+            @include tablet{
+                font-size: 1.8rem;
                 img{                           
-                    width: 15px;                        
-                    top: 33%;
-                    right: 7.5%;
-                    left: 75%;
+                    width: 1.8rem;                        
+                }
+            }
+          
+            @include mobile{
+                font-size: 1.1rem;
+                margin-right: 0;  
+                padding-inline: 0.8rem;    
+                img{                           
+                    width: 1.1rem;                        
                 }
             }
 

@@ -14,11 +14,9 @@ const Login = () => {
     const onSubmit = async (data) => await userLogin(data);
 
     const userLogin = async (data) => {   
-
         const email = data.email;
         const password = data.password;
         setIsLoading(true);
-
         try {
             await signInWithEmailAndPassword(auth, email, password);      
             setIsLoading(false);                       

@@ -11,7 +11,6 @@ import loading from '../assets/images/loading.gif';
 import defaultAvatar from '../assets/images/defaultAvatar.png';
 
 const Register = () => {
-
     const [error, setError] = useState(false);
     const [avatarError, setAvatarError] = useState(false);
     const [avatarErrorMsg, setAvatarErrorMsg] = useState("");

@@ -9,7 +9,6 @@ import addImg from '../assets/images/img.png';
 import vMark from '../assets/images/v.png';
 
 const Input = () => {
-
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
   const {currentUser} = useContext(AuthContext);
@@ -35,7 +34,6 @@ const Input = () => {
   }
 
   useEffect(() => {
-    
     setImg(null);
     setImgIsReady(false);
     window.innerWidth > 940 && inputRef?.current?.focus();   

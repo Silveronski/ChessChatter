@@ -7,7 +7,6 @@ import { AppearanceContext } from '../context/AppearanceContext';
 import search from '../assets/images/search.png';
 
 const Search = ({selectedChatIdFromSearch}) => {
-
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
