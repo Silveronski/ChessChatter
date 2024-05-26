@@ -7,8 +7,8 @@ import newLogo from '../assets/images/newLogo.png';
 import loading from '../assets/images/loading.gif';
 
 const Login = () => {
-    const [error, setError] = useState(false);
     const navigate = useNavigate(); 
+    const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const {register, formState: {errors}, handleSubmit} = useForm();
     const onSubmit = async (data) => await userLogin(data);

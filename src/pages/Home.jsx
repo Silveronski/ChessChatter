@@ -17,7 +17,6 @@ const Home = () => {
 
   useEffect(() => {
     let timer;
-
     const fetchCurrentUserPresence = async () => {
       try {
         const currentUserPresenceRef = doc(db, 'presence', currentUser?.uid);     
@@ -34,15 +33,12 @@ const Home = () => {
   
     currentUser.uid && fetchCurrentUserPresence();
   
-    return () => clearTimeout(timer); 
-        
+    return () => clearTimeout(timer);        
   },[]);
 
 
   useEffect(() => {
-
-    if (!currentUser.uid) return;
-        
+    if (!currentUser.uid) return;      
     onSnapshot( 
       query(collection(db, "gameInvitations"), where("userId", "==", currentUser.uid)),
       (snapshot) => {
@@ -75,7 +71,7 @@ const Home = () => {
           await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "true" });
           setTimeout(() => {
             window.open(`https://chess-game-fh3hl.ondigitalocean.app/black?code=${gameLink}`, '_blank');                            
-          }, 2000);                                     
+          }, 2500);                                     
         }
         catch (err) {
           console.log(err);
@@ -92,16 +88,12 @@ const Home = () => {
           console.log(err);
           // handle later
         }       
-      };      
-    
+      };        
   },[]);
 
   
-
-  useEffect(() => {
-    
+  useEffect(() => {  
     if (currentUser?.uid === undefined || null) return;
-
     const unsubscribe = onSnapshot(collection(db, 'presence'), (snapshot) => {
       snapshot.forEach(async (presDoc) => {
         const data = presDoc.data();         
@@ -119,15 +111,12 @@ const Home = () => {
       });
     });
 
-    return () => unsubscribe();
-      
+    return () => unsubscribe(); 
   },[currentUser.uid]);
 
 
   useEffect(() => {
-
-    if (!currentUser.uid) return;
-    
+    if (!currentUser.uid) return;   
     onSnapshot(
       collection(db, "chats"),
       (snapshot) => {
@@ -141,14 +130,11 @@ const Home = () => {
           }          
         })
       }     
-    ); 
-       
+    );        
   },[]);
 
-    useEffect(() => {
-      
+    useEffect(() => {    
       const handleResize = () => {  
-
         if (initialWindowSize === 0) setInitialWindowSize(window.innerWidth);
           
         if (window.innerWidth < 940) {
