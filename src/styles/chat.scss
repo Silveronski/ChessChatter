@@ -1,9 +1,6 @@
-@import './base.scss';
-
 .chat{
     flex: 2;
     background-color: rgb(50, 49, 49);
-
     .chat-info{
         height: 50px;
         padding: 10px;
@@ -13,17 +10,14 @@
         color: $green-bgcolor;
         justify-content: space-between;
         position: relative;
-
         @include mobile{
             position: fixed;
             width: 93.7%;
         }
-
         .user-info{
             display: flex;
             align-items: center;                                      
         }
-
         span{
             margin-left: 1.2vw;
             font-size: 20px;
@@ -31,19 +25,16 @@
                 margin-left: 20px;
             }
         }
-
         img:nth-child(2){
             @include mobile{
                 margin-left: 10px;
             }
         }
-
         img:nth-child(1){
             @include mobile{
                 margin-left: 6px;
             }
         }
-
         img{
             margin-left: 0.5vw;
             width: 35px;
@@ -53,7 +44,6 @@
             object-fit: contain;
             border: 3px white solid;
         }
-
         .backBtn{
             display: none;
             background-color: transparent;
@@ -66,7 +56,6 @@
                 display: block;
             }          
         }
-
         button{        
             display: flex;   
             align-items: center;   
@@ -88,21 +77,18 @@
                 background-color: transparent;
                 border: none;
             }
-
             @include laptop{
                 font-size: 1.3rem;
                 img{                           
                     width: 1.3rem;                        
                 }
-            }
-            
+            }        
             @include tablet{
                 font-size: 1.8rem;
                 img{                           
                     width: 1.8rem;                        
                 }
-            }
-          
+            }         
             @include mobile{
                 font-size: 1.1rem;
                 margin-right: 0;  
@@ -111,13 +97,11 @@
                     width: 1.1rem;                        
                 }
             }
-
             &:hover{
                 background-color: hsl(117, 100%, 72%);
             }
         }
     }
-
     .logo-panel{               
         height: 100%;
         .panel-content{
@@ -126,40 +110,33 @@
             justify-content: center; 
             align-items: center; 
             flex-direction: column;
-            text-align: center;
-            
+            text-align: center;         
             img{
                 width: 60%;                                       
             }
-
             p{
                 color: white;                      
                 font-size: 20px;
                 letter-spacing: 4px;
             }
-
             p:nth-child(3){
                 margin-top: 0;
                 color: white;
             }                  
         }                
     }
-
     .messages{
         background-color: rgb(50, 49, 49);  
         padding: 10px;
         height: calc(100% - 160px);
-        overflow-y: scroll;                 
-        
+        overflow-y: scroll;                     
         @include mobile{
             height: calc(100% - 130px);
             margin-top: 22%;
-        }
-        
+        }      
         &::-webkit-scrollbar {
             width: 0.4em; 
-          }
-                           
+          }                        
         &::-webkit-scrollbar-track {
         background: rgb(57, 57, 57);
         border-radius: 100vw;
@@ -168,9 +145,7 @@
         &::-webkit-scrollbar-thumb {
         background-color: $green-bgcolor;
         border-radius: 100vw;              
-        }
-                           
-          
+        }                                   
         .message{
             flex-direction: row-reverse;
             display: flex;
@@ -181,8 +156,7 @@
                 &:last-child {
                     margin-bottom: 45px;
                 }
-            }
-            
+            }       
             .message-info{
                 display: flex;
                 flex-direction: column;
@@ -201,7 +175,6 @@
                     object-fit: cover;
                 }
             }
-
             .message-content{                      
                 max-width: 80%;
                 display: flex;
@@ -224,10 +197,8 @@
                     }                    
                 }
             }
-
             &.owner{
                 flex-direction: row;
-
                 .message-content{
                     align-items: flex-end;                          
                     p{
@@ -240,22 +211,19 @@
             }
         }
     }
-
     .input{
         height: 50px;
         background-color: rgb(174, 173, 173);
         padding: 10px;
         display: flex;
         align-items: center;
-        justify-content: space-between; 
-        
+        justify-content: space-between;       
         @include mobile{
             position: fixed;
             bottom: 0;
             width: 93.7%;
             margin-bottom: 2px;
         }
-
         input{
             width: 100%;
             border: none;
@@ -269,13 +237,11 @@
                 color: $black-bgcolor;                       
             }
         }
-
         .icons{
             display: flex;
             align-items: center;
             gap: 15px;
             margin-right: 0.5vw;
-
             button{
                 background-color: $green-bgcolor;
                 font-family: "Tilt Warp";
@@ -291,7 +257,6 @@
                 }
             }
         }
-
         img{
             width: 24px;
             height: 24px;
@@ -301,6 +266,5 @@
                 transform: scale(1.1);
             }
         }
-
     }
 }

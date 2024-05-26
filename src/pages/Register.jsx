@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, storage, db } from "../firebase/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore"; 
+import { doc, setDoc } from "firebase/firestore"; 
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { imageUrlToFile, isDisplayNameTaken, validImgExtensions } from '../utils/utilities';
 import Add from "../assets/images/addAvatar.png";
 import newLogo from '../assets/images/newLogo.png';
 import loading from '../assets/images/loading.gif';
@@ -12,40 +13,34 @@ import defaultAvatar from '../assets/images/defaultAvatar.png';
 
 const Register = () => {
     const [error, setError] = useState(false);
-    const [avatarError, setAvatarError] = useState(false);
-    const [avatarErrorMsg, setAvatarErrorMsg] = useState("");
+    const [avatarError, setAvatarError] = useState({ msg: '', activated: false });
     const [displayNameError, setDisplayNameError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
-
+    
     const {register, formState: {errors}, handleSubmit} = useForm();
-    const onSubmit = async (data) => await AddUser(data);  
+    const onSubmit = async (data) => await registerUser(data);  
      
-    const AddUser = async (data) => {  
+    const registerUser = async (data) => {  
         const displayNameTaken = await isDisplayNameTaken(data.displayName);
-        if (displayNameTaken) return;
-
+        if (displayNameTaken) {
+            setDisplayNameError(true);
+            return;
+        }
         const displayName = data.displayName;
         const email = data.email;
         const password = data.password;
         let avatar = null;
-
-        if (data.image[0]){
+        if (data.image[0]) { // image uploaded
             if (!validImgExtensions.includes(data.image[0].type)) {
-                setAvatarError(true); 
-                setAvatarErrorMsg("Please select a valid file type (PNG/JPEG/GIF)");
-                return;
+                displayAvatarError("Please select a valid file type (PNG/JPEG/GIF)");
             }
             else if (data.image[0].size > 80000) {
-                setAvatarError(true); 
-                setAvatarErrorMsg("Image must not exceed 80 kilobytes in size!");
-                return;
+                displayAvatarError("Image must not exceed 80 kilobytes in size!");
             }
-            setAvatarError(false); 
             avatar = data.image[0];        
         }
-        else {
+        else { // no image, use default avatar
             imageUrlToFile(defaultAvatar, "defaultAvatar.png")
                 .then((file) => {
                     avatar = file;
@@ -53,12 +48,10 @@ const Register = () => {
                 .catch((error) => {
                     console.error('Error:', error);
                     return;
-                });
-            setAvatarError(false);          
-        }
-             
+                });                   
+        }  
+        setAvatarError({ activated: false });         
         setIsLoading(true);
-
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const storageRef = ref(storage, email); // creates a reference to the storage location where the avatar will be saved
@@ -99,30 +92,9 @@ const Register = () => {
         }
     }
 
-    async function imageUrlToFile(imageUrl, fileName) {
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-        const file = new File([blob], fileName);
-        return file;
-    }
-
-    async function isDisplayNameTaken (displayName) {
-        try {
-            let displayNameTaken = false;
-            const querySnapshot = await getDocs(collection(db, "users"));
-            querySnapshot.forEach((doc) => { 
-                if (doc.data().displayName.toLowerCase() === displayName.toLowerCase()) { 
-                    displayNameTaken = true; 
-                    setDisplayNameError(true);        
-                }                    
-            });
-            return displayNameTaken;
-        } 
-        catch (err) {
-            console.error("Error searching for user:", err);
-            setError(true);
-            return true;
-        }
+    const displayAvatarError = (errorMsg) => {
+        setAvatarError({ msg: errorMsg, activated: true}); 
+        return;
     }
 
     return (
@@ -158,7 +130,7 @@ const Register = () => {
                         <span className='avatar-span'>Add an Avatar (Optional)</span>
                     </label>
                     <span className='form-error'>
-                        {avatarError && avatarErrorMsg}
+                        {avatarError.activated && avatarError.msg}
                     </span>              
 
                     <button>Sign up</button>

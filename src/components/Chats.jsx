@@ -19,8 +19,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
         setChats(doc.data());                                                
-      });
-      
+      });  
       return () => unsub();                      
     }   
     currentUser.uid && getChats();    
@@ -56,7 +55,6 @@ const Chats = ({selectedChatIdFromSearch}) => {
       controlChatAppearance(true);
     }
   }
-
 
   return (
     <div className="chats">     

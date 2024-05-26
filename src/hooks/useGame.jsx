@@ -4,7 +4,7 @@ import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { AuthContext } from "../context/AuthContext";
 
-export const UseGame = () => {
+export const useGame = () => {
     const {currentUser} = useContext(AuthContext);
     const [invitePending, setInvitePending] = useState(false);
     const [gameInviteId, setGameInviteId] = useState("");

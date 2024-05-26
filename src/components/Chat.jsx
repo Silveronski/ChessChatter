@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { ChatContext } from '../context/ChatContext';
 import { AppearanceContext } from '../context/AppearanceContext';
-import { UseGame } from '../hooks/useGame';
+import { useGame } from '../hooks/useGame';
 import Messages from './Messages';
 import Input from './Input';
 import back from '../assets/images/back.png';
 import pawn from '../assets/images/pawn.png';
 
 const Chat = () => {
-  const { invitePlayer } = UseGame();
+  const {invitePlayer} = useGame();
   const {data} = useContext(ChatContext);
   const {controlSidebarAppearance, controlChatAppearance} = useContext(AppearanceContext);
 
