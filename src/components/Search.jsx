@@ -21,7 +21,6 @@ const Search = ({selectedChatIdFromSearch}) => {
     }
   },[username]);
 
-
   const handleKey = (e) => {
     (e.code === "Enter" && username.trim() !== '') && handleSearch();
   }

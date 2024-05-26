@@ -8,7 +8,6 @@ import online from '../assets/images/online.jpg';
 import offline from '../assets/images/offline.png';
 
 const Chats = ({selectedChatIdFromSearch}) => {
-
   const [chats, setChats] = useState([]);
   const {currentUser} = useContext(AuthContext);
   const {dispatch} = useContext(ChatContext);
@@ -28,7 +27,6 @@ const Chats = ({selectedChatIdFromSearch}) => {
   }, [currentUser.uid]);
 
 
-  
   useEffect(() => {         
     const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
       const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {                          
@@ -52,7 +50,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
 
   const handleSelect = (user) => {
     setSelectedChat(user.uid);
-    dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
+    dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
     if (window.innerWidth < 940) {
       controlSidebarAppearance(false);
       controlChatAppearance(true);

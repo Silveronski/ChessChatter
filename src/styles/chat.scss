@@ -55,12 +55,16 @@
         }
 
         .backBtn{
+            display: none;
             background-color: transparent;
             border: none;
             cursor: pointer;
             border-radius: 0%;
             margin-right: 10px;
-            width: 30px;
+            width: 30px; 
+            @media screen and (max-width: 940px) {
+                display: block;
+            }          
         }
 
         button{        

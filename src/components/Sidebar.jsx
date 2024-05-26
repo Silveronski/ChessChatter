@@ -4,7 +4,6 @@ import Search from './Search';
 import Chats from './Chats';
 
 const Sidebar = () => {
-
   const [selectedChatIdFromSearch, setSelectedChatIdFromSearch] = useState("");
 
   const handleDataFromSearch = useCallback((chatId) => {

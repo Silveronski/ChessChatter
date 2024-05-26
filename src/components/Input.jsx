@@ -8,6 +8,11 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import addImg from '../assets/images/img.png';
 import vMark from '../assets/images/v.png';
 
+const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
+                    Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
+const minOfMsg = Timestamp.now().toDate().getMinutes().toString().length === 2 ?
+                  Timestamp.now().toDate().getMinutes() : "0"+ Timestamp.now().toDate().getMinutes();
+
 const Input = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
@@ -16,12 +21,6 @@ const Input = () => {
   const [imgIsReady, setImgIsReady] = useState(false);
   const inputRef = useRef();
   const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
-
-  const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
-                      Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
-  const minOfMsg = Timestamp.now().toDate().getMinutes().toString().length === 2 ?
-                    Timestamp.now().toDate().getMinutes() : "0"+ Timestamp.now().toDate().getMinutes();
-
   const timeOfMsg = hourOfMsg + ":" + minOfMsg;
 
   const handleKeyPress = async (e) => {
@@ -36,13 +35,11 @@ const Input = () => {
   useEffect(() => {
     setImg(null);
     setImgIsReady(false);
-    window.innerWidth > 940 && inputRef?.current?.focus();   
-
-    return () => setText(""); 
-       
+    window.innerWidth > 940 && inputRef?.current?.focus();  
+    return () => setText("");     
   },[data.chatId]);
 
-
+  
   const handleImage = (img) => {
     if (img && validImgExtensions.includes(img.type)) {
       setImg(img);
@@ -52,8 +49,7 @@ const Input = () => {
       alert("Invalid image format!");
     }
   }
-
-                                                               
+                                                           
   const handleSend = async () => {
     if (img) {
       const storageRef = ref(storage, uuid());      
