@@ -4,7 +4,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
 const UpdateCurrentUserPresence = () => {
-    const {currentUser} = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
 
     useEffect(() => {
         let timer;

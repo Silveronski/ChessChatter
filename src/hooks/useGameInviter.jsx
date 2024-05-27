@@ -1,11 +1,11 @@
-import useToastr from "./useToastr";
 import { useContext, useEffect, useState } from "react";
 import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { AuthContext } from "../context/AuthContext";
+import useToastr from "./useToastr";
 
 export const useGameInviter = () => {
-    const {currentUser} = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
     const [invitePending, setInvitePending] = useState(false);
     const [gameInviteId, setGameInviteId] = useState("");
 

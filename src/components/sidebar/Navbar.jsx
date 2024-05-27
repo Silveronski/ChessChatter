@@ -8,8 +8,8 @@ import newLogo from '../../assets/images/newLogo.png';
 import logout from '../../assets/images/logout.png';
 
 const Navbar = () => {
-  const {currentUser} = useContext(AuthContext);
-  const {dispatch} = useContext(ChatContext);
+  const { currentUser } = useContext(AuthContext);
+  const { dispatch } = useContext(ChatContext);
 
   const signUserOut = async () => {
     try {      

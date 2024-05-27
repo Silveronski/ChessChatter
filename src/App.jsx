@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import './styles/style.scss';
 
 function App() {
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   const ProtectedRoute = ({children}) => {
     if (!currentUser){

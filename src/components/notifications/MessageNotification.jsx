@@ -5,7 +5,7 @@ import { AuthContext } from '../../context/AuthContext';
 import msgSound from '../../assets/audio/msgSound.mp3';
 
 const MessageNotification = () => {
-    const {currentUser} = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
     const msgReceivedSound = useRef();
 
     useEffect(() => {

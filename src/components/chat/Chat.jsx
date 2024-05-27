@@ -7,8 +7,8 @@ import back from '../../assets/images/back.png';
 import pawn from '../../assets/images/pawn.png';
 
 const Chat = () => {
-  const {invitePlayer} = useGameInviter();
-  const {data} = useContext(ChatContext);
+  const { invitePlayer } = useGameInviter();
+  const { data } = useContext(ChatContext);
 
   const handleGameInvite = async () => await invitePlayer(data.user.uid);
     

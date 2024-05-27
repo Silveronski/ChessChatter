@@ -7,9 +7,9 @@ import online from '../../assets/images/online.jpg';
 import offline from '../../assets/images/offline.png';
 
 const Chats = ({ selectedChatIdFromSearch }) => {
+  const { currentUser } = useContext(AuthContext);
+  const { dispatch } = useContext(ChatContext);
   const [chats, setChats] = useState([]);
-  const {currentUser} = useContext(AuthContext);
-  const {dispatch} = useContext(ChatContext);
   const [selectedChatId, setSelectedChat] = useState("");
   const [userStatuses, setUserStatuses] = useState({});
 
@@ -57,7 +57,8 @@ const Chats = ({ selectedChatIdFromSearch }) => {
   return (
     <section className="chats">     
       {chats && Object.entries(chats)?.sort((a,b) => b[1]?.fullDate - a[1]?.fullDate).map((chat) => ( 
-        <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`} id={chat[1]?.userInfo?.uid} key={chat[1]?.userInfo?.uid} onClick={() => handleSelect(chat[1]?.userInfo)}>        
+        <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`}
+         id={chat[1]?.userInfo?.uid} key={chat[1]?.userInfo?.uid} onClick={() => handleSelect(chat[1]?.userInfo)}>        
           <img className='user-photo' src={chat[1].userInfo?.photoURL} alt='user image'/>
           <div className="user-chat-info">
             <span>{chat[1].userInfo?.displayName}</span>

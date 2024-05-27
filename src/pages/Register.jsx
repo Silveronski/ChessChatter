@@ -46,7 +46,6 @@ const Register = () => {
                     avatar = file;
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
                     return;
                 });                   
         }  
@@ -86,7 +85,6 @@ const Register = () => {
             );                      
         }
         catch (err) {
-            console.log(err);
             setIsLoading(false);
             setError(true);
         }

@@ -6,8 +6,8 @@ import Message  from './Message';
 import newLogo from '../../assets/images/newLogo.png';
 
 const Messages = () => {
+    const { data } = useContext(ChatContext);
     const [messages, setMessages] = useState([]);
-    const {data} = useContext(ChatContext);
 
     useEffect(() => {
         const unsub = onSnapshot(doc(db, "chats", data.chatId), (doc) => {

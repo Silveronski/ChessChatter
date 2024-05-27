@@ -57,7 +57,6 @@ const GameInvitations = () => {
                 useToastr('error', 'There was a problem rejecting the game offer');
             }       
         };
-
     },[]);
       
     return null 

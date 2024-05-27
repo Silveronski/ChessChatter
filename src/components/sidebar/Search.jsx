@@ -6,11 +6,11 @@ import { ChatContext } from '../../context/ChatContext';
 import search from '../../assets/images/search.png';
 
 const Search = ({ selectedChatIdFromSearch }) => {
+  const { currentUser } = useContext(AuthContext);
+  const { dispatch } = useContext(ChatContext);
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
-  const {currentUser} = useContext(AuthContext);
-  const {dispatch} = useContext(ChatContext);
 
   useEffect(() => {
     if (username.length === 0){

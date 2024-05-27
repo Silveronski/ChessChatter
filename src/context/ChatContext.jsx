@@ -8,8 +8,8 @@ export const INITIAL_STATE = {
     user:{}
 }
 
-export const ChatContextProvider = ({children}) => {
-    const {currentUser} = useContext(AuthContext); 
+export const ChatContextProvider = ({ children }) => {
+    const { currentUser } = useContext(AuthContext); 
     
     const chatReducer = (state, action) => {
         switch(action.type) {

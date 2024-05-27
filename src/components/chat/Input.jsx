@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import addImg from '../../assets/images/img.png';
 import vMark from '../../assets/images/v.png';
+import useToastr from '../../hooks/useToastr';
 
 const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
                     Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
@@ -14,10 +15,10 @@ const minOfMsg = Timestamp.now().toDate().getMinutes().toString().length === 2 ?
                   Timestamp.now().toDate().getMinutes() : "0"+ Timestamp.now().toDate().getMinutes();
 
 const Input = () => {
+  const { currentUser } = useContext(AuthContext);
+  const { data } = useContext(ChatContext);
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
-  const {currentUser} = useContext(AuthContext);
-  const {data} = useContext(ChatContext);
   const [imgIsReady, setImgIsReady] = useState(false);
   const inputRef = useRef();
   const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
@@ -53,7 +54,8 @@ const Input = () => {
       
       uploadTask.on(
         (error) => {
-            console.error(error);       
+            useToastr('error', 'There was an error sending the image'); 
+            return;      
         }, 
         () => {             
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -79,8 +81,7 @@ const Input = () => {
         },
         [data.chatId + ".date"] : timeOfMsg,
         [data.chatId + ".fullDate"] : serverTimestamp()
-      })
-  
+      }) 
       await updateDoc(doc(db, "userChats", data.user.uid), {
         [data.chatId + ".lastMessage"] : {
           text : "Image",
@@ -93,8 +94,7 @@ const Input = () => {
 
     else if(!img && text.trim() !== '') {
       const msgText = text;
-      setText("");
-      
+      setText("");  
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),
