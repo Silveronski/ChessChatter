@@ -4,7 +4,7 @@ import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { AuthContext } from "../context/AuthContext";
 
-export const useGame = () => {
+export const useGameInviter = () => {
     const {currentUser} = useContext(AuthContext);
     const [invitePending, setInvitePending] = useState(false);
     const [gameInviteId, setGameInviteId] = useState("");
@@ -34,7 +34,7 @@ export const useGame = () => {
                 userId: otherUserId,
                 senderId : currentUser.uid,
                 senderDisplayName : currentUser.displayName,
-                link: otherUserId + currentUser.uid,
+                link: `https://chess-game-fh3hl.ondigitalocean.app/black?code=${otherUserId + currentUser.uid}`,
                 gameConcluded: false,
                 gameAccepted: ""
               });   
@@ -43,8 +43,7 @@ export const useGame = () => {
               setGameInviteId(otherUserId + currentUser.uid);       
             }
             catch (err) {
-              console.log(err);
-              // handle error - problem setting doc
+              useToastr('error', "There was a problem inviting this user to a match");
             }      
         } 
         else {

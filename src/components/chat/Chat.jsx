@@ -1,28 +1,24 @@
-import React, { useContext } from 'react';
-import { ChatContext } from '../context/ChatContext';
-import { AppearanceContext } from '../context/AppearanceContext';
-import { useGame } from '../hooks/useGame';
+import { useContext } from 'react';
+import { ChatContext } from '../../context/ChatContext';
+import { useGameInviter } from '../../hooks/useGameInviter';
 import Messages from './Messages';
 import Input from './Input';
-import back from '../assets/images/back.png';
-import pawn from '../assets/images/pawn.png';
+import back from '../../assets/images/back.png';
+import pawn from '../../assets/images/pawn.png';
 
 const Chat = () => {
-  const {invitePlayer} = useGame();
+  const {invitePlayer} = useGameInviter();
   const {data} = useContext(ChatContext);
-  const {controlSidebarAppearance, controlChatAppearance} = useContext(AppearanceContext);
 
-  const handleGameInvite = async () => {
-    await invitePlayer(data.user.uid);
-  }
-  
+  const handleGameInvite = async () => await invitePlayer(data.user.uid);
+    
   const handleBackBtn = () => {
-    controlChatAppearance(false);
-    controlSidebarAppearance(true);
+    document.querySelector('.home .container .chat').style.display = 'none';
+    document.querySelector('.home .container .sidebar').style.display = 'block';
   }
 
   return (
-    <div className='chat'>
+    <section className='chat'>
       <div className="chat-info">
         <div className='user-info'>
           <img src={back} className='backBtn' onClick={handleBackBtn} alt='back button'/>
@@ -33,7 +29,7 @@ const Chat = () => {
       </div>        
         <Messages/>
         <Input/>  
-    </div>
+    </section>
   )
 }
 

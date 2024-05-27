@@ -1,9 +1,9 @@
-import Message  from './Message';
-import React, { useContext, useEffect, useState } from 'react';
-import { ChatContext } from '../context/ChatContext';
+import { useContext, useEffect, useState } from 'react';
+import { ChatContext } from '../../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase/firebase';
-import newLogo from '../assets/images/newLogo.png';
+import { db } from '../../firebase/firebase';
+import Message  from './Message';
+import newLogo from '../../assets/images/newLogo.png';
 
 const Messages = () => {
     const [messages, setMessages] = useState([]);
@@ -17,12 +17,10 @@ const Messages = () => {
     }, [data.chatId]);
    
     return (
-        <div className={`${data.chatId !== "null" ? "messages" : "logo-panel"}`}> 
-
+        <section className={`${data.chatId !== "null" ? "messages" : "logo-panel"}`}> 
             {messages && messages.map((msg) => (
                 <Message message={msg} key={msg.id}/>
             ))}
-
             {data.chatId === "null" && (
                 <div className='panel-content'>
                     <img src={newLogo} alt='site logo'/>
@@ -30,7 +28,7 @@ const Messages = () => {
                     <p>Play Chess with your friends!</p>
                 </div>              
             )}                                       
-        </div>        
+        </section>        
     )
 }
 

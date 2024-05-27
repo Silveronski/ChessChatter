@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { ChatContext } from '../context/ChatContext';
+import { useContext, useEffect, useRef } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { ChatContext } from '../../context/ChatContext';
 
 const Message = ({message}) => {
   const {currentUser} = useContext(AuthContext);
   const {data} = useContext(ChatContext);
-  const ref = useRef();
+  const msgRef = useRef();
 
   useEffect(() => {
-    ref.current?.scrollIntoView();
+    msgRef.current?.scrollIntoView();
   },[message]);
 
   const formatMessage = (msg) => {
@@ -29,7 +29,7 @@ const Message = ({message}) => {
   }
 
   return (
-    <div ref={ref} className={`message ${message.senderId === currentUser.uid && "owner"}`}>
+    <section ref={msgRef} className={`message ${message.senderId === currentUser.uid && "owner"}`}>
       <div className="message-info">
         <img src={message.senderId === currentUser.uid ? currentUser.photoURL : data.user.photoURL} alt='user image'/>
         <span>{JSON.stringify(message.date).substring(1,6)}</span>
@@ -37,7 +37,7 @@ const Message = ({message}) => {
       <div className="message-content">
         <p dangerouslySetInnerHTML={{ __html: (message.text.length > 35 ? formatMessage(message.text) : message.text) + (message.img ? `<br/> <img src="${message.img}"/>` : '') }} /> 
       </div>
-    </div>
+    </section>
   )
 }
 

@@ -1,18 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { collection, getDoc, getDocs, query, setDoc, where, doc, updateDoc, Timestamp } from "firebase/firestore";
-import { db } from '../firebase/firebase';
-import { AuthContext } from '../context/AuthContext';
-import { ChatContext } from '../context/ChatContext';
-import { AppearanceContext } from '../context/AppearanceContext';
-import search from '../assets/images/search.png';
+import { db } from '../../firebase/firebase';
+import { AuthContext } from '../../context/AuthContext';
+import { ChatContext } from '../../context/ChatContext';
+import search from '../../assets/images/search.png';
 
-const Search = ({selectedChatIdFromSearch}) => {
+const Search = ({ selectedChatIdFromSearch }) => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
   const {currentUser} = useContext(AuthContext);
   const {dispatch} = useContext(ChatContext);
-  const {controlSidebarAppearance, controlChatAppearance} = useContext(AppearanceContext);
 
   useEffect(() => {
     if (username.length === 0){
@@ -22,14 +20,14 @@ const Search = ({selectedChatIdFromSearch}) => {
   },[username]);
 
   const handleKey = (e) => {
-    (e.code === "Enter" && username.trim() !== '') && handleSearch();
+    (e.code === "Enter" && username.trim() !== '') && handleUserSearch();
   }
 
   const handleSearchClick = () => {
-    username.trim() !== '' && handleSearch();
+    username.trim() !== '' && handleUserSearch();
   }
 
-  const handleSearch = async () => {
+  const handleUserSearch = async () => {
     if (username.toLowerCase() === currentUser.displayName.toLowerCase()) {
       setErr(true);
       return;
@@ -55,7 +53,7 @@ const Search = ({selectedChatIdFromSearch}) => {
   }
 
   
-  const handleSelect = async () => {
+  const handleUserSelect = async () => {
     //check whether the group(chats in firestore) exists, if not, create
     const combinedId = 
       currentUser.uid > user.uid 
@@ -93,8 +91,8 @@ const Search = ({selectedChatIdFromSearch}) => {
       selectedChatIdFromSearch(user.uid);
 
       if (window.innerWidth < 940) {
-        controlSidebarAppearance(false);
-        controlChatAppearance(true);
+        document.querySelector('.home .container .sidebar').style.display = 'none';
+        document.querySelector('.home .container .chat').style.display = 'block';
       }
     }    
     catch (err) {}
@@ -104,7 +102,7 @@ const Search = ({selectedChatIdFromSearch}) => {
   }
 
   return (
-    <div className='search'>
+    <section className='search'>
       <div className="search-form">
         <input 
         type="text" 
@@ -114,17 +112,16 @@ const Search = ({selectedChatIdFromSearch}) => {
         value={username}/>
         <img className='search-icon' alt='search for users icon' src={search} onClick={handleSearchClick}/>
       </div>
-
       {err && <span className='error'>User not found!</span>}
       {user && ( 
-        <div className="user-chat" onClick={handleSelect}>
+        <div className="user-chat" onClick={handleUserSelect}>
           <img src={user.photoURL} alt='found user image'/>
           <div className="user-chat-info">
             <span>{user.displayName}</span>
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 

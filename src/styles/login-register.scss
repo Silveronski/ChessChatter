@@ -61,8 +61,7 @@
         form{
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            
+            gap: 15px;         
             input{
                 width: 250px;
                 font-family: "Tilt Warp";
@@ -131,7 +130,6 @@
                 font-size: 12px;
                 margin-left: 0.4vw;
                 letter-spacing: 0.2px;
-
                 @include mobile{
                     margin-left: 6vw;
                 }

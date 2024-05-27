@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { ChatContext } from '../context/ChatContext';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { ChatContext } from '../../context/ChatContext';
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db, storage } from '../firebase/firebase';
+import { db, storage } from '../../firebase/firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import addImg from '../assets/images/img.png';
-import vMark from '../assets/images/v.png';
+import addImg from '../../assets/images/img.png';
+import vMark from '../../assets/images/v.png';
 
 const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
                     Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
@@ -24,12 +24,8 @@ const Input = () => {
   const timeOfMsg = hourOfMsg + ":" + minOfMsg;
 
   const handleKeyPress = async (e) => {
-    if (img) {
-      e.key === "Enter" && await handleSend();
-    }
-    else {
-      (e.key === "Enter" && text.trim()!== '') && await handleSend();     
-    }
+    if (img) e.key === "Enter" && await handleSend();        
+    else (e.key === "Enter" && text.trim()!== '') && await handleSend(); 
   }
 
   useEffect(() => {
@@ -45,9 +41,7 @@ const Input = () => {
       setImg(img);
       setImgIsReady(true);
     }
-    else {
-      alert("Invalid image format!");
-    }
+    else alert("Invalid image format!");  
   }
                                                            
   const handleSend = async () => {
@@ -98,7 +92,6 @@ const Input = () => {
     }
 
     else if(!img && text.trim() !== '') {
-
       const msgText = text;
       setText("");
       
@@ -138,7 +131,8 @@ const Input = () => {
   }
 
   return (
-    (data.chatId !== "null" && <div className='input'>   
+    (data.chatId !== "null" && 
+    <section className='input'>   
       <input 
        type="text"
        placeholder='Type something...'
@@ -154,7 +148,7 @@ const Input = () => {
         </label>              
         <button onClick={handleSend}>Send</button> 
       </div>             
-    </div>)
+    </section>)
   )
 }
 

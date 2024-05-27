@@ -1,6 +1,9 @@
 .chat{
     flex: 2;
     background-color: rgb(50, 49, 49);
+    @media screen and (max-width: 940px) {
+        display: none;
+    }
     .chat-info{
         height: 50px;
         padding: 10px;

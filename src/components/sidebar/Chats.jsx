@@ -1,17 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { db } from '../firebase/firebase';
-import { collection, doc, onSnapshot } from 'firebase/firestore';
-import { AuthContext } from '../context/AuthContext';
-import { ChatContext } from '../context/ChatContext';
-import { AppearanceContext } from '../context/AppearanceContext';
-import online from '../assets/images/online.jpg';
-import offline from '../assets/images/offline.png';
+import { useContext, useEffect, useState } from 'react';
+import { db } from '../../firebase/firebase';
+import { collection, doc, onSnapshot } from 'firebase/firestore';;
+import { ChatContext } from '../../context/ChatContext';
+import { AuthContext } from '../../context/AuthContext';
+import online from '../../assets/images/online.jpg';
+import offline from '../../assets/images/offline.png';
 
-const Chats = ({selectedChatIdFromSearch}) => {
+const Chats = ({ selectedChatIdFromSearch }) => {
   const [chats, setChats] = useState([]);
   const {currentUser} = useContext(AuthContext);
   const {dispatch} = useContext(ChatContext);
-  const {controlSidebarAppearance, controlChatAppearance} = useContext(AppearanceContext);
   const [selectedChatId, setSelectedChat] = useState("");
   const [userStatuses, setUserStatuses] = useState({});
 
@@ -51,13 +49,13 @@ const Chats = ({selectedChatIdFromSearch}) => {
     setSelectedChat(user.uid);
     dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
     if (window.innerWidth < 940) {
-      controlSidebarAppearance(false);
-      controlChatAppearance(true);
+      document.querySelector('.home .container .sidebar').style.display = 'none';
+      document.querySelector('.home .container .chat').style.display = 'block';
     }
   }
 
   return (
-    <div className="chats">     
+    <section className="chats">     
       {chats && Object.entries(chats)?.sort((a,b) => b[1]?.fullDate - a[1]?.fullDate).map((chat) => ( 
         <div className={`user-chat ${selectedChatId === chat[1]?.userInfo?.uid ? 'selected-chat' : ''}`} id={chat[1]?.userInfo?.uid} key={chat[1]?.userInfo?.uid} onClick={() => handleSelect(chat[1]?.userInfo)}>        
           <img className='user-photo' src={chat[1].userInfo?.photoURL} alt='user image'/>
@@ -73,7 +71,7 @@ const Chats = ({selectedChatIdFromSearch}) => {
           </div>
         </div>      
       ))}
-    </div>          
+    </section>          
   )
 }
 

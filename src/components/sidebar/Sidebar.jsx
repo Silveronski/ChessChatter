@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Navbar from './Navbar';
 import Search from './Search';
 import Chats from './Chats';
@@ -11,11 +11,11 @@ const Sidebar = () => {
   },[selectedChatIdFromSearch]);
 
   return (
-    <div className='sidebar'>
+    <section className='sidebar'>
       <Navbar/>
       <Search selectedChatIdFromSearch={handleDataFromSearch}/>
       <Chats selectedChatIdFromSearch = {selectedChatIdFromSearch}/>
-    </div>
+    </section>
   )
 }
 

@@ -5,7 +5,7 @@ import { Timestamp, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 export const AuthContext = createContext();
 
-export const AuthContextProvider = ({children}) => {
+export const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState({});
     
     useEffect(() => {  
@@ -26,8 +26,7 @@ export const AuthContextProvider = ({children}) => {
                                 date: Timestamp.now()
                             });                      
                         }
-                    } 
-                    
+                    }               
                     else {
                         setTimeout(async () => {                                                     
                             const currentUserSnap = await getDoc(doc(db, 'users', user.uid));                        
