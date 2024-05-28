@@ -25,7 +25,7 @@ const Chats = ({ selectedChatIdFromSearch }) => {
 
 
   useEffect(() => {         
-    const unsubscribePresence = onSnapshot(collection(db, 'presence'), (snapshot) => {
+    const getUsersOnlineStatus = onSnapshot(collection(db, 'presence'), (snapshot) => {
       const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {                          
         account[presDoc.id] = presDoc.data().online;
         return account;
@@ -34,7 +34,7 @@ const Chats = ({ selectedChatIdFromSearch }) => {
       setUserStatuses(updatedUserStatuses);
     });
          
-    return () => unsubscribePresence();           
+    return () => getUsersOnlineStatus();           
   }, []);
 
   

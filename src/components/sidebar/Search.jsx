@@ -4,10 +4,12 @@ import { db } from '../../firebase/firebase';
 import { AuthContext } from '../../context/AuthContext';
 import { ChatContext } from '../../context/ChatContext';
 import search from '../../assets/images/search.png';
+import { useFirebase } from '../../hooks/useFirebase';
 
 const Search = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const { createUserChat } = useFirebase();
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
@@ -19,14 +21,10 @@ const Search = ({ selectedChatIdFromSearch }) => {
     }
   },[username]);
 
-  const handleKey = (e) => {
-    (e.code === "Enter" && username.trim() !== '') && handleUserSearch();
-  }
-
-  const handleSearchClick = () => {
-    username.trim() !== '' && handleUserSearch();
-  }
-
+  const handleKey = (e) => (e.code === "Enter" && username.trim() !== '') && handleUserSearch();
+    
+  const handleSearchClick = () => username.trim() !== '' && handleUserSearch();
+    
   const handleUserSearch = async () => {
     if (username.toLowerCase() === currentUser.displayName.toLowerCase()) {
       setErr(true);
@@ -47,12 +45,9 @@ const Search = ({ selectedChatIdFromSearch }) => {
         setErr(true);
       }
     }
-    catch (err) {
-      setErr(true);
-    }
+    catch (err) { setErr(true); }        
   }
 
-  
   const handleUserSelect = async () => {
     //check whether the group(chats in firestore) exists, if not, create
     const combinedId = 
@@ -62,31 +57,14 @@ const Search = ({ selectedChatIdFromSearch }) => {
 
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
-
       if (!res.exists()) {
         // create a chat in chats collection
         await setDoc(doc(db, "chats", combinedId),{ messages: [] });
         
-        //create user chats
-        await updateDoc(doc(db, "userChats", currentUser.uid), {
-          [combinedId+".userInfo"] : {
-            uid: user.uid,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-          },
-          [combinedId + ".date"]: Timestamp.now().toDate(),
-        });      
-
-        await updateDoc(doc(db, "userChats", user.uid), {
-          [combinedId + ".userInfo"]: {
-            uid: currentUser.uid,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL,
-          },
-          [combinedId + ".date"]: Timestamp.now().toDate(),
-        });   
+        //create user chats for both users
+        await createUserChat(currentUser.uid, user, combinedId);
+        await createUserChat(user.uid, currentUser, combinedId);
       }
-
       dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
       selectedChatIdFromSearch(user.uid);
 

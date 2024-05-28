@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { v4 as uuid } from 'uuid';
+import useToastr from "./useToastr";
 
 export const useFirebase = () => {
     const { currentUser } = useContext(AuthContext);
@@ -46,5 +47,19 @@ export const useFirebase = () => {
         catch (error) { throw error; }                            
     }
 
-    return { updateUserChatsDoc, updateChatsDoc };
+    const createUserChat = async (userDocToUpdate, otherUser, combinedId) => {
+        try {
+            await updateDoc(doc(db, "userChats", userDocToUpdate), {
+                [combinedId + ".userInfo"] : {
+                  uid: otherUser.uid,
+                  displayName: otherUser.displayName,
+                  photoURL: otherUser.photoURL,
+                },
+                [combinedId + ".date"]: Timestamp.now().toDate(),
+            });   
+        } 
+        catch (error) { useToastr('error', 'There was a problem setting the caht with this user'); }       
+    }
+
+    return { updateUserChatsDoc, updateChatsDoc, createUserChat };
 }

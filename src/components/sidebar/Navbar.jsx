@@ -6,6 +6,7 @@ import { ChatContext } from '../../context/ChatContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import newLogo from '../../assets/images/newLogo.png';
 import logout from '../../assets/images/logout.png';
+import useToastr from '../../hooks/useToastr';
 
 const Navbar = () => {
   const { currentUser } = useContext(AuthContext);
@@ -22,9 +23,7 @@ const Navbar = () => {
       await signOut(auth);
       dispatch({ type: "LOG_OUT", payload: {} });
     } 
-    catch (error) {
-      console.error('Error logging out:', error);
-    }
+    catch (error) { useToastr('error', ' There was an error logging out'); }           
   }
 
   return (

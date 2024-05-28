@@ -78,8 +78,9 @@ export const useGameInviter = () => {
                 useToastr("error", "Your invitation was not responded to within the specified time frame");
                 resetState();
               }
-            } catch (err) {
-              console.log(err);
+            } 
+            catch (err) {
+              useToastr("error", "Your invitation was not responded to within the specified time frame");
             }
           }, 10000);
         }

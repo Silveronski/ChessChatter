@@ -12,7 +12,6 @@ export const AuthContextProvider = ({ children }) => {
         const unsub = onAuthStateChanged(auth, async (user) => {
             try {
                 setCurrentUser(user);
-
                 if (currentUser?.uid === undefined || null) return;
 
                 if (user?.uid) {                  
