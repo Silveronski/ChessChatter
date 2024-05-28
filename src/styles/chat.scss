@@ -105,8 +105,7 @@
             }
         }
     }
-    .logo-panel{               
-        height: 100%;
+    .logo-panel{                      
         .panel-content{
             margin-top: 15%; 
             display: flex;
@@ -115,14 +114,17 @@
             flex-direction: column;
             text-align: center;         
             img{
-                width: 60%;                                       
+                width: 58em;  
+                @include laptop{
+                    width: 38em;
+                }                                     
             }
             p{
                 color: white;                      
-                font-size: 20px;
+                font-size: 2rem;
                 letter-spacing: 4px;
             }
-            p:nth-child(3){
+            p:nth-child(3) {
                 margin-top: 0;
                 color: white;
             }                  
