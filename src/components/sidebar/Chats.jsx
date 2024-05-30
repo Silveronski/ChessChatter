@@ -5,10 +5,12 @@ import { ChatContext } from '../../context/ChatContext';
 import { AuthContext } from '../../context/AuthContext';
 import online from '../../assets/images/online.jpg';
 import offline from '../../assets/images/offline.png';
+import { RefContext } from '../../context/RefContext';
 
 const Chats = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const { sidebarRef, chatRef } = useContext(RefContext);
   const [chats, setChats] = useState([]);
   const [selectedChatId, setSelectedChat] = useState("");
   const [userStatuses, setUserStatuses] = useState({});
@@ -49,8 +51,8 @@ const Chats = ({ selectedChatIdFromSearch }) => {
     setSelectedChat(user.uid);
     dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
     if (window.innerWidth < 940) {
-      document.querySelector('.home .container .sidebar').style.display = 'none';
-      document.querySelector('.home .container .chat').style.display = 'block';
+      sidebarRef.current.style.display = 'none';
+      chatRef.current.style.display = 'block';
     }
   }
 

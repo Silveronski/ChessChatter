@@ -1,14 +1,16 @@
+import search from '../../assets/images/search.png';
 import { useContext, useEffect, useState } from 'react';
 import { collection, getDoc, getDocs, query, setDoc, where, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from '../../firebase/firebase';
 import { AuthContext } from '../../context/AuthContext';
 import { ChatContext } from '../../context/ChatContext';
-import search from '../../assets/images/search.png';
 import { useFirebase } from '../../hooks/useFirebase';
+import { RefContext } from '../../context/RefContext';
 
 const Search = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const { sidebarRef, chatRef } = useContext(RefContext);
   const { createUserChat } = useFirebase();
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
@@ -69,8 +71,8 @@ const Search = ({ selectedChatIdFromSearch }) => {
       selectedChatIdFromSearch(user.uid);
 
       if (window.innerWidth < 940) {
-        document.querySelector('.home .container .sidebar').style.display = 'none';
-        document.querySelector('.home .container .chat').style.display = 'block';
+        sidebarRef.current.style.display = 'none';
+        chatRef.current.style.display = 'block';
       }
     }    
     catch (err) {}

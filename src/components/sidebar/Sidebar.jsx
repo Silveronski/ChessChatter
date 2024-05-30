@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react';
 import Navbar from './Navbar';
 import Search from './Search';
 import Chats from './Chats';
+import { useCallback, useContext, useState } from 'react';
+import { RefContext } from '../../context/RefContext';
 
 const Sidebar = () => {
+  const { sidebarRef } = useContext(RefContext);
   const [selectedChatIdFromSearch, setSelectedChatIdFromSearch] = useState("");
 
   const handleDataFromSearch = useCallback((chatId) => {
@@ -11,7 +13,7 @@ const Sidebar = () => {
   },[selectedChatIdFromSearch]);
 
   return (
-    <section className='sidebar'>
+    <section className='sidebar' ref={sidebarRef}>
       <Navbar/>
       <Search selectedChatIdFromSearch={handleDataFromSearch}/>
       <Chats selectedChatIdFromSearch = {selectedChatIdFromSearch}/>

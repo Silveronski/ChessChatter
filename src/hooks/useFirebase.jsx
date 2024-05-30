@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
 import { v4 as uuid } from 'uuid';
 import useToastr from "./useToastr";
+import { signOut } from "firebase/auth";
+import { ChatContext } from "../context/ChatContext";
 
 export const useFirebase = () => {
     const { currentUser } = useContext(AuthContext);
+    const { dispatch } = useContext(ChatContext);
+
     const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
                     Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
     const minOfMsg = Timestamp.now().toDate().getMinutes().toString().length === 2 ?
@@ -61,5 +65,19 @@ export const useFirebase = () => {
         catch (error) { useToastr('error', 'There was a problem setting the caht with this user'); }       
     }
 
-    return { updateUserChatsDoc, updateChatsDoc, createUserChat };
+    const userSignout = async () => {
+        try {      
+            const userRef = doc(db, 'presence', currentUser.uid); 
+            await updateDoc(userRef, { 
+              count : 0,
+              online: false, 
+              hasShown: false 
+            });
+            await signOut(auth);
+            dispatch({ type: "LOG_OUT", payload: {} });
+        } 
+        catch (error) { useToastr('error', ' There was an error logging out');  console.log(error)}       
+    }
+
+    return { updateUserChatsDoc, updateChatsDoc, createUserChat, userSignout };
 }
