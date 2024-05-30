@@ -13,11 +13,11 @@ const Home = () => {
         <RefContextProvider>
           <Sidebar/>
           <Chat/>
+        </RefContextProvider>   
           <UpdateCurrentUserPresence/>
           <UserPresenceNotifications/>
           <MessageNotification/>
-          <GameInvitations/>        
-        </RefContextProvider>                                                           
+          <GameInvitations/>                                                                     
         </section>
     </main>
   )
