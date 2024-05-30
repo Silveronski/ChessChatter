@@ -91,7 +91,7 @@ const Input = () => {
         <input type="file" id="img" accept="image/*" style={{display:"none"}} onChange={e => handleImage(e.target.files[0])}/>
         {imgIsReady && <img src={vMark}/>} 
         <label htmlFor="img">
-        <img src={addImg}/>
+          <img src={addImg}/>
         </label>              
         <button onClick={handleSend}>Send</button> 
       </div>             
