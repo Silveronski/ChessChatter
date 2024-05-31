@@ -1,11 +1,12 @@
+import useToastr from "./useToastr";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc } from "firebase/firestore";
+import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { v4 as uuid } from 'uuid';
-import useToastr from "./useToastr";
-import { signOut } from "firebase/auth";
+import { signOut, updateProfile } from "firebase/auth";
 import { ChatContext } from "../context/ChatContext";
+import { getDownloadURL } from "firebase/storage";
 
 export const useFirebase = () => {
     const { currentUser } = useContext(AuthContext);
@@ -79,14 +80,26 @@ export const useFirebase = () => {
         catch (error) { useToastr('error', ' There was an error logging out');  console.log(error)}       
     }
 
-    const createUser = async () => {
+    const createUser = async (avatarUrl, userName, userEmail, res) => {
         try {
-            
+            getDownloadURL(avatarUrl).then(async (downloadURL) => {
+                await updateProfile(res.user, {
+                    displayName: userName,
+                    photoURL: downloadURL
+                });
+
+                await setDoc(doc(db, "users", res.user.uid),{
+                    uid: res.user.uid,
+                    displayName: userName,
+                    email: userEmail,
+                    photoURL: downloadURL
+                });
+
+                await setDoc(doc(db, "userChats", res.user.uid), {});                   
+            });
         } 
-        catch (error) {
-            
-        }
+        catch (error) { throw error; }      
     }
 
-    return { updateUserChatsDoc, updateChatsDoc, createUserChat, userSignout };
+    return { updateUserChatsDoc, updateChatsDoc, createUserChat, userSignout, createUser };
 }

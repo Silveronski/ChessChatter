@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, storage, db } from "../firebase/firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore"; 
-import { useNavigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { imageUrlToFile, isDisplayNameTaken, validImgExtensions } from '../utils/utilities';
 import Add from "../assets/images/addAvatar.png";
 import newLogo from '../assets/images/newLogo.png';
 import loading from '../assets/images/loading.gif';
 import defaultAvatar from '../assets/images/defaultAvatar.png';
+import { useState } from 'react';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, storage, db } from "../firebase/firebase";
+import { ref, uploadBytesResumable } from "firebase/storage";
+import { useNavigate, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { imageUrlToFile, isDisplayNameTaken, validImgExtensions } from '../utils/utilities';
+import { useFirebase } from '../hooks/useFirebase';
 
 const Register = () => {
+    const { createUser } = useFirebase();
     const [error, setError] = useState(false);
     const [avatarError, setAvatarError] = useState({ msg: '', activated: false });
     const [displayNameError, setDisplayNameError] = useState(false);
@@ -58,40 +59,28 @@ const Register = () => {
             const uploadTask = uploadBytesResumable(storageRef, avatar); // initiates the upload of the user's avatar to the storage location
 
             uploadTask.on(
-                (error) => {
-                    setIsLoading(false);
-                    setError(true);
-                }, 
-                () => {             
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await updateProfile(res.user, {
-                            displayName,
-                            photoURL: downloadURL
-                        });
-
-                        await setDoc(doc(db, "users", res.user.uid),{
-                            uid: res.user.uid,
-                            displayName,
-                            email,
-                            photoURL: downloadURL
-                        });
-
-                        await setDoc(doc(db, "userChats", res.user.uid), {});
+                (error) => { displayGeneralError(); },                           
+                async ()  => {   
+                    try {
+                        await createUser(uploadTask.snapshot.ref, displayName, email, res);          
                         setIsLoading(false);
                         navigate("/");
-                    });
+                    } 
+                    catch (error) { displayGeneralError(); }                                                  
                 }
             );                      
         }
-        catch (err) {
-            setIsLoading(false);
-            setError(true);
-        }
+        catch (err) { displayGeneralError(); }                 
     }
 
     const displayAvatarError = (errorMsg) => {
         setAvatarError({ msg: errorMsg, activated: true}); 
         return;
+    }
+
+    const displayGeneralError = () => {
+        setIsLoading(false);
+        setError(true);
     }
 
     return (
