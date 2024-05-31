@@ -95,6 +95,14 @@ export const useFirebase = () => {
                     photoURL: downloadURL
                 });
 
+                await setDoc(doc(db, "presence", res.user.uid),{
+                    count : 1,
+                    date: Timestamp.now(), 
+                    hasShown: false,
+                    name: userName, 
+                    online: true, 
+                });
+
                 await setDoc(doc(db, "userChats", res.user.uid), {});                   
             });
         } 
