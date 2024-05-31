@@ -5,12 +5,12 @@ import { db } from '../../firebase/firebase';
 import { AuthContext } from '../../context/AuthContext';
 import { ChatContext } from '../../context/ChatContext';
 import { useFirebase } from '../../hooks/useFirebase';
-import { RefContext } from '../../context/RefContext';
+import { useRefs } from '../../hooks/useRefs';
 
 const Search = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
-  const { sidebarRef, chatRef } = useContext(RefContext);
+  const { showChat } = useRefs();
   const { createUserChat } = useFirebase();
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
@@ -70,10 +70,7 @@ const Search = ({ selectedChatIdFromSearch }) => {
       dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
       selectedChatIdFromSearch(user.uid);
 
-      if (window.innerWidth < 940) {
-        sidebarRef.current.style.display = 'none';
-        chatRef.current.style.display = 'block';
-      }
+      if (window.innerWidth < 940) showChat();     
     }    
     catch (err) {}
 

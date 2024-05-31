@@ -79,5 +79,14 @@ export const useFirebase = () => {
         catch (error) { useToastr('error', ' There was an error logging out');  console.log(error)}       
     }
 
+    const createUser = async () => {
+        try {
+            
+        } 
+        catch (error) {
+            
+        }
+    }
+
     return { updateUserChatsDoc, updateChatsDoc, createUserChat, userSignout };
 }

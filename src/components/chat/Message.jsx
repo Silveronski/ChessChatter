@@ -8,7 +8,7 @@ const Message = ({ message }) => {
   const msgRef = useRef();
 
   useEffect(() => {
-    msgRef.current?.scrollIntoView();
+    msgRef.current?.scrollIntoView({ block: "end" });
   },[message]);
 
   const formatMessage = (msg) => {

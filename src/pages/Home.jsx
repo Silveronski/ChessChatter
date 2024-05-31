@@ -4,16 +4,13 @@ import GameInvitations from '../components/notifications/GameInvitations';
 import UserPresenceNotifications from '../components/notifications/UserPresenceNotifications';
 import UpdateCurrentUserPresence from '../components/notifications/UpdateCurrentUserPresence';
 import MessageNotification from '../components/notifications/MessageNotification';
-import { RefContextProvider } from '../context/RefContext';
 
 const Home = () => {
   return (
     <main className='home'>
-        <section className='container'>  
-        <RefContextProvider>
+        <section className='container'>       
           <Sidebar/>
-          <Chat/>
-        </RefContextProvider>   
+          <Chat/>  
           <UpdateCurrentUserPresence/>
           <UserPresenceNotifications/>
           <MessageNotification/>

@@ -9,16 +9,15 @@ const UserPresenceNotifications = () => {
 
   useEffect(() => {
     if (!currentUser?.uid) return;
-    const unsubscribe = onSnapshot(collection(db, 'presence'), (snapshot) => {
-      snapshot.forEach(async (presDoc) => {
-        const data = presDoc.data();
-        if (presDoc.id !== currentUser.uid && !data.hasShown && data.online) {
-            useToastr("info", `${data.name} has just logged in!`, 8000);
+    const userPresenceListener = onSnapshot(collection(db, 'presence'), (snapshot) => {
+      snapshot.forEach(async (presenceDoc) => {
+        const user = presenceDoc.data();
+        if (presenceDoc.id !== currentUser.uid && !user.hasShown && user.online) {
+            useToastr("info", `${user.name} has just logged in!`, 8000);
         }
       });
     });
-
-    return () => unsubscribe();
+    return () => userPresenceListener();
   }, [currentUser?.uid]);
 
   return null;

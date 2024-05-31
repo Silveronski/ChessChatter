@@ -36,7 +36,9 @@ const Input = () => {
       setImg(img);
       setImgIsReady(true);
     }
-    else alert("Invalid image format!");  
+    else alert("Invalid image format!"); 
+    
+    inputRef.current.focus(); 
   }
                                                            
   const handleSend = async () => {

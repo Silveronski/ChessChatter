@@ -1,6 +1,6 @@
 import Navbar from './Navbar';
 import Search from './Search';
-import Chats from './Chats';
+import UserChats from './UserChats';
 import { useCallback, useContext, useState } from 'react';
 import { RefContext } from '../../context/RefContext';
 
@@ -16,7 +16,7 @@ const Sidebar = () => {
     <section className='sidebar' ref={sidebarRef}>
       <Navbar/>
       <Search selectedChatIdFromSearch={handleDataFromSearch}/>
-      <Chats selectedChatIdFromSearch = {selectedChatIdFromSearch}/>
+      <UserChats selectedChatIdFromSearch = {selectedChatIdFromSearch}/>
     </section>
   )
 }

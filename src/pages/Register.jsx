@@ -59,7 +59,6 @@ const Register = () => {
 
             uploadTask.on(
                 (error) => {
-                    console.log(error);
                     setIsLoading(false);
                     setError(true);
                 }, 
