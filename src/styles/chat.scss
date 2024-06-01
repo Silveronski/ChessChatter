@@ -65,11 +65,10 @@
             display: flex;   
             align-items: center;   
             justify-content: center;
-            width: 23%;
-            min-width: fit-content;
-            padding: 6px;   
+            min-width: fit-content;      
             margin-right: 15px;
-            font-size: 1.1vw;
+            font-size: 1.6rem;
+            padding: 0.1em 1.5em;
             background-color: $green-bgcolor;
             color: $black-bgcolor;
             font-family: "Tilt Warp";
@@ -78,7 +77,7 @@
             cursor: pointer;
             transition: 0.3s;       
             img{             
-                width: 1.1vw;
+                width: 1.6rem;
                 background-color: transparent;
                 border: none;
             }
