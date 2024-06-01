@@ -100,7 +100,6 @@
             padding-left: 10px;
             height: 30px;
             font-family: "Tilt Warp";
-            padding-bottom: 0%;
             &::placeholder{
                 color: hsla(117, 100%, 72%, 0.691);
                 letter-spacing: 0.5px;
@@ -122,19 +121,24 @@
         }
     }
     .chats{
-        height: calc(100% - 225px);
+        height: calc(100% - 115px);
         overflow-y: auto;
         &::-webkit-scrollbar {
             width: 0.1500em; 
-          }                          
+        }                          
         &::-webkit-scrollbar-track {
-        background-color: transparent;
-        border-radius: 100vw;
+            background-color: transparent;
+            border-radius: 100vw;
         }
                         
         &::-webkit-scrollbar-thumb {
-        background-color: $green-bgcolor;
-        border-radius: 100vw;              
+            background-color: $green-bgcolor;
+            border-radius: 100vw;              
+        }
+        @include mobile{
+            &::-webkit-scrollbar {
+                width: 1.8px; 
+            }
         }
     }
     .user-chat{
@@ -144,7 +148,8 @@
         gap: 15px;
         color: $green-bgcolor;
         cursor: pointer;
-        transition: 0.3s linear;  
+        transition: 0.3s linear; 
+        border-top: 1px solid rgba(128, 128, 128, 0.233); 
         &:hover{
             background-color: $green-bgcolor;
             color: black;                  

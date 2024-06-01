@@ -15,7 +15,9 @@
         position: relative;
         @include mobile{
             position: fixed;
-            width: 93.7%;
+            width: 100%;
+            top: 0;
+            margin-top: 0;
         }
         .user-info{
             display: flex;
@@ -93,9 +95,9 @@
                 }
             }         
             @include mobile{
-                font-size: 1.1rem;
-                margin-right: 0;  
-                padding-inline: 0.8rem;    
+                font-size: 1.1rem; 
+                padding: 0.2em 0.8em; 
+                margin-right: 1.3em;  
                 img{                           
                     width: 1.1rem;                        
                 }
@@ -226,8 +228,7 @@
         @include mobile{
             position: fixed;
             bottom: 0;
-            width: 93.7%;
-            margin-bottom: 2px;
+            width: 100%;
         }
         input{
             width: 100%;
@@ -260,6 +261,9 @@
                 &:hover{
                     background-color: hsl(117, 100%, 72%);
                 }
+            }
+            @include mobile{
+                margin-right: 1.3em;             
             }
         }
         img{
