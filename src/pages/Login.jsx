@@ -1,10 +1,10 @@
+import newLogo from '../assets/images/newLogo.png';
+import loading from '../assets/images/loading.gif';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase/firebase';
 import { useForm } from 'react-hook-form';
-import newLogo from '../assets/images/newLogo.png';
-import loading from '../assets/images/loading.gif';
 import { useFirebase } from '../hooks/useFirebase';
 
 const Login = () => {

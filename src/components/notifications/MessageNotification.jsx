@@ -9,23 +9,23 @@ const MessageNotification = () => {
     const msgReceivedSound = useRef();
 
     useEffect(() => {
-        if (!currentUser.uid) return;   
-        onSnapshot(
-          collection(db, "chats"),
-          (snapshot) => {
-            snapshot.forEach((chatDoc) => {
-              const msgAraayLen = chatDoc.data().messages.length;
-              const receiverId = chatDoc.data().messages[msgAraayLen-1]?.receiverId;
-              const msgDate = chatDoc.data().messages[msgAraayLen-1]?.fullDate.seconds;
-              if (receiverId === currentUser.uid && msgDate === Timestamp.now().seconds) {           
-                msgReceivedSound.current.play();
-              }          
-            })
-          }     
-        );        
+      if (!currentUser.uid) return;   
+      onSnapshot(
+        collection(db, "chats"),
+        (snapshot) => {
+          snapshot.forEach((chatDoc) => {
+            const msgAraayLen = chatDoc.data().messages.length;
+            const receiverId = chatDoc.data().messages[msgAraayLen-1]?.receiverId;
+            const msgDate = chatDoc.data().messages[msgAraayLen-1]?.fullDate.seconds;
+            if (receiverId === currentUser.uid && msgDate === Timestamp.now().seconds) {           
+              msgReceivedSound.current.play();
+            }          
+          })
+        }     
+      );        
     },[]);
 
-    return <audio src={msgSound} ref={msgReceivedSound}></audio>; 
+    return <audio src={msgSound} ref={msgReceivedSound}></audio>
 }
 
 export default MessageNotification

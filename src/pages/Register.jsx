@@ -4,7 +4,7 @@ import loading from '../assets/images/loading.gif';
 import defaultAvatar from '../assets/images/defaultAvatar.png';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, storage, db } from "../firebase/firebase";
+import { auth, storage } from "../firebase/firebase";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
