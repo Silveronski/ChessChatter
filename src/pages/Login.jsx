@@ -5,20 +5,23 @@ import { auth } from '../firebase/firebase';
 import { useForm } from 'react-hook-form';
 import newLogo from '../assets/images/newLogo.png';
 import loading from '../assets/images/loading.gif';
+import { useFirebase } from '../hooks/useFirebase';
 
 const Login = () => {
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const { userLogin } = useFirebase();
     const navigate = useNavigate(); 
-    const {register, formState: {errors}, handleSubmit} = useForm();
-    const onSubmit = async (data) => await userLogin(data);
+    const { register, formState: {errors}, handleSubmit } = useForm();
+    const onSubmit = async (data) => await handleLogin(data);
 
-    const userLogin = async (data) => {   
+    const handleLogin = async (data) => {   
         const email = data.email;
         const password = data.password;
         setIsLoading(true);
         try {
-            await signInWithEmailAndPassword(auth, email, password);      
+            const data = await signInWithEmailAndPassword(auth, email, password); 
+            await userLogin(data.user.uid);    
             setIsLoading(false);                       
             navigate("/");                     
         }

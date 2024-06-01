@@ -77,7 +77,16 @@ export const useFirebase = () => {
             await signOut(auth);
             dispatch({ type: "LOG_OUT", payload: {} });
         } 
-        catch (error) { useToastr('error', ' There was an error logging out');  console.log(error)}       
+        catch (error) { useToastr('error', ' There was an error logging out'); }       
+    }
+
+    const userLogin = async (userId) => {
+        const userRef = doc(db, 'presence', userId); 
+        await updateDoc(userRef, { 
+            count : 1,
+            online: true, 
+            hasShown: false 
+        });
     }
 
     const createUser = async (avatarUrl, userName, userEmail, res) => {
@@ -109,5 +118,5 @@ export const useFirebase = () => {
         catch (error) { throw error; }      
     }
 
-    return { updateUserChatsDoc, updateChatsDoc, createUserChat, userSignout, createUser };
+    return { updateUserChatsDoc, updateChatsDoc, createUserChat, userSignout, userLogin, createUser };
 }
