@@ -151,15 +151,17 @@
         transition: 0.3s linear; 
         border-top: 1px solid rgba(128, 128, 128, 0.233); 
         &:hover{
-            background-color: $green-bgcolor;
-            color: black;                  
-            .user-chat-info{
-                .lastmsg-time{
-                    p, div{
-                        color: black;                               
-                    }                                                    
-                }                    
-            }
+            @media screen and (min-width: 941px) {
+                background-color: $green-bgcolor;
+                color: black;                  
+                .user-chat-info{
+                    .lastmsg-time{
+                        p, div{
+                            color: black;                               
+                        }                                                    
+                    }                    
+                }
+            }          
         }
         img{
             width: 50px;
