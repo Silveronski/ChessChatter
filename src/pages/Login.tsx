@@ -8,8 +8,8 @@ import { useForm } from 'react-hook-form';
 import { useFirebase } from '../hooks/useFirebase';
 
 const Login = () => {
-    const [error, setError] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { userLogin } = useFirebase();
     const navigate = useNavigate(); 
     const { register, formState: {errors}, handleSubmit } = useForm();

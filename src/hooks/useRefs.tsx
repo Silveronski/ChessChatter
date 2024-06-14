@@ -1,17 +1,24 @@
-import { useContext } from "react";
-import { RefContext } from "../context/RefContext";
+import { useRefContext } from "../context/RefContext";
 
 export const useRefs = () => {
-    const { chatRef, sidebarRef } = useContext(RefContext);
+    const { chatRef, sidebarRef } = useRefContext();
 
     const showSidebar = () => {
-        sidebarRef.current.style.display = 'block';
-        chatRef.current.style.display = 'none';
+        if (areRefsPresenet()) {
+            sidebarRef.current!.style.display = 'block';
+            chatRef.current!.style.display = 'none';
+        }       
     }
 
     const showChat = () => {
-        sidebarRef.current.style.display = 'none';
-        chatRef.current.style.display = 'block';
+        if (areRefsPresenet()) {
+            sidebarRef.current!.style.display = 'none';
+            chatRef.current!.style.display = 'block';
+        }          
+    }
+
+    const areRefsPresenet = () => {
+        return sidebarRef.current && chatRef.current;
     }
 
     return { showSidebar, showChat }

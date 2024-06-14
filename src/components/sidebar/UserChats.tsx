@@ -1,24 +1,28 @@
 import UserChat from './UserChat';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { db } from '../../firebase/firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';;
-import { AuthContext } from '../../context/AuthContext';
+import { useAuthContext } from '../../context/AuthContext';
 
-const UserChats = ({ selectedChatIdFromSearch }) => {
-  const { currentUser } = useContext(AuthContext);
+interface UserChatsProps {
+  selectedChatIdFromSearch: string
+};
+
+const UserChats = ({ selectedChatIdFromSearch }: UserChatsProps) => {
+  const { currentUser } = useAuthContext();
   const [chats, setChats] = useState([]);
-  const [selectedChatId, setSelectedChat] = useState("");
+  const [selectedChatId, setSelectedChat] = useState<string>("");
   const [userStatuses, setUserStatuses] = useState({});
 
   useEffect(() => {
     const getChats = () => {
-      const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+      const unsub = onSnapshot(doc(db, "userChats", currentUser!.uid), (doc) => {
         setChats(doc.data());                                                
       });  
       return () => unsub();                      
     }   
-    currentUser.uid && getChats();    
-  }, [currentUser.uid]);
+    currentUser?.uid && getChats();    
+  }, [currentUser?.uid]);
 
 
   useEffect(() => {         

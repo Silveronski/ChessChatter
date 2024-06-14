@@ -1,15 +1,15 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { query, onSnapshot, collection, doc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuthContext } from '../../context/AuthContext';
 import toastr from 'toastr';
-import useToastr from '../../hooks/useToastr';
+import { useToastr } from '../../hooks/useToastr';
 
 const GameInvitations = () => {
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser } = useAuthContext();
 
     useEffect(() => {
-        if (!currentUser.uid) return;            
+        if (!currentUser?.uid) return;            
         onSnapshot( 
           query(collection(db, "gameInvitations"), where("userId", "==", currentUser.uid)),
           (snapshot) => {
@@ -37,24 +37,24 @@ const GameInvitations = () => {
           }
         );
           
-        window.acceptInvite = async (gameLink, inviteId) => {
+        (window as any).acceptInvite = async (gameLink: string, inviteId: string) => {
             try {
                 const invitationDocRef = doc(db, "gameInvitations", inviteId);
                 await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "true" });
                 setTimeout(() => { window.open(gameLink, '_blank') }, 2500);                                                                                 
             }
             catch (err) {
-                useToastr('error', 'There was a problem accepting the game offer');
+                useToastr('There was a problem accepting the game offer', 'error');
             }                            
         };
 
-        window.rejectInvite = async (inviteId) => {
+        (window as any).rejectInvite = async (inviteId: string) => {
             try {
                 const invitationDocRef = doc(db, "gameInvitations", inviteId);
                 await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "false" });                                     
             }
             catch (err) {
-                useToastr('error', 'There was a problem rejecting the game offer');
+                useToastr('There was a problem rejecting the game offer', 'error');
             }       
         };
     },[]);

@@ -2,15 +2,14 @@ import Messages from './Messages';
 import Input from './Input';
 import back from '../../assets/images/back.png';
 import pawn from '../../assets/images/pawn.png';
-import { useContext } from 'react';
-import { ChatContext } from '../../context/ChatContext';
+import { useChatContext } from '../../context/ChatContext';
 import { useGameInviter } from '../../hooks/useGameInviter';
-import { RefContext } from '../../context/RefContext';
+import { useRefContext } from '../../context/RefContext';
 import { useRefs } from '../../hooks/useRefs';
 
 const Chat = () => {
-  const { data } = useContext(ChatContext);
-  const { chatRef } = useContext(RefContext);
+  const { data } = useChatContext();
+  const { chatRef } = useRefContext();
   const { invitePlayer } = useGameInviter();
   const { showSidebar } = useRefs();
 

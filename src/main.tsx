@@ -1,8 +1,8 @@
 import ReactDOM from 'react-dom/client';
-import App from './App.js';
-import { AuthContextProvider } from './context/AuthContext.js';
-import { ChatContextProvider } from './context/ChatContext.js';
-import { RefContextProvider } from './context/RefContext.js';
+import App from './App';
+import { AuthContextProvider } from './context/AuthContext';
+import { ChatContextProvider } from './context/ChatContext';
+import { RefContextProvider } from './context/RefContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <AuthContextProvider>

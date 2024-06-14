@@ -1,11 +1,12 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { onSnapshot, collection } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
-import { AuthContext } from '../../context/AuthContext';
-import useToastr from '../../hooks/useToastr';
+import { useAuthContext } from '../../context/AuthContext';
+import { useToastr } from '../../hooks/useToastr';
+
 
 const UserPresenceNotifications = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useAuthContext();
 
   useEffect(() => {
     if (!currentUser?.uid) return;
@@ -13,7 +14,7 @@ const UserPresenceNotifications = () => {
       snapshot.forEach(async (presenceDoc) => {
         const user = presenceDoc.data();
         if (presenceDoc.id !== currentUser.uid && !user.hasShown && user.online) {
-            useToastr("info", `${user.name} has just logged in!`, 8000);
+            useToastr(`${user.name} has just logged in!`, "info", 8000);
         }
       });
     });
@@ -23,4 +24,4 @@ const UserPresenceNotifications = () => {
   return null;
 };
 
-export default UserPresenceNotifications;
+export default UserPresenceNotifications

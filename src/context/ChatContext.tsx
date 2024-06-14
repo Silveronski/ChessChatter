@@ -1,24 +1,28 @@
-import { createContext, useContext, useReducer } from "react";
-import { AuthContext } from "./AuthContext";
+import { ReactNode, createContext, useContext, useReducer } from "react";
+import {  useAuthContext } from "./AuthContext";
 
-export const ChatContext = createContext();
+interface ChatContextProviderProps {
+    children: ReactNode
+};
+
+export const ChatContext = createContext<any | null>(null);
 
 export const INITIAL_STATE = {
     chatId: "null",
     user:{}
 }
 
-export const ChatContextProvider = ({ children }) => {
-    const { currentUser } = useContext(AuthContext); 
+export const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
+    const { currentUser } = useAuthContext(); 
     
-    const chatReducer = (state, action) => {
+    const chatReducer = (state: any, action: any) => {
         switch(action.type) {
             case "CHANGE_USER":
                 return {
                     user: action.payload,
-                    chatId: currentUser.uid > action.payload.uid 
-                    ? currentUser.uid + action.payload.uid
-                    : action.payload.uid + currentUser.uid
+                    chatId: currentUser!.uid > action.payload.uid 
+                    ? currentUser!.uid + action.payload.uid
+                    : action.payload.uid + currentUser!.uid
                 }
 
             case "LOG_OUT":
@@ -40,3 +44,11 @@ export const ChatContextProvider = ({ children }) => {
         </ChatContext.Provider>
     )   
 }
+
+export const useChatContext = () => {
+    const context = useContext(ChatContext);
+    if (!context) {
+        throw new Error('ChatContext must be used within a ChatContextProvider');
+    }
+    return context;
+};

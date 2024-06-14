@@ -1,8 +1,16 @@
 import toastr from "toastr";
 
-export default function useToastr(ToastType, text, timeout = 3000) {
+type ToastrDisplayMethod = 'error' | 'success' | 'info' | 'warning';
+     
+type ToastrType = {
+    (text: string,
+    ToastType?: ToastrDisplayMethod,
+    timeout?: number): void
+}
+
+export const useToastr: ToastrType = (text, ToastType, timeout): void => {
     const options = {
-        timeOut: timeout,
+        timeOut: timeout || 3000,
         extendedTimeOut: 0, 
         closeButton: true, 
         positionClass: "toast-top-right", 
@@ -12,19 +20,19 @@ export default function useToastr(ToastType, text, timeout = 3000) {
 
     switch (ToastType) {
         case 'error':
-            toastr.error(text, options);
+            toastr.error(text, '', options);
             break;
         case 'success':
-            toastr.success(text, options);
+            toastr.success(text, '', options);
             break;
         case 'info':
-            toastr.info(text, options);
+            toastr.info(text, '', options);
             break;
         case 'warning':
-            toastr.warning(text, options);
+            toastr.warning(text, '', options);
             break;
         default:
-            toastr.info(text, options);
+            toastr.info(text, '', options);
             break;
     }
 }

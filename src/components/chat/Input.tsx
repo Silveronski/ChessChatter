@@ -1,23 +1,23 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import { ChatContext } from '../../context/ChatContext';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { useAuthContext } from '../../context/AuthContext';
+import { useChatContext } from '../../context/ChatContext';
 import { useFirebase } from '../../hooks/useFirebase';
 import { storage } from '../../firebase/firebase';
 import { v4 as uuid } from 'uuid';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { validImgExtensions } from '../../utils/utilities';
+import { useToastr } from '../../hooks/useToastr';
 import addImg from '../../assets/images/img.png';
 import vMark from '../../assets/images/v.png';
-import useToastr from '../../hooks/useToastr';
 
 const Input = () => {
-  const { currentUser } = useContext(AuthContext);
-  const { data } = useContext(ChatContext);
+  const { currentUser } = useAuthContext();
+  const { data } = useChatContext();
   const { updateUserChatsDoc, updateChatsDoc } = useFirebase();
-  const [text, setText] = useState("");
-  const [img, setImg] = useState(null);
-  const [imgIsReady, setImgIsReady] = useState(false);
-  const inputRef = useRef();
+  const [text, setText] = useState<string>("");
+  const [img, setImg] = useState<File | null>(null);
+  const [imgIsReady, setImgIsReady] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
     setImg(null);
@@ -26,19 +26,20 @@ const Input = () => {
     return () => setText("");     
   },[data.chatId]);
 
-  const handleKeyPress = async (e) => {
+  const handleKeyPress = async (e: KeyboardEvent) => {
     if (img) e.key === "Enter" && await handleSend();        
     else (e.key === "Enter" && text.trim()!== '') && await handleSend(); 
   }
 
-  const handleImage = (img) => {
+  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const img = e.target.files ? e.target.files[0] : null;
     if (img && validImgExtensions.includes(img.type)) {
       setImg(img);
       setImgIsReady(true);
     }
     else alert("Invalid image format!"); 
     
-    inputRef.current.focus(); 
+    inputRef.current && inputRef.current.focus(); 
   }
                                                            
   const handleSend = async () => {
@@ -49,9 +50,9 @@ const Input = () => {
         const msgText = text;
         setText("");  
   
-        uploadTask.on(
-          (error) => {
-              useToastr('error', 'There was an error sending the image'); 
+        uploadTask.on("state_changed",
+          (_error: unknown) => {
+              useToastr('There was an error sending the image', 'error'); 
               return;      
           }, 
           () => {             
@@ -60,7 +61,7 @@ const Input = () => {
             })
           }
         );
-        await updateUserChatsDoc(currentUser.uid, data.chatId);
+        await updateUserChatsDoc(currentUser!.uid, data.chatId);
         await updateUserChatsDoc(data.user.uid);
       }
   
@@ -68,15 +69,15 @@ const Input = () => {
         const msgText = text;
         setText(""); 
         await updateChatsDoc(msgText, data.chatId, data.user.uid); 
-        await updateUserChatsDoc(currentUser.uid, data.chatId, msgText);
+        await updateUserChatsDoc(currentUser!.uid, data.chatId, msgText);
         await updateUserChatsDoc(data.user.uid, data.chatId, msgText);
       }
   
-      inputRef.current.focus();  
+      inputRef.current && inputRef.current.focus();  
       setImg(null);
       setImgIsReady(false);
     } 
-    catch (error) { useToastr('error', 'There was an error sending the message'); } 
+    catch (error) { useToastr('There was an error sending the message', 'error'); } 
   }
 
   return (
@@ -90,7 +91,13 @@ const Input = () => {
        onKeyDown={handleKeyPress}
        ref={inputRef}/>          
       <div className="icons">
-        <input type="file" id="img" accept="image/*" style={{display:"none"}} onChange={e => handleImage(e.target.files[0])}/>
+        <input 
+          type="file"
+          id="img"
+          accept="image/*"
+          style={{display:"none"}}
+          onChange={handleImage}
+        />
         {imgIsReady && <img src={vMark}/>} 
         <label htmlFor="img">
           <img src={addImg}/>

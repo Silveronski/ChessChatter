@@ -1,20 +1,25 @@
 import search from '../../assets/images/search.png';
-import { useContext, useEffect, useState } from 'react';
-import { collection, getDoc, getDocs, query, setDoc, where, doc, updateDoc, Timestamp } from "firebase/firestore";
+import { KeyboardEvent, useContext, useEffect, useState } from 'react';
+import { collection, getDoc, getDocs, query, setDoc, where, doc} from "firebase/firestore";
 import { db } from '../../firebase/firebase';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuthContext } from '../../context/AuthContext';
 import { ChatContext } from '../../context/ChatContext';
 import { useFirebase } from '../../hooks/useFirebase';
 import { useRefs } from '../../hooks/useRefs';
+import { User } from 'firebase/auth';
 
-const Search = ({ selectedChatIdFromSearch }) => {
-  const { currentUser } = useContext(AuthContext);
+interface SearchProps {
+  selectedChatIdFromSearch: Function
+};
+
+const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
+  const { currentUser } = useAuthContext();
   const { dispatch } = useContext(ChatContext);
   const { showChat } = useRefs();
   const { createUserChat } = useFirebase();
-  const [username, setUsername] = useState("");
-  const [user, setUser] = useState(null);
-  const [err, setErr] = useState(false);
+  const [username, setUsername] = useState<string>("");
+  const [user, setUser] = useState<User | null>(null);
+  const [err, setErr] = useState<boolean>(false);
 
   useEffect(() => {
     if (username.length === 0){
@@ -23,12 +28,12 @@ const Search = ({ selectedChatIdFromSearch }) => {
     }
   },[username]);
 
-  const handleKey = (e) => (e.code === "Enter" && username.trim() !== '') && handleUserSearch();
+  const handleKey = (e: KeyboardEvent) => (e.code === "Enter" && username.trim() !== '') && handleUserSearch();
     
   const handleSearchClick = () => username.trim() !== '' && handleUserSearch();
     
   const handleUserSearch = async () => {
-    if (username.toLowerCase() === currentUser.displayName.toLowerCase()) {
+    if (username.toLowerCase() === currentUser!.displayName?.toLowerCase()) {
       setErr(true);
       return;
     }
@@ -40,7 +45,8 @@ const Search = ({ selectedChatIdFromSearch }) => {
     try {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
-        setUser(doc.data());
+        const user = doc.data() as User;
+        setUser(user);
         setErr(false);
       });
       if (querySnapshot.empty){
@@ -53,9 +59,9 @@ const Search = ({ selectedChatIdFromSearch }) => {
   const handleUserSelect = async () => {
     //check whether the group(chats in firestore) exists, if not, create
     const combinedId = 
-      currentUser.uid > user.uid 
-        ? currentUser.uid + user.uid 
-        : user.uid + currentUser.uid
+      currentUser!.uid > user!.uid 
+        ? currentUser!.uid + user?.uid 
+        : user?.uid + currentUser!.uid
 
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
@@ -64,11 +70,11 @@ const Search = ({ selectedChatIdFromSearch }) => {
         await setDoc(doc(db, "chats", combinedId),{ messages: [] });
         
         //create user chats for both users
-        await createUserChat(currentUser.uid, user, combinedId);
-        await createUserChat(user.uid, currentUser, combinedId);
+        await createUserChat(currentUser!.uid, user!, combinedId);
+        await createUserChat(user!.uid, currentUser!, combinedId);
       }
-      dispatch({type:"CHANGE_USER", payload: user}); // move to chat window with the user.
-      selectedChatIdFromSearch(user.uid);
+      dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
+      selectedChatIdFromSearch(user?.uid);
 
       if (window.innerWidth < 940) showChat();     
     }    
@@ -92,7 +98,7 @@ const Search = ({ selectedChatIdFromSearch }) => {
       {err && <span className='error'>User not found!</span>}
       {user && ( 
         <div className="user-chat" onClick={handleUserSelect}>
-          <img src={user.photoURL} alt='found user image'/>
+          {user?.photoURL && <img src={user.photoURL} alt='found user image'/>}
           <div className="user-chat-info">
             <span>{user.displayName}</span>
           </div>

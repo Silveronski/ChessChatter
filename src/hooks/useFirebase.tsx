@@ -1,16 +1,15 @@
-import useToastr from "./useToastr";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { v4 as uuid } from 'uuid';
-import { signOut, updateProfile } from "firebase/auth";
-import { ChatContext } from "../context/ChatContext";
-import { getDownloadURL } from "firebase/storage";
+import { User, signOut, updateProfile } from "firebase/auth";
+import { useChatContext } from "../context/ChatContext";
+import { StorageReference, getDownloadURL } from "firebase/storage";
+import { useToastr } from "./useToastr";
 
 export const useFirebase = () => {
-    const { currentUser } = useContext(AuthContext);
-    const { dispatch } = useContext(ChatContext);
+    const { currentUser } = useAuthContext();
+    const { dispatch } = useChatContext();
 
     const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
                     Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
@@ -18,12 +17,12 @@ export const useFirebase = () => {
                     Timestamp.now().toDate().getMinutes() : "0"+ Timestamp.now().toDate().getMinutes();
     const timeOfMsg = hourOfMsg + ":" + minOfMsg;
 
-    const updateUserChatsDoc = async (userIdToUpdate, chatId, msgText = "Image") => {
+    const updateUserChatsDoc = async (userIdToUpdate: string, chatId?: string, msgText = "Image") => {
         try {
             await updateDoc(doc(db, "userChats", userIdToUpdate), {
                 [chatId + ".lastMessage"] : {
                   text : msgText,
-                  senderId: currentUser.uid         
+                  senderId: currentUser?.uid         
                 },
                 [chatId + ".date"] : timeOfMsg,
                 [chatId + ".fullDate"] : serverTimestamp()
@@ -32,11 +31,11 @@ export const useFirebase = () => {
         catch (error) { throw error; }      
     }
     
-    const updateChatsDoc = async (msgText, chatId, otherUserId, isImg = false, imgUrl = null) => {
-        const message = {
+    const updateChatsDoc = async (msgText: string, chatId: string, otherUserId: string, isImg = false, imgUrl: string | null = null) => {
+        const message: any = {
             id: uuid(),
             text: msgText,
-            senderId: currentUser.uid,
+            senderId: currentUser?.uid,
             receiverId: otherUserId,
             date: timeOfMsg,
             fullDate: Timestamp.now(),
@@ -52,7 +51,7 @@ export const useFirebase = () => {
         catch (error) { throw error; }                            
     }
 
-    const createUserChat = async (userDocToUpdate, otherUser, combinedId) => {
+    const createUserChat = async (userDocToUpdate: string, otherUser: User, combinedId: string) => {
         try {
             await updateDoc(doc(db, "userChats", userDocToUpdate), {
                 [combinedId + ".userInfo"] : {
@@ -63,12 +62,12 @@ export const useFirebase = () => {
                 [combinedId + ".date"]: Timestamp.now().toDate(),
             });   
         } 
-        catch (error) { useToastr('error', 'There was a problem setting the caht with this user'); }       
+        catch (error) { useToastr('There was a problem setting the caht with this user', 'error'); }       
     }
 
     const userSignout = async () => {
         try {      
-            const userRef = doc(db, 'presence', currentUser.uid); 
+            const userRef = doc(db, 'presence', currentUser!.uid); 
             await updateDoc(userRef, { 
               count : 0,
               online: false, 
@@ -77,10 +76,10 @@ export const useFirebase = () => {
             await signOut(auth);
             dispatch({ type: "LOG_OUT", payload: {} });
         } 
-        catch (error) { useToastr('error', ' There was an error logging out'); }       
+        catch (error) { useToastr('There was an error logging out', 'error'); }       
     }
 
-    const userLogin = async (userId) => {
+    const userLogin = async (userId: string) => {
         const userRef = doc(db, 'presence', userId); 
         await updateDoc(userRef, { 
             count : 1,
@@ -89,7 +88,7 @@ export const useFirebase = () => {
         });
     }
 
-    const createUser = async (avatarUrl, userName, userEmail, res) => {
+    const createUser = async (avatarUrl: StorageReference, userName: string, userEmail: string, res: any) => {
         try {
             getDownloadURL(avatarUrl).then(async (downloadURL) => {
                 await updateProfile(res.user, {

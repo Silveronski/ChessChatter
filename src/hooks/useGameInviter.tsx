@@ -1,11 +1,11 @@
-import useToastr from "./useToastr";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { AuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
+import { useToastr } from "./useToastr";
 
 export const useGameInviter = () => {
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser } = useAuthContext();
     const [invitePending, setInvitePending] = useState(false);
     const [gameInviteId, setGameInviteId] = useState("");
 
@@ -21,39 +21,39 @@ export const useGameInviter = () => {
         window.localStorage.setItem('gameInviteId', JSON.stringify(gameInviteId));
     },[invitePending, gameInviteId]);
 
-    const invitePlayer = async (otherUserId) => {
+    const invitePlayer = async (otherUserId: string) => {
         if (!invitePending) { 
             try {        
               const userSnap = await getDoc(doc(db, 'presence', otherUserId));    
               if (userSnap.exists() && !userSnap.data().online) {
-                useToastr("error", "Can't invite an offline user!");
+                useToastr("Can't invite an offline user!", "error",);
                 return;
               }  
-              await setDoc(doc(db, "gameInvitations", otherUserId + currentUser.uid),{
-                id: otherUserId + currentUser.uid,
+              await setDoc(doc(db, "gameInvitations", otherUserId + currentUser?.uid),{
+                id: otherUserId + currentUser?.uid,
                 userId: otherUserId,
-                senderId : currentUser.uid,
-                senderDisplayName : currentUser.displayName,
-                link: `https://chess-game-fh3hl.ondigitalocean.app/black?code=${otherUserId + currentUser.uid}`,
+                senderId : currentUser?.uid,
+                senderDisplayName : currentUser?.displayName,
+                link: `https://chess-game-fh3hl.ondigitalocean.app/black?code=${otherUserId + currentUser?.uid}`,
                 gameConcluded: false,
                 gameAccepted: ""
               });   
-              useToastr("success", "Your invitation was successfully sent!");
+              useToastr("Your invitation was successfully sent!", "success");
               setInvitePending(true);
-              setGameInviteId(otherUserId + currentUser.uid);       
+              setGameInviteId(otherUserId + currentUser?.uid);       
             }
             catch (err) {
-              useToastr('error', "There was a problem inviting this user to a match");
+              useToastr("There was a problem inviting this user to a match", 'error');
             }      
         } 
         else {
-            useToastr("error", "Can't invite more than one person at a time!");
+            useToastr("Can't invite more than one person at a time!", "error");
         }         
     }
 
     useEffect(() => {
-        let unsub;
-        let timer;
+        let unsub: Function;
+        let timer: ReturnType<typeof setTimeout>;
     
         if (invitePending && gameInviteId !== "") {
           const gameInviteRef = doc(db, "gameInvitations", gameInviteId);
@@ -64,7 +64,7 @@ export const useGameInviter = () => {
               resetState();
             } 
             else if (data && data.gameAccepted === "false") { // user declines game offer          
-                useToastr("error", "Your invitation was declined");
+                useToastr("Your invitation was declined", "error");
                 resetState();
             }
           });
@@ -73,14 +73,14 @@ export const useGameInviter = () => {
             try {
               const gameInviteRef = doc(db, "gameInvitations", gameInviteId);
               const gameInviteSnap = await getDoc(gameInviteRef);
-              if (gameInviteSnap.data().gameConcluded === false) { // user didn't respond to game offer after 10 seconds
+              if (gameInviteSnap.data()?.gameConcluded === false) { // user didn't respond to game offer after 10 seconds
                 await updateDoc(gameInviteRef, { gameConcluded: true });
-                useToastr("error", "Your invitation was not responded to within the specified time frame");
+                useToastr("Your invitation was not responded to within the specified time frame", "error");
                 resetState();
               }
             } 
             catch (err) {
-              useToastr("error", "Your invitation was not responded to within the specified time frame");
+              useToastr("Your invitation was not responded to within the specified time frame", "error");
             }
           }, 10000);
         }

@@ -13,10 +13,10 @@ import { useFirebase } from '../hooks/useFirebase';
 
 const Register = () => {
     const { createUser } = useFirebase();
-    const [error, setError] = useState(false);
+    const [error, setError] = useState<boolean>(false);
+    const [displayNameError, setDisplayNameError] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [avatarError, setAvatarError] = useState({ msg: '', activated: false });
-    const [displayNameError, setDisplayNameError] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     
     const {register, formState: {errors}, handleSubmit} = useForm();
@@ -73,7 +73,7 @@ const Register = () => {
         catch (err) { displayGeneralError(); }                 
     }
 
-    const displayAvatarError = (errorMsg) => {
+    const displayAvatarError = (errorMsg: string) => {
         setAvatarError({ msg: errorMsg, activated: true}); 
         return;
     }

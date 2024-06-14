@@ -1,17 +1,17 @@
-import './styles/style.scss';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthContext } from './context/AuthContext';
+import React from 'react';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import React, { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
+import './styles/style.scss';
 
 interface ProtectedRouteProps {
   children: React.ReactNode
 };
 
 function App() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useAuthContext();
 
   const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     if (!currentUser){

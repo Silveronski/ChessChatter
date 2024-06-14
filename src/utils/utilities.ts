@@ -3,14 +3,14 @@ import { db } from "../firebase/firebase";
 
 export const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
 
-export async function imageUrlToFile(imageUrl, fileName) {
+export async function imageUrlToFile(imageUrl: string, fileName: string) {
     const response = await fetch(imageUrl);
     const blob = await response.blob();
     const file = new File([blob], fileName);
     return file;
 }
 
-export async function isDisplayNameTaken (displayName) {
+export async function isDisplayNameTaken (displayName: string) {
     try {
         let displayNameTaken = false;
         const querySnapshot = await getDocs(collection(db, "users"));

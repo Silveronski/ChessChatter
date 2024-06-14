@@ -1,14 +1,14 @@
 import Navbar from './Navbar';
 import Search from './Search';
 import UserChats from './UserChats';
-import { useCallback, useContext, useState } from 'react';
-import { RefContext } from '../../context/RefContext';
+import { useCallback, useState } from 'react';
+import { useRefContext } from '../../context/RefContext';
 
 const Sidebar = () => {
-  const { sidebarRef } = useContext(RefContext);
+  const { sidebarRef } = useRefContext();
   const [selectedChatIdFromSearch, setSelectedChatIdFromSearch] = useState("");
 
-  const handleDataFromSearch = useCallback((chatId) => {
+  const handleDataFromSearch = useCallback((chatId: string) => {
     setSelectedChatIdFromSearch(chatId);
   },[selectedChatIdFromSearch]);
 

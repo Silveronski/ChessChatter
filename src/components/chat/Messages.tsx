@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
-import { ChatContext } from '../../context/ChatContext';
+import { useEffect, useState } from 'react';
+import { useChatContext } from '../../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import Message  from './Message';
 import newLogo from '../../assets/images/newLogo.png';
 
 const Messages = () => {
-    const { data } = useContext(ChatContext);
-    const [messages, setMessages] = useState([]);
+    const { data } = useChatContext();
+    const [messages, setMessages] = useState<TMessage[]>([]);
 
     useEffect(() => {
         const getMessages = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
