@@ -2,10 +2,27 @@ import { useAuthContext } from "../context/AuthContext";
 import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { v4 as uuid } from 'uuid';
-import { User, signOut, updateProfile } from "firebase/auth";
+import { User, UserCredential, signOut, updateProfile } from "firebase/auth";
 import { useChatContext } from "../context/ChatContext";
 import { StorageReference, getDownloadURL } from "firebase/storage";
 import { useToastr } from "./useToastr";
+import { TMessage } from "../types/types";
+
+interface ChatDocProps {
+    (msgText: string,
+    chatId: string,
+    otherUserId: string,
+    isImg?: boolean,
+    imgUrl?: string): void
+};
+
+interface CreateUserChatProps {
+    (
+        userIdToUpdate: string,
+        otherUser: User,
+        combinedId: string
+    ): Promise<void>
+}
 
 export const useFirebase = () => {
     const { currentUser } = useAuthContext();
@@ -31,11 +48,11 @@ export const useFirebase = () => {
         catch (error) { throw error; }      
     }
     
-    const updateChatsDoc = async (msgText: string, chatId: string, otherUserId: string, isImg = false, imgUrl: string | null = null) => {
-        const message: any = {
+    const updateChatsDoc: ChatDocProps = async (msgText, chatId, otherUserId, isImg, imgUrl) => {
+        const message: TMessage = {
             id: uuid(),
             text: msgText,
-            senderId: currentUser?.uid,
+            senderId: currentUser!.uid,
             receiverId: otherUserId,
             date: timeOfMsg,
             fullDate: Timestamp.now(),
@@ -51,9 +68,9 @@ export const useFirebase = () => {
         catch (error) { throw error; }                            
     }
 
-    const createUserChat = async (userDocToUpdate: string, otherUser: User, combinedId: string) => {
+    const createUserChat: CreateUserChatProps = async (userIdToUpdate, otherUser, combinedId): Promise<void> => {
         try {
-            await updateDoc(doc(db, "userChats", userDocToUpdate), {
+            await updateDoc(doc(db, "userChats", userIdToUpdate), {
                 [combinedId + ".userInfo"] : {
                   uid: otherUser.uid,
                   displayName: otherUser.displayName,
@@ -65,7 +82,7 @@ export const useFirebase = () => {
         catch (error) { useToastr('There was a problem setting the caht with this user', 'error'); }       
     }
 
-    const userSignout = async () => {
+    const userSignout = async (): Promise<void> => {
         try {      
             const userRef = doc(db, 'presence', currentUser!.uid); 
             await updateDoc(userRef, { 
@@ -79,7 +96,7 @@ export const useFirebase = () => {
         catch (error) { useToastr('There was an error logging out', 'error'); }       
     }
 
-    const userLogin = async (userId: string) => {
+    const userLogin = async (userId: string): Promise<void> => {
         const userRef = doc(db, 'presence', userId); 
         await updateDoc(userRef, { 
             count : 1,
@@ -88,18 +105,18 @@ export const useFirebase = () => {
         });
     }
 
-    const createUser = async (avatarUrl: StorageReference, userName: string, userEmail: string, res: any) => {
+    const createUser = async (avatarUrl: StorageReference, res: UserCredential) => {
         try {
             getDownloadURL(avatarUrl).then(async (downloadURL) => {
                 await updateProfile(res.user, {
-                    displayName: userName,
+                    displayName: res.user.displayName,
                     photoURL: downloadURL
                 });
 
                 await setDoc(doc(db, "users", res.user.uid),{
                     uid: res.user.uid,
-                    displayName: userName,
-                    email: userEmail,
+                    displayName: res.user.displayName,
+                    email: res.user.email,
                     photoURL: downloadURL
                 });
 
@@ -107,7 +124,7 @@ export const useFirebase = () => {
                     count : 1,
                     date: Timestamp.now(), 
                     hasShown: false,
-                    name: userName, 
+                    name: res.user.displayName, 
                     online: true, 
                 });
 

@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { query, onSnapshot, collection, doc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import { useAuthContext } from '../../context/AuthContext';
-import toastr from 'toastr';
 import { useToastr } from '../../hooks/useToastr';
+import toastr from 'toastr';
 
 const GameInvitations = () => {
     const { currentUser } = useAuthContext();

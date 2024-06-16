@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../../firebase/firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';;
 import { useAuthContext } from '../../context/AuthContext';
+import { TUserChat } from '../../types/types';
 
 interface UserChatsProps {
   selectedChatIdFromSearch: string
@@ -10,14 +11,14 @@ interface UserChatsProps {
 
 const UserChats = ({ selectedChatIdFromSearch }: UserChatsProps) => {
   const { currentUser } = useAuthContext();
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState<TUserChat[]>([]);
   const [selectedChatId, setSelectedChat] = useState<string>("");
-  const [userStatuses, setUserStatuses] = useState({});
+  const [userStatuses, setUserStatuses] = useState<any>({});
 
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser!.uid), (doc) => {
-        setChats(doc.data());                                                
+        setChats(doc.data() as TUserChat[]);                                                
       });  
       return () => unsub();                      
     }   

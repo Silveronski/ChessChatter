@@ -7,22 +7,30 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, storage } from "../firebase/firebase";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { useNavigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { imageUrlToFile, isDisplayNameTaken, validImgExtensions } from '../utils/utilities';
 import { useFirebase } from '../hooks/useFirebase';
+import { TError } from "../types/types";
+
+interface RegisterFormInputs {
+    email: string,
+    displayName: string,
+    password: string,
+    image?: FileList 
+}
 
 const Register = () => {
-    const { createUser } = useFirebase();
     const [error, setError] = useState<boolean>(false);
     const [displayNameError, setDisplayNameError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [avatarError, setAvatarError] = useState({ msg: '', activated: false });
+    const { createUser } = useFirebase();
+    const [avatarError, setAvatarError] = useState<TError>({ msg: '', activated: false });
     const navigate = useNavigate();
     
-    const {register, formState: {errors}, handleSubmit} = useForm();
-    const onSubmit = async (data) => await registerUser(data);  
+    const {register, formState: {errors}, handleSubmit} = useForm<RegisterFormInputs>();
+    const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => await registerUser(data);  
      
-    const registerUser = async (data) => {  
+    const registerUser = async (data: RegisterFormInputs) => {  
         const displayNameTaken = await isDisplayNameTaken(data.displayName);
         if (displayNameTaken) {
             setDisplayNameError(true);
@@ -31,13 +39,15 @@ const Register = () => {
         const displayName = data.displayName;
         const email = data.email;
         const password = data.password;
-        let avatar = null;
-        if (data.image[0]) { // image uploaded
+        let avatar: File | null = null;
+        if (data.image && data.image[0]) { // image uploaded
             if (!validImgExtensions.includes(data.image[0].type)) {
                 displayAvatarError("Please select a valid file type (PNG/JPEG/GIF)");
+                return;
             }
             else if (data.image[0].size > 80000) {
                 displayAvatarError("Image must not exceed 80 kilobytes in size!");
+                return;
             }
             avatar = data.image[0];        
         }
@@ -46,7 +56,8 @@ const Register = () => {
                 .then((file) => {
                     avatar = file;
                 })
-                .catch((error) => {
+                .catch((_error) => {
+                    displayAvatarError('there was a problem creating the default avatar');
                     return;
                 });                   
         }  
@@ -55,14 +66,14 @@ const Register = () => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const storageRef = ref(storage, email); // creates a reference to the storage location where the avatar will be saved
-                                                          // the name of the image will be the email
-            const uploadTask = uploadBytesResumable(storageRef, avatar); // initiates the upload of the user's avatar to the storage location
-
-            uploadTask.on(
-                (error) => { displayGeneralError(); },                           
+                                                          // the name of the image will be the email       
+            const uploadTask = uploadBytesResumable(storageRef, avatar as File); // initiates the upload of the user's avatar to the storage location
+                                                          
+            uploadTask.on("state_changed",
+                (_error) => { displayGeneralError(); },                           
                 async ()  => {   
                     try {
-                        await createUser(uploadTask.snapshot.ref, displayName, email, res);          
+                        await createUser(uploadTask.snapshot.ref, res);          
                         setIsLoading(false);
                         navigate("/");
                     } 
@@ -73,12 +84,11 @@ const Register = () => {
         catch (err) { displayGeneralError(); }                 
     }
 
-    const displayAvatarError = (errorMsg: string) => {
+    const displayAvatarError = (errorMsg: string): void => {
         setAvatarError({ msg: errorMsg, activated: true}); 
-        return;
     }
 
-    const displayGeneralError = () => {
+    const displayGeneralError = (): void => {
         setIsLoading(false);
         setError(true);
     }

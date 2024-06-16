@@ -11,14 +11,14 @@ const UpdateCurrentUserPresence = () => {
     const updateCurrentUserPresence = async () => {
       try {
         const currentUserPresenceRef = doc(db, 'presence', currentUser!.uid);     
-        const currentUserPresenceSnap = await getDoc(currentUserPresenceRef);    
-        if (currentUserPresenceSnap.exists() && !currentUserPresenceSnap.data().hasShown) {
+        const currentUserPresenceSnap = await getDoc(currentUserPresenceRef);        
+        if (currentUserPresenceSnap.exists() && !currentUserPresenceSnap.data()?.hasShown) {
           timer = setTimeout(async () => {
             await updateDoc(currentUserPresenceRef, { hasShown: true });      
           }, 4000);
         }
       } 
-      catch (error) {}                   
+      catch (_error) {}                   
     };   
     currentUser?.uid && updateCurrentUserPresence();     
     return () => clearTimeout(timer);              

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useChatContext } from '../../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
+import { TMessage } from '../../types/types';
 import Message  from './Message';
 import newLogo from '../../assets/images/newLogo.png';
 

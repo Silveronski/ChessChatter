@@ -4,18 +4,23 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase/firebase';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useFirebase } from '../hooks/useFirebase';
+
+interface LoginFormInputs {
+    email: string,
+    password: string
+};
 
 const Login = () => {
     const [error, setError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { userLogin } = useFirebase();
     const navigate = useNavigate(); 
-    const { register, formState: {errors}, handleSubmit } = useForm();
-    const onSubmit = async (data) => await handleLogin(data);
+    const { userLogin } = useFirebase();
+    const { register, formState: {errors}, handleSubmit } = useForm<LoginFormInputs>();
+    const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => await handleLogin(data);
 
-    const handleLogin = async (data) => {   
+    const handleLogin = async (data: LoginFormInputs) => {   
         const email = data.email;
         const password = data.password;
         setIsLoading(true);

@@ -1,9 +1,9 @@
 import search from '../../assets/images/search.png';
-import { KeyboardEvent, useContext, useEffect, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import { collection, getDoc, getDocs, query, setDoc, where, doc} from "firebase/firestore";
 import { db } from '../../firebase/firebase';
 import { useAuthContext } from '../../context/AuthContext';
-import { ChatContext } from '../../context/ChatContext';
+import { useChatContext } from '../../context/ChatContext';
 import { useFirebase } from '../../hooks/useFirebase';
 import { useRefs } from '../../hooks/useRefs';
 import { User } from 'firebase/auth';
@@ -14,11 +14,11 @@ interface SearchProps {
 
 const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
   const { currentUser } = useAuthContext();
-  const { dispatch } = useContext(ChatContext);
+  const { dispatch } = useChatContext();
   const { showChat } = useRefs();
   const { createUserChat } = useFirebase();
-  const [username, setUsername] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
+  const [username, setUsername] = useState<string>("");
   const [err, setErr] = useState<boolean>(false);
 
   useEffect(() => {
@@ -30,10 +30,10 @@ const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
 
   const handleKey = (e: KeyboardEvent) => (e.code === "Enter" && username.trim() !== '') && handleUserSearch();
     
-  const handleSearchClick = () => username.trim() !== '' && handleUserSearch();
+  const handleSearchClick = (): Promise<void> | boolean => username.trim() !== '' && handleUserSearch();
     
-  const handleUserSearch = async () => {
-    if (username.toLowerCase() === currentUser!.displayName?.toLowerCase()) {
+  const handleUserSearch = async (): Promise<void> => {
+    if (username.toLowerCase() === currentUser?.displayName?.toLowerCase()) {
       setErr(true);
       return;
     }
@@ -41,7 +41,6 @@ const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
       collection(db, "users"), 
       where("displayName", "==", username)
     );
-
     try {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -53,7 +52,7 @@ const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
         setErr(true);
       }
     }
-    catch (err) { setErr(true); }        
+    catch (_err) { setErr(true); }        
   }
 
   const handleUserSelect = async () => {
@@ -62,14 +61,12 @@ const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
       currentUser!.uid > user!.uid 
         ? currentUser!.uid + user?.uid 
         : user?.uid + currentUser!.uid
-
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
         // create a chat in chats collection
-        await setDoc(doc(db, "chats", combinedId),{ messages: [] });
-        
-        //create user chats for both users
+        await setDoc(doc(db, "chats", combinedId),{ messages: [] });       
+        // creates user chats for both users
         await createUserChat(currentUser!.uid, user!, combinedId);
         await createUserChat(user!.uid, currentUser!, combinedId);
       }
@@ -78,8 +75,7 @@ const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
 
       if (window.innerWidth < 940) showChat();     
     }    
-    catch (err) {}
-
+    catch (_err) {}
     setUser(null);
     setUsername("");   
   }
@@ -88,11 +84,12 @@ const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
     <section className='search'>
       <div className="search-form">
         <input 
-        type="text" 
-        placeholder='Find a user'
-        onKeyDown={handleKey}
-        onChange={(e) => setUsername(e.target.value)} 
-        value={username}/>
+          type="text" 
+          placeholder='Find a user'
+          onKeyDown={handleKey}
+          onChange={(e) => setUsername(e.target.value)} 
+          value={username}
+        />
         <img className='search-icon' alt='search for users icon' src={search} onClick={handleSearchClick}/>
       </div>
       {err && <span className='error'>User not found!</span>}

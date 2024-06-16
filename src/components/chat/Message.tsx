@@ -1,15 +1,16 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
-import { ChatContext } from '../../context/ChatContext';
+import { useChatContext } from '../../context/ChatContext';
+import { TMessage } from '../../types/types';
 
 interface MessageProps {
   message: TMessage
-}
+};
 
 const Message = ({ message }: MessageProps) => {
   const { currentUser } = useAuthContext();
-  const { data } = useContext(ChatContext);
-  const msgRef = useRef<HTMLElement>(null);
+  const { data } = useChatContext();
+  const msgRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     msgRef.current?.scrollIntoView({ block: "end" });
@@ -35,7 +36,10 @@ const Message = ({ message }: MessageProps) => {
   return (
     <section ref={msgRef} className={`message ${message.senderId === currentUser?.uid && "owner"}`}>
       <div className="message-info">
-        <img src={message.senderId === currentUser?.uid ? currentUser?.photoURL : data.user.photoURL} alt='user image'/>
+        <img 
+          src={message.senderId === currentUser?.uid ? currentUser?.photoURL : data.user.photoURL}
+          alt='user image'
+        />
         <span>{JSON.stringify(message.date).substring(1,6)}</span>
       </div>
       <div className="message-content">

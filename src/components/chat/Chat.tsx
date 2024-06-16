@@ -23,7 +23,12 @@ const Chat = () => {
           {data.chatId !== "null" && <img src={data.user?.photoURL} alt='user image'/>}
           <span>{data.user?.displayName}</span> 
         </div>       
-        {data.chatId !== "null" && <button onClick={handleGameInvite}>Play Chess <img src={pawn}/></button>}
+        {data.chatId !== "null" && 
+          <button 
+            onClick={handleGameInvite}>Play Chess 
+            <img src={pawn}/>
+          </button>
+        }
       </div>        
         <Messages/>
         <Input/>  

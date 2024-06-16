@@ -17,21 +17,21 @@ const Input = () => {
   const [text, setText] = useState<string>("");
   const [img, setImg] = useState<File | null>(null);
   const [imgIsReady, setImgIsReady] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   
   useEffect(() => {
     setImg(null);
     setImgIsReady(false);
     window.innerWidth > 940 && inputRef?.current?.focus();  
     return () => setText("");     
-  },[data.chatId]);
+  },[data?.chatId]);
 
-  const handleKeyPress = async (e: KeyboardEvent) => {
+  const handleKeyPress = async (e: KeyboardEvent): Promise<void | boolean> => {
     if (img) e.key === "Enter" && await handleSend();        
     else (e.key === "Enter" && text.trim()!== '') && await handleSend(); 
   }
 
-  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImage = (e: ChangeEvent<HTMLInputElement>): void => {
     const img = e.target.files ? e.target.files[0] : null;
     if (img && validImgExtensions.includes(img.type)) {
       setImg(img);
@@ -42,7 +42,7 @@ const Input = () => {
     inputRef.current && inputRef.current.focus(); 
   }
                                                            
-  const handleSend = async () => {
+  const handleSend = async (): Promise<void> => {
     try {
       if (img) {
         const storageRef = ref(storage, uuid());      
@@ -65,7 +65,7 @@ const Input = () => {
         await updateUserChatsDoc(data.user.uid);
       }
   
-      else if(!img && text.trim() !== '') {
+      else if (!img && text.trim() !== '') {
         const msgText = text;
         setText(""); 
         await updateChatsDoc(msgText, data.chatId, data.user.uid); 
@@ -89,7 +89,8 @@ const Input = () => {
        onChange={e => setText(e.target.value)}
        value={text}
        onKeyDown={handleKeyPress}
-       ref={inputRef}/>          
+       ref={inputRef}
+      />          
       <div className="icons">
         <input 
           type="file"

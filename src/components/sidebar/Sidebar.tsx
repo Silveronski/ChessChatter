@@ -6,7 +6,7 @@ import { useRefContext } from '../../context/RefContext';
 
 const Sidebar = () => {
   const { sidebarRef } = useRefContext();
-  const [selectedChatIdFromSearch, setSelectedChatIdFromSearch] = useState("");
+  const [selectedChatIdFromSearch, setSelectedChatIdFromSearch] = useState<string>("");
 
   const handleDataFromSearch = useCallback((chatId: string) => {
     setSelectedChatIdFromSearch(chatId);

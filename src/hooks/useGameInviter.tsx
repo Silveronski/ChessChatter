@@ -6,8 +6,8 @@ import { useToastr } from "./useToastr";
 
 export const useGameInviter = () => {
     const { currentUser } = useAuthContext();
-    const [invitePending, setInvitePending] = useState(false);
-    const [gameInviteId, setGameInviteId] = useState("");
+    const [invitePending, setInvitePending] = useState<boolean>(false);
+    const [gameInviteId, setGameInviteId] = useState<string>("");
 
     useEffect(() => {
         const invitePendingData = window.localStorage.getItem('invitePending');
@@ -26,7 +26,7 @@ export const useGameInviter = () => {
             try {        
               const userSnap = await getDoc(doc(db, 'presence', otherUserId));    
               if (userSnap.exists() && !userSnap.data().online) {
-                useToastr("Can't invite an offline user!", "error",);
+                useToastr("Can't invite an offline user!", "error");
                 return;
               }  
               await setDoc(doc(db, "gameInvitations", otherUserId + currentUser?.uid),{
@@ -63,9 +63,9 @@ export const useGameInviter = () => {
               window.open(`https://chess-game-fh3hl.ondigitalocean.app/white?code=${gameInviteId}`, '_blank');
               resetState();
             } 
-            else if (data && data.gameAccepted === "false") { // user declines game offer          
-                useToastr("Your invitation was declined", "error");
-                resetState();
+            else if (data && data.gameAccepted === "false") { // user declines game offer  
+              useToastr("Your invitation was declined", "error");
+              resetState();
             }
           });
     
