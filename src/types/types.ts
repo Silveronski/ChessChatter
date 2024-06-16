@@ -1,6 +1,5 @@
 import { Timestamp } from "firebase/firestore";
 
-// DocumentData
 export type TMessage = {
     id: string,
     text: string,
@@ -17,23 +16,25 @@ export type TUserPresence = {
     hasShown: boolean,
     date: Date,
     count?: number
-}
+};
+
+export type TUserInfo = { 
+    displayName: string,
+    photoURL: string,
+    uid: string 
+};
 
 export type TUserChat = {
     date: string,
-    fullDate: Timestamp,
+    fullDate: number,
     lastMessage: {
         senderId: string,
         text: string,
     },
-    userInfo: {
-        displayName: string,
-        photoURL: string,
-        uid: string,
-    }
-}
+    userInfo: TUserInfo 
+};
 
 export type TError = {
     msg?: string,
     activated: boolean
-}
+};

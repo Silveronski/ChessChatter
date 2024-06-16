@@ -12,17 +12,17 @@ const MessageNotification: React.FC = () => {
       if (!currentUser?.uid) return;   
       onSnapshot(
         collection(db, "chats"),
-        (snapshot) => {
-          snapshot.forEach((chatDoc) => {
-            const data = chatDoc.data();
-            const msgAraayLen: number = data.messages.length;
-            const receiverId: string = data.messages[msgAraayLen-1]?.receiverId;
-            const msgDate: number = data.messages[msgAraayLen-1]?.fullDate.seconds;
-            if (receiverId === currentUser.uid && msgDate === Timestamp.now().seconds) {           
-              msgReceivedSound.current?.play();
-            }          
-          })
-        }     
+          (snapshot) => {
+            snapshot.forEach((chatDoc) => {
+              const data = chatDoc.data();
+              const msgAraayLen: number = data.messages.length;
+              const receiverId: string = data.messages[msgAraayLen-1]?.receiverId;
+              const msgDate: number = data.messages[msgAraayLen-1]?.fullDate.seconds;
+              if (receiverId === currentUser.uid && msgDate === Timestamp.now().seconds) {           
+                msgReceivedSound.current?.play();
+              }          
+            })
+          }     
       );        
     },[]);
 

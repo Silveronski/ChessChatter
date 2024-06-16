@@ -26,13 +26,12 @@ const Login: React.FC = () => {
         setIsLoading(true);
         try {
             const data = await signInWithEmailAndPassword(auth, email, password); 
-            await userLogin(data.user.uid);    
-            setIsLoading(false);                       
+            await userLogin(data.user.uid);                          
             navigate("/");                     
         }
-        catch (err) {
-            setIsLoading(false); 
-            setError(true);
+        catch (_err) { setError(true); }                
+        finally{
+            setIsLoading(false);
         }
     }
 

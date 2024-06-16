@@ -1,3 +1,4 @@
+import React from 'react';
 import Messages from './Messages';
 import Input from './Input';
 import back from '../../assets/images/back.png';
@@ -6,7 +7,6 @@ import { useChatContext } from '../../context/ChatContext';
 import { useGameInviter } from '../../hooks/useGameInviter';
 import { useRefContext } from '../../context/RefContext';
 import { useRefs } from '../../hooks/useRefs';
-import React from 'react';
 
 const Chat: React.FC = () => {
   const { data } = useChatContext();

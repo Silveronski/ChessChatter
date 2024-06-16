@@ -48,23 +48,23 @@ const Input: React.FC = () => {
         const storageRef = ref(storage, uuid());      
         const uploadTask = uploadBytesResumable(storageRef, img);
         const msgText = text;
-        setText("");  
-  
+        setText("");     
         uploadTask.on("state_changed",
+          null,         
           (_error: unknown) => {
-              useToastr('There was an error sending the image', 'error'); 
-              return;      
+            useToastr('There was an error sending the image', 'error'); 
+            resetImgState();
+            return;      
           }, 
-          () => {             
+          async () => { // This part is called when the upload is complete           
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               await updateChatsDoc(msgText, data.chatId, data.user.uid, true, downloadURL);
-            })
+            });
+            await updateUserChatsDoc(currentUser!.uid, data.chatId);
+            await updateUserChatsDoc(data.user.uid);
           }
-        );
-        await updateUserChatsDoc(currentUser!.uid, data.chatId);
-        await updateUserChatsDoc(data.user.uid);
-      }
-  
+        );    
+      } 
       else if (!img && text.trim() !== '') {
         const msgText = text;
         setText(""); 
@@ -72,12 +72,15 @@ const Input: React.FC = () => {
         await updateUserChatsDoc(currentUser!.uid, data.chatId, msgText);
         await updateUserChatsDoc(data.user.uid, data.chatId, msgText);
       }
-  
       inputRef.current && inputRef.current.focus();  
-      setImg(null);
-      setImgIsReady(false);
+      resetImgState();
     } 
-    catch (error) { useToastr('There was an error sending the message', 'error'); } 
+    catch (_error) { useToastr('There was an error sending the message', 'error'); } 
+  }
+
+  const resetImgState = (): void => {
+    setImg(null);
+    setImgIsReady(false);
   }
 
   return (

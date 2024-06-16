@@ -43,9 +43,7 @@ const GameInvitations: React.FC = () => {
                 await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "true" });
                 setTimeout(() => { window.open(gameLink, '_blank') }, 2500);                                                                                 
             }
-            catch (err) {
-                useToastr('There was a problem accepting the game offer', 'error');
-            }                            
+            catch (_err) { useToastr('There was a problem accepting the game offer', 'error'); }                                                    
         };
 
         (window as any).rejectInvite = async (inviteId: string) => {
@@ -53,9 +51,7 @@ const GameInvitations: React.FC = () => {
                 const invitationDocRef = doc(db, "gameInvitations", inviteId);
                 await updateDoc(invitationDocRef, { gameConcluded: true, gameAccepted: "false" });                                     
             }
-            catch (err) {
-                useToastr('There was a problem rejecting the game offer', 'error');
-            }       
+            catch (_err) { useToastr('There was a problem rejecting the game offer', 'error'); }                     
         };
     },[]);
       

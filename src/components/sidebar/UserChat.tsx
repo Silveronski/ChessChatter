@@ -3,22 +3,22 @@ import offline from '../../assets/images/offline.png';
 import React from 'react';
 import { useRefs } from '../../hooks/useRefs';
 import { useChatContext } from '../../context/ChatContext';
-import { User } from 'firebase/auth';
+import { TUserInfo } from '../../types/types';
 
 interface UserChatProps {
-    userInfo: User,
+    userInfo: TUserInfo,
     selectedChatId: string,
     setSelectedChat: React.Dispatch<React.SetStateAction<string>>,
     chatLastMsg: string,
     chatDate: string,
-    userStatuses: {}
+    userStatuses: Record<string, boolean>
 };
 
 const UserChat: React.FC<UserChatProps> = ({ userInfo, selectedChatId, setSelectedChat, chatLastMsg, chatDate, userStatuses }) => {
     const { dispatch } = useChatContext();
     const { showChat } = useRefs();
 
-    const handleSelect = (user: User) => {
+    const handleSelect = (user: TUserInfo) => {
         setSelectedChat(user.uid);
         dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
         if (window.innerWidth < 940) showChat();

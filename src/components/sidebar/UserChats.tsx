@@ -13,7 +13,7 @@ const UserChats: React.FC<UserChatsProps> = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useAuthContext();
   const [chats, setChats] = useState<TUserChat[]>([]);
   const [selectedChatId, setSelectedChat] = useState<string>("");
-  const [userStatuses, setUserStatuses] = useState<any>({});
+  const [userStatuses, setUserStatuses] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const getChats = () => {
@@ -31,7 +31,7 @@ const UserChats: React.FC<UserChatsProps> = ({ selectedChatIdFromSearch }) => {
       const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {                          
         account[presDoc.id] = presDoc.data().online;
         return account;
-      }, {});
+      }, {} as Record<string, boolean>);
       
       setUserStatuses(updatedUserStatuses);
     });

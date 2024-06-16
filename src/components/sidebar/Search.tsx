@@ -64,11 +64,14 @@ const Search: React.FC<SearchProps> = ({ selectedChatIdFromSearch }) => {
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
-        // create a chat in chats collection
-        await setDoc(doc(db, "chats", combinedId),{ messages: [] });       
-        // creates user chats for both users
-        await createUserChat(currentUser!.uid, user!, combinedId);
-        await createUserChat(user!.uid, currentUser!, combinedId);
+        
+        await Promise.all([      
+          setDoc(doc(db, "chats", combinedId),{ messages: [] }), // creates a chat in chats collection    
+          // creates user chats for both users
+          createUserChat(currentUser!.uid, user!, combinedId),
+          createUserChat(user!.uid, currentUser!, combinedId)
+        ]);
+        
       }
       dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
       selectedChatIdFromSearch(user?.uid);

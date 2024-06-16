@@ -1,5 +1,13 @@
-import { collection, getDocs } from "firebase/firestore";
+import { Timestamp, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+
+const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
+    Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
+
+const minOfMsg = Timestamp.now().toDate().getMinutes().toString().length === 2 ?
+    Timestamp.now().toDate().getMinutes() : "0"+ Timestamp.now().toDate().getMinutes();
+    
+export const timeOfMsg = hourOfMsg + ":" + minOfMsg;
 
 export const validImgExtensions = ["image/png", "image/jpeg", "image/gif"];
 

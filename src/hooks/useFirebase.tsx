@@ -7,6 +7,7 @@ import { useChatContext } from "../context/ChatContext";
 import { StorageReference, getDownloadURL } from "firebase/storage";
 import { useToastr } from "./useToastr";
 import { TMessage } from "../types/types";
+import { timeOfMsg } from "../utils/utilities";
 
 interface ChatDocProps {
     (msgText: string,
@@ -22,17 +23,11 @@ interface CreateUserChatProps {
         otherUser: User,
         combinedId: string
     ): Promise<void>
-}
+};
 
 export const useFirebase = () => {
     const { currentUser } = useAuthContext();
     const { dispatch } = useChatContext();
-
-    const hourOfMsg = Timestamp.now().toDate().getHours().toString().length === 2 ? 
-                    Timestamp.now().toDate().getHours() : "0"+ Timestamp.now().toDate().getHours() 
-    const minOfMsg = Timestamp.now().toDate().getMinutes().toString().length === 2 ?
-                    Timestamp.now().toDate().getMinutes() : "0"+ Timestamp.now().toDate().getMinutes();
-    const timeOfMsg = hourOfMsg + ":" + minOfMsg;
 
     const updateUserChatsDoc = async (userIdToUpdate: string, chatId?: string, msgText = "Image") => {
         try {
@@ -105,17 +100,17 @@ export const useFirebase = () => {
         });
     }
 
-    const createUser = async (avatarUrl: StorageReference, res: UserCredential) => {
+    const createUser = async (avatarUrl: StorageReference, res: UserCredential, displayName: string) => {
         try {
             getDownloadURL(avatarUrl).then(async (downloadURL) => {
                 await updateProfile(res.user, {
-                    displayName: res.user.displayName,
+                    displayName,
                     photoURL: downloadURL
                 });
 
                 await setDoc(doc(db, "users", res.user.uid),{
                     uid: res.user.uid,
-                    displayName: res.user.displayName,
+                    displayName,
                     email: res.user.email,
                     photoURL: downloadURL
                 });

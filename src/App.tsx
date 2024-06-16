@@ -11,10 +11,10 @@ interface ProtectedRouteProps {
 };
 
 function App() {
-  const { currentUser } = useAuthContext();
+  const { currentUser, loading } = useAuthContext();
 
   const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-    if (!currentUser){
+    if (!loading && !currentUser){     
       return <Navigate to="/login"/>
     }
     return children;
@@ -23,9 +23,7 @@ function App() {
   return (    
     <BrowserRouter>
       <Routes>
-        <Route path='/' index element=
-          {<ProtectedRoute><Home/></ProtectedRoute>}>                    
-        </Route>
+        <Route path='/' index element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>                           
         <Route path='register' element={<Register/>}></Route>
         <Route path='login' element={<Login/>}></Route>
         <Route path='*' element={<Navigate to={'/'}/>}></Route>

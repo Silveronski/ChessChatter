@@ -17,7 +17,7 @@ interface RegisterFormInputs {
     displayName: string,
     password: string,
     image?: FileList 
-}
+};
 
 const Register: React.FC = () => {
     const [error, setError] = useState<boolean>(false);
@@ -27,7 +27,7 @@ const Register: React.FC = () => {
     const [avatarError, setAvatarError] = useState<TError>({ msg: '', activated: false });
     const navigate = useNavigate();
     
-    const {register, formState: {errors}, handleSubmit} = useForm<RegisterFormInputs>();
+    const { register, formState: {errors}, handleSubmit } = useForm<RegisterFormInputs>();
     const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => await registerUser(data);  
      
     const registerUser = async (data: RegisterFormInputs) => {  
@@ -36,9 +36,9 @@ const Register: React.FC = () => {
             setDisplayNameError(true);
             return;
         }
-        const displayName = data.displayName;
         const email = data.email;
         const password = data.password;
+        const displayName = data.displayName;
         let avatar: File | null = null;
         if (data.image && data.image[0]) { // image uploaded
             if (!validImgExtensions.includes(data.image[0].type)) {
@@ -66,14 +66,14 @@ const Register: React.FC = () => {
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const storageRef = ref(storage, email); // creates a reference to the storage location where the avatar will be saved
-                                                          // the name of the image will be the email       
-            const uploadTask = uploadBytesResumable(storageRef, avatar as File); // initiates the upload of the user's avatar to the storage location
-                                                          
+                                                    // the name of the image will be the email       
+            const uploadTask = uploadBytesResumable(storageRef, avatar as File); // initiates the upload of the user's avatar to the storage location                                                         
             uploadTask.on("state_changed",
+                null,
                 (_error) => { displayGeneralError(); },                           
-                async ()  => {   
+                async () => {   
                     try {
-                        await createUser(uploadTask.snapshot.ref, res);          
+                        await createUser(uploadTask.snapshot.ref, res, displayName);          
                         setIsLoading(false);
                         navigate("/");
                     } 
@@ -81,7 +81,7 @@ const Register: React.FC = () => {
                 }
             );                      
         }
-        catch (err) { displayGeneralError(); }                 
+        catch (_err) { displayGeneralError(); }                 
     }
 
     const displayAvatarError = (errorMsg: string): void => {

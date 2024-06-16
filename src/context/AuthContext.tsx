@@ -7,15 +7,16 @@ interface AuthContextProviderProps {
 };
 
 interface AuthContextType {
-    currentUser: User | null;
+    currentUser: User | null,
+    loading: boolean
 };
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-    const { currentUser } = useAuth();
+    const { currentUser, loading } = useAuth();
     return (
-        <AuthContext.Provider value={{ currentUser }}>
+        <AuthContext.Provider value={{ currentUser, loading }}>
             {children}
         </AuthContext.Provider>
     )   

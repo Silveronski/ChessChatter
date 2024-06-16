@@ -12,8 +12,8 @@ export const useGameInviter = () => {
     useEffect(() => {
         const invitePendingData = window.localStorage.getItem('invitePending');
         const gameInviteIdData = window.localStorage.getItem('gameInviteId');
-        if (invitePendingData !== null) setInvitePending(JSON.parse(invitePendingData));
-        if (gameInviteIdData !== null) setGameInviteId(JSON.parse(gameInviteIdData));
+        invitePendingData !== null && setInvitePending(JSON.parse(invitePendingData));
+        gameInviteIdData !== null && setGameInviteId(JSON.parse(gameInviteIdData));
     },[]);
        
     useEffect(() => {
