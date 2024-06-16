@@ -14,7 +14,7 @@ interface UserChatProps {
     userStatuses: {}
 };
 
-const UserChat = ({ userInfo, selectedChatId, setSelectedChat, chatLastMsg, chatDate, userStatuses }: UserChatProps) => {
+const UserChat: React.FC<UserChatProps> = ({ userInfo, selectedChatId, setSelectedChat, chatLastMsg, chatDate, userStatuses }) => {
     const { dispatch } = useChatContext();
     const { showChat } = useRefs();
 

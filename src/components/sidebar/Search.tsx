@@ -1,5 +1,5 @@
 import search from '../../assets/images/search.png';
-import { KeyboardEvent, useEffect, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { collection, getDoc, getDocs, query, setDoc, where, doc} from "firebase/firestore";
 import { db } from '../../firebase/firebase';
 import { useAuthContext } from '../../context/AuthContext';
@@ -12,7 +12,7 @@ interface SearchProps {
   selectedChatIdFromSearch: Function
 };
 
-const Search = ({ selectedChatIdFromSearch }: SearchProps) => {
+const Search: React.FC<SearchProps> = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useAuthContext();
   const { dispatch } = useChatContext();
   const { showChat } = useRefs();

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 import { useChatContext } from '../../context/ChatContext';
 import { TMessage } from '../../types/types';
@@ -7,7 +7,7 @@ interface MessageProps {
   message: TMessage
 };
 
-const Message = ({ message }: MessageProps) => {
+const Message: React.FC<MessageProps> = ({ message }) => {
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
   const msgRef = useRef<HTMLElement | null>(null);

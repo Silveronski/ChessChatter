@@ -1,5 +1,5 @@
 import UserChat from './UserChat';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { db } from '../../firebase/firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';;
 import { useAuthContext } from '../../context/AuthContext';
@@ -9,7 +9,7 @@ interface UserChatsProps {
   selectedChatIdFromSearch: string
 };
 
-const UserChats = ({ selectedChatIdFromSearch }: UserChatsProps) => {
+const UserChats: React.FC<UserChatsProps> = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useAuthContext();
   const [chats, setChats] = useState<TUserChat[]>([]);
   const [selectedChatId, setSelectedChat] = useState<string>("");
