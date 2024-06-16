@@ -25,7 +25,6 @@ const UserChats: React.FC<UserChatsProps> = ({ selectedChatIdFromSearch }) => {
     currentUser?.uid && getChats();    
   }, [currentUser?.uid]);
 
-
   useEffect(() => {         
     const getUsersOnlineStatus = onSnapshot(collection(db, 'presence'), (snapshot) => {
       const updatedUserStatuses = snapshot.docs.reduce((account, presDoc) => {                          
@@ -39,13 +38,11 @@ const UserChats: React.FC<UserChatsProps> = ({ selectedChatIdFromSearch }) => {
     return () => getUsersOnlineStatus();           
   }, []);
 
-  
   useEffect(() => {
     setSelectedChat(selectedChatIdFromSearch);
     const selectedChat = document.getElementById(selectedChatIdFromSearch);
     selectedChat?.scrollIntoView({ behavior:'instant' });
   },[selectedChatIdFromSearch]);
-
 
   return (
     <section className="chats">     

@@ -1,6 +1,6 @@
 import search from '../../assets/images/search.png';
 import React, { KeyboardEvent, useEffect, useState } from 'react';
-import { collection, getDoc, getDocs, query, setDoc, where, doc} from "firebase/firestore";
+import { getDoc, getDocs, setDoc, doc} from "firebase/firestore";
 import { db } from '../../firebase/firebase';
 import { useAuthContext } from '../../context/AuthContext';
 import { useChatContext } from '../../context/ChatContext';
@@ -16,7 +16,7 @@ const Search: React.FC<SearchProps> = ({ selectedChatIdFromSearch }) => {
   const { currentUser } = useAuthContext();
   const { dispatch } = useChatContext();
   const { showChat } = useRefs();
-  const { createUserChat } = useFirebase();
+  const { createUserChat, searchForUser } = useFirebase();
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState<string>("");
   const [err, setErr] = useState<boolean>(false);
@@ -36,21 +36,16 @@ const Search: React.FC<SearchProps> = ({ selectedChatIdFromSearch }) => {
     if (username.toLowerCase() === currentUser?.displayName?.toLowerCase()) {
       setErr(true);
       return;
-    }
-    const q = query(
-      collection(db, "users"), 
-      where("displayName", "==", username)
-    );
+    }  
     try {
-      const querySnapshot = await getDocs(q);
+      const userQuery = searchForUser(username);
+      const querySnapshot = await getDocs(userQuery);
       querySnapshot.forEach((doc) => {
         const user = doc.data() as User;
         setUser(user);
         setErr(false);
       });
-      if (querySnapshot.empty){
-        setErr(true);
-      }
+      if (querySnapshot.empty) setErr(true);   
     }
     catch (_err) { setErr(true); }        
   }
@@ -62,25 +57,23 @@ const Search: React.FC<SearchProps> = ({ selectedChatIdFromSearch }) => {
         ? currentUser!.uid + user?.uid 
         : user?.uid + currentUser!.uid
     try {
-      const res = await getDoc(doc(db, "chats", combinedId));
-      if (!res.exists()) {
-        
+      const chat = await getDoc(doc(db, "chats", combinedId));
+      if (!chat.exists()) {    
         await Promise.all([      
           setDoc(doc(db, "chats", combinedId),{ messages: [] }), // creates a chat in chats collection    
-          // creates user chats for both users
-          createUserChat(currentUser!.uid, user!, combinedId),
-          createUserChat(user!.uid, currentUser!, combinedId)
-        ]);
-        
+          createUserChat(currentUser!.uid, user!, combinedId),   // creates user chats for current user
+          createUserChat(user!.uid, currentUser!, combinedId)    // creates user chats for searched user
+        ]);      
       }
-      dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
+      dispatch({ type:"CHANGE_USER", payload: user! }); // move to chat window with the user.
       selectedChatIdFromSearch(user?.uid);
-
       if (window.innerWidth < 940) showChat();     
     }    
     catch (_err) {}
-    setUser(null);
-    setUsername("");   
+    finally{
+      setUser(null);
+      setUsername("");
+    }     
   }
 
   return (
@@ -100,7 +93,7 @@ const Search: React.FC<SearchProps> = ({ selectedChatIdFromSearch }) => {
         <div className="user-chat" onClick={handleUserSelect}>
           {user?.photoURL && <img src={user.photoURL} alt='found user image'/>}
           <div className="user-chat-info">
-            <span>{user.displayName}</span>
+            <span>{user?.displayName}</span>
           </div>
         </div>
       )}

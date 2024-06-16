@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 import { useChatContext } from '../../context/ChatContext';
 import { TMessage } from '../../types/types';
+import defaultAvatar from '../../assets/images/defaultAvatar.png';
 
 interface MessageProps {
   message: TMessage
@@ -37,7 +38,10 @@ const Message: React.FC<MessageProps> = ({ message }) => {
     <section ref={msgRef} className={`message ${message.senderId === currentUser?.uid && "owner"}`}>
       <div className="message-info">
         <img 
-          src={message.senderId === currentUser?.uid ? currentUser?.photoURL : data.user.photoURL}
+          src={
+            message.senderId === 
+            currentUser?.uid ? currentUser?.photoURL || defaultAvatar 
+            : data.user?.photoURL || defaultAvatar}
           alt='user image'
         />
         <span>{JSON.stringify(message.date).substring(1,6)}</span>

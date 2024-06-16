@@ -1,5 +1,5 @@
 import { useAuthContext } from "../context/AuthContext";
-import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc, setDoc } from "firebase/firestore";
+import { Timestamp, doc, arrayUnion, serverTimestamp, updateDoc, setDoc, query, collection, where } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { v4 as uuid } from 'uuid';
 import { User, UserCredential, signOut, updateProfile } from "firebase/auth";
@@ -9,7 +9,7 @@ import { useToastr } from "./useToastr";
 import { TMessage } from "../types/types";
 import { timeOfMsg } from "../utils/utilities";
 
-interface ChatDocProps {
+interface UpdateChatDocProps {
     (msgText: string,
     chatId: string,
     otherUserId: string,
@@ -23,6 +23,12 @@ interface CreateUserChatProps {
         otherUser: User,
         combinedId: string
     ): Promise<void>
+};
+
+interface CreateUserProps {
+    (avatarFile: StorageReference,
+    res: UserCredential,
+    displayName: string): Promise<void>
 };
 
 export const useFirebase = () => {
@@ -43,7 +49,7 @@ export const useFirebase = () => {
         catch (error) { throw error; }      
     }
     
-    const updateChatsDoc: ChatDocProps = async (msgText, chatId, otherUserId, isImg, imgUrl) => {
+    const updateChatsDoc: UpdateChatDocProps = async (msgText, chatId, otherUserId, isImg, imgUrl) => {
         const message: TMessage = {
             id: uuid(),
             text: msgText,
@@ -63,7 +69,7 @@ export const useFirebase = () => {
         catch (error) { throw error; }                            
     }
 
-    const createUserChat: CreateUserChatProps = async (userIdToUpdate, otherUser, combinedId): Promise<void> => {
+    const createUserChat: CreateUserChatProps = async (userIdToUpdate, otherUser, combinedId) => {
         try {
             await updateDoc(doc(db, "userChats", userIdToUpdate), {
                 [combinedId + ".userInfo"] : {
@@ -100,9 +106,9 @@ export const useFirebase = () => {
         });
     }
 
-    const createUser = async (avatarUrl: StorageReference, res: UserCredential, displayName: string) => {
+    const createUser: CreateUserProps = async (avatarFile, res, displayName) => {
         try {
-            getDownloadURL(avatarUrl).then(async (downloadURL) => {
+            getDownloadURL(avatarFile).then(async (downloadURL) => {
                 await updateProfile(res.user, {
                     displayName,
                     photoURL: downloadURL
@@ -129,5 +135,21 @@ export const useFirebase = () => {
         catch (error) { throw error; }      
     }
 
-    return { updateUserChatsDoc, updateChatsDoc, createUserChat, userSignout, userLogin, createUser };
+    const searchForUser = (username: string) => {
+        const userQuery = query(
+            collection(db, "users"), 
+            where("displayName", "==", username)
+        );
+        return userQuery;
+    }
+
+    return { 
+        updateUserChatsDoc,
+        updateChatsDoc,
+        createUserChat,
+        userSignout,
+        userLogin,
+        createUser,
+        searchForUser 
+    };
 }

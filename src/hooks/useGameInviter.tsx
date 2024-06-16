@@ -34,7 +34,7 @@ export const useGameInviter = () => {
                 userId: otherUserId,
                 senderId : currentUser?.uid,
                 senderDisplayName : currentUser?.displayName,
-                link: `https://chess-game-fh3hl.ondigitalocean.app/black?code=${otherUserId + currentUser?.uid}`,
+                link: `${import.meta.env.VITE_BLACK_GAME_LINK}${otherUserId + currentUser?.uid}`,
                 gameConcluded: false,
                 gameAccepted: ""
               });   
@@ -60,7 +60,7 @@ export const useGameInviter = () => {
           unsub = onSnapshot(gameInviteRef, (docSnapshot) => {
             const data = docSnapshot.data();
             if (data && data.gameAccepted === "true") { // user accepts game offer
-              window.open(`https://chess-game-fh3hl.ondigitalocean.app/white?code=${gameInviteId}`, '_blank');
+              window.open(`${import.meta.env.VITE_WHITE_GAME_LINK}${gameInviteId}`, '_blank');
               resetState();
             } 
             else if (data && data.gameAccepted === "false") { // user declines game offer  
@@ -79,7 +79,7 @@ export const useGameInviter = () => {
                 resetState();
               }
             } 
-            catch (err) {
+            catch (_err) {
               useToastr("Your invitation was not responded to within the specified time frame", "error");
             }
           }, 10000);

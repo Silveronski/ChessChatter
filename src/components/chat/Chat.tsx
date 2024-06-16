@@ -14,14 +14,16 @@ const Chat: React.FC = () => {
   const { invitePlayer } = useGameInviter();
   const { showSidebar } = useRefs();
 
-  const handleGameInvite = async () => await invitePlayer(data.user.uid);
+  const handleGameInvite = async (): Promise<void> => {
+    if (data.user?.uid) await invitePlayer(data.user.uid); 
+  }
     
   return (
     <section className='chat' ref={chatRef}>
       <div className="chat-info">
         <div className='user-info'>
           <img src={back} className='backBtn' onClick={() => showSidebar()} alt='back button'/>
-          {data.chatId !== "null" && <img src={data.user?.photoURL} alt='user image'/>}
+          {(data.chatId !== "null" && data.user?.photoURL) && <img src={data.user?.photoURL} alt='user image'/>}
           <span>{data.user?.displayName}</span> 
         </div>       
         {data.chatId !== "null" && 

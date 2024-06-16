@@ -11,11 +11,11 @@ const Messages: React.FC = () => {
     const [messages, setMessages] = useState<TMessage[]>([]);
 
     useEffect(() => {
-        const getMessages = onSnapshot(doc(db, "chats", data.chatId), (doc) => {
+        const getMessages = onSnapshot(doc(db, "chats", data?.chatId), (doc) => {
             doc.exists() && setMessages(doc.data().messages);
         });  
         return () => getMessages();                
-    }, [data.chatId]);
+    }, [data?.chatId]);
    
     return (
         <section className={`${data.chatId !== "null" ? "messages" : "logo-panel"}`}> 

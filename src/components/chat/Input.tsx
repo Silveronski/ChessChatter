@@ -44,7 +44,7 @@ const Input: React.FC = () => {
                                                            
   const handleSend = async (): Promise<void> => {
     try {
-      if (img) {
+      if (img) { // user sent an image
         const storageRef = ref(storage, uuid());      
         const uploadTask = uploadBytesResumable(storageRef, img);
         const msgText = text;
@@ -58,19 +58,23 @@ const Input: React.FC = () => {
           }, 
           async () => { // This part is called when the upload is complete           
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-              await updateChatsDoc(msgText, data.chatId, data.user.uid, true, downloadURL);
+              data?.user && await updateChatsDoc(msgText, data.chatId, data.user.uid, true, downloadURL);
             });
-            await updateUserChatsDoc(currentUser!.uid, data.chatId);
-            await updateUserChatsDoc(data.user.uid);
+            await Promise.all([
+              updateUserChatsDoc(currentUser!.uid, data.chatId),
+              data?.user && updateUserChatsDoc(data.user.uid)
+            ]);            
           }
         );    
       } 
-      else if (!img && text.trim() !== '') {
+      else if (!img && text.trim() !== '') { // user didn't send an image
         const msgText = text;
         setText(""); 
-        await updateChatsDoc(msgText, data.chatId, data.user.uid); 
-        await updateUserChatsDoc(currentUser!.uid, data.chatId, msgText);
-        await updateUserChatsDoc(data.user.uid, data.chatId, msgText);
+        data?.user && await Promise.all([
+          updateChatsDoc(msgText, data.chatId, data.user.uid), 
+          updateUserChatsDoc(currentUser!.uid, data.chatId, msgText),
+          updateUserChatsDoc(data.user.uid, data.chatId, msgText)
+        ]);     
       }
       inputRef.current && inputRef.current.focus();  
       resetImgState();

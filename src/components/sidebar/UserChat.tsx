@@ -1,6 +1,6 @@
+import React from 'react';
 import online from '../../assets/images/online.jpg';
 import offline from '../../assets/images/offline.png';
-import React from 'react';
 import { useRefs } from '../../hooks/useRefs';
 import { useChatContext } from '../../context/ChatContext';
 import { TUserInfo } from '../../types/types';
@@ -20,7 +20,7 @@ const UserChat: React.FC<UserChatProps> = ({ userInfo, selectedChatId, setSelect
 
     const handleSelect = (user: TUserInfo) => {
         setSelectedChat(user.uid);
-        dispatch({ type:"CHANGE_USER", payload: user }); // move to chat window with the user.
+        dispatch({ type: "CHANGE_USER", payload: user }); // move to chat window with the user.
         if (window.innerWidth < 940) showChat();
     }
 
