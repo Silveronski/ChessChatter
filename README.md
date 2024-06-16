@@ -4,6 +4,7 @@ Introducing Chess Chatter: a platform for messaging and playing chess with your 
 ## Tech Stack
 ### Messaging App Portion
 - React
+- TypeScript
 - Sass
 - Firebase & Firestore DB
 ### Chess App Portion
