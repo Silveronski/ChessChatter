@@ -92,7 +92,7 @@ export const useFirebase = () => {
               hasShown: false 
             });
             await signOut(auth);
-            dispatch({ type: "LOG_OUT", payload: {} });
+            dispatch({ type: "LOG_OUT", payload: null });
         } 
         catch (error) { useToastr('There was an error logging out', 'error'); }       
     }

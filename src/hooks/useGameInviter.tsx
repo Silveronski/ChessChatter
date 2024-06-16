@@ -21,34 +21,32 @@ export const useGameInviter = () => {
         window.localStorage.setItem('gameInviteId', JSON.stringify(gameInviteId));
     },[invitePending, gameInviteId]);
 
-    const invitePlayer = async (otherUserId: string) => {
-        if (!invitePending) { 
-            try {        
-              const userSnap = await getDoc(doc(db, 'presence', otherUserId));    
-              if (userSnap.exists() && !userSnap.data().online) {
-                useToastr("Can't invite an offline user!", "error");
-                return;
-              }  
-              await setDoc(doc(db, "gameInvitations", otherUserId + currentUser?.uid),{
-                id: otherUserId + currentUser?.uid,
-                userId: otherUserId,
-                senderId : currentUser?.uid,
-                senderDisplayName : currentUser?.displayName,
-                link: `${import.meta.env.VITE_BLACK_GAME_LINK}${otherUserId + currentUser?.uid}`,
-                gameConcluded: false,
-                gameAccepted: ""
-              });   
-              useToastr("Your invitation was successfully sent!", "success");
-              setInvitePending(true);
-              setGameInviteId(otherUserId + currentUser?.uid);       
-            }
-            catch (err) {
-              useToastr("There was a problem inviting this user to a match", 'error');
-            }      
-        } 
-        else {
-            useToastr("Can't invite more than one person at a time!", "error");
-        }         
+    const invitePlayer = async (invitedUserId: string): Promise<void> => {
+      if (!invitePending) { 
+        try {        
+          const userSnap = await getDoc(doc(db, 'presence', invitedUserId));    
+          if (userSnap.exists() && !userSnap.data().online) {
+            useToastr("Can't invite an offline user!", "error");
+            return;
+          }  
+          await setDoc(doc(db, "gameInvitations", invitedUserId + currentUser?.uid),{
+            id: invitedUserId + currentUser?.uid,
+            userId: invitedUserId,
+            senderId : currentUser?.uid,
+            senderDisplayName : currentUser?.displayName,
+            link: `${import.meta.env.VITE_BLACK_GAME_LINK}${invitedUserId + currentUser?.uid}`,
+            gameConcluded: false,
+            gameAccepted: ""
+          });   
+          useToastr("Your invitation was successfully sent!", "success");
+          setInvitePending(true);
+          setGameInviteId(invitedUserId + currentUser?.uid);       
+        }
+        catch (_err) {
+          useToastr("There was a problem inviting this user to a match", 'error');
+        }      
+      } 
+      else useToastr("Can't invite more than one person at a time!", "error");             
     }
 
     useEffect(() => {
@@ -92,7 +90,7 @@ export const useGameInviter = () => {
     
     }, [invitePending, gameInviteId]);
 
-    const resetState = () => {
+    const resetState = (): void => {
         setInvitePending(false);
         setGameInviteId("");
     }

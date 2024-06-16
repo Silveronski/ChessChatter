@@ -23,8 +23,8 @@ const Register: React.FC = () => {
     const [error, setError] = useState<boolean>(false);
     const [displayNameError, setDisplayNameError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { createUser } = useFirebase();
     const [avatarError, setAvatarError] = useState<TError>({ msg: '', activated: false });
+    const { createUser } = useFirebase();
     const navigate = useNavigate();
     
     const { register, formState: {errors}, handleSubmit } = useForm<RegisterFormInputs>();

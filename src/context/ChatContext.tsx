@@ -11,7 +11,7 @@ type TActionPayload = User | TUserInfo;
 
 interface Action  {
     type: "CHANGE_USER" | "LOG_OUT",
-    payload: TActionPayload
+    payload: TActionPayload | null
 };
 
 interface State {
@@ -37,12 +37,18 @@ export const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
     const chatReducer = (state: State, action: Action): State => {
         switch(action.type) {
             case "CHANGE_USER":
+                if (!action.payload) {
+                    return {
+                        user: null,
+                        chatId: "null"
+                    }
+                }
                 return {
                     user: action.payload,
                     chatId: currentUser!.uid > action.payload.uid 
                     ? currentUser!.uid + action.payload.uid
                     : action.payload.uid + currentUser!.uid
-                }
+                }            
             case "LOG_OUT":
                 return {
                     user: null,
