@@ -1,6 +1,6 @@
 import newLogo from '../assets/images/newLogo.png';
 import loading from '../assets/images/loading.gif';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase/firebase';
@@ -12,7 +12,7 @@ interface LoginFormInputs {
     password: string
 };
 
-const Login = () => {
+const Login: React.FC = () => {
     const [error, setError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate(); 

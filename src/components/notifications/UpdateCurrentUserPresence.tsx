@@ -1,9 +1,9 @@
 import { useAuthContext } from "../../context/AuthContext";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
-const UpdateCurrentUserPresence = () => {
+const UpdateCurrentUserPresence: React.FC = () => {
   const { currentUser } = useAuthContext();
 
   useEffect(() => {

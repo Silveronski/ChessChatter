@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 import { useChatContext } from '../../context/ChatContext';
 import { useFirebase } from '../../hooks/useFirebase';
@@ -10,7 +10,7 @@ import { useToastr } from '../../hooks/useToastr';
 import addImg from '../../assets/images/img.png';
 import vMark from '../../assets/images/v.png';
 
-const Input = () => {
+const Input: React.FC = () => {
   const { currentUser } = useAuthContext();
   const { data } = useChatContext();
   const { updateUserChatsDoc, updateChatsDoc } = useFirebase();

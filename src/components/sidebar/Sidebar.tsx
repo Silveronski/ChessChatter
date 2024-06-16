@@ -1,10 +1,10 @@
 import Navbar from './Navbar';
 import Search from './Search';
 import UserChats from './UserChats';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useRefContext } from '../../context/RefContext';
 
-const Sidebar = () => {
+const Sidebar: React.FC = () => {
   const { sidebarRef } = useRefContext();
   const [selectedChatIdFromSearch, setSelectedChatIdFromSearch] = useState<string>("");
 

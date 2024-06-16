@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { onSnapshot, collection } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import { useAuthContext } from '../../context/AuthContext';
 import { useToastr } from '../../hooks/useToastr';
 import { TUserPresence } from '../../types/types';
 
-const UserPresenceNotifications = () => {
+const UserPresenceNotifications: React.FC = () => {
   const { currentUser } = useAuthContext();
 
   useEffect(() => {

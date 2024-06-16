@@ -2,7 +2,7 @@ import Add from "../assets/images/addAvatar.png";
 import newLogo from '../assets/images/newLogo.png';
 import loading from '../assets/images/loading.gif';
 import defaultAvatar from '../assets/images/defaultAvatar.png';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, storage } from "../firebase/firebase";
 import { ref, uploadBytesResumable } from "firebase/storage";
@@ -19,7 +19,7 @@ interface RegisterFormInputs {
     image?: FileList 
 }
 
-const Register = () => {
+const Register: React.FC = () => {
     const [error, setError] = useState<boolean>(false);
     const [displayNameError, setDisplayNameError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);

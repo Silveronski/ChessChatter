@@ -2,8 +2,9 @@ import newLogo from '../../assets/images/newLogo.png';
 import logout from '../../assets/images/logout.png';
 import { useAuthContext } from '../../context/AuthContext';
 import { useFirebase } from '../../hooks/useFirebase';
+import React from 'react';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const { currentUser } = useAuthContext();
   const { userSignout } = useFirebase();
 

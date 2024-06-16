@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Timestamp, collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
 import { useAuthContext } from '../../context/AuthContext';
 import msgSound from '../../assets/audio/msgSound.mp3';
 
-const MessageNotification = () => {
+const MessageNotification: React.FC = () => {
     const { currentUser } = useAuthContext();
     const msgReceivedSound = useRef<HTMLAudioElement | null>(null);
 
